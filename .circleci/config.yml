@@ -77,7 +77,7 @@ jobs:
           command: sudo ls build/
       - run:
           name: Deploy
-          command: gh-pages --message "[skip ci] Updates" --dist build
+          command: npm run gh-pages --message "[skip ci] Updates" --dist build
 
 workflows:
   version: 2
