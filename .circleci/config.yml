@@ -62,7 +62,7 @@ jobs:
       - setup_dependencies
       - run:
           name: Install gh-pages
-          command: npm install gh-pages
+          command: sudo npm install -g gh-pages
       - run:
           name: Setup Git Configs
           command: |
@@ -77,7 +77,7 @@ jobs:
           command: sudo ls build/
       - run:
           name: Deploy
-          command: npm run gh-pages --message "[skip ci] Updates" --dist build
+          command: echo "yes\n" | sudo gh-pages --message "[skip ci] Updates" --dist build
 
 workflows:
   version: 2
