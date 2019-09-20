@@ -39,20 +39,9 @@ jobs:
     steps:
       - checkout
       - setup_dependencies
-      - run: # run tests
+      - run:
           name: Test
           command: npm test
-      # - run:
-      #     name: "Run Jest and Collect Coverage Reports"
-      #     command: jest --collectCoverage=true
-      # - store_artifacts:
-      #     path: coverage
-      #     previx: coverage
-      - store_artifacts:
-          path: test-results.xml
-          prefix: tests
-      - store_test_results:
-          path: test-results.xml
 
   deploy:
     executor: node
@@ -75,7 +64,7 @@ jobs:
             - "b5:3b:e4:44:28:54:fc:60:3f:a3:19:63:f3:3d:5c:7a"
       - run:
           name: Deploy
-          command: ./node_modules/.bin/gh-pages --message "[skip ci] Updates" --dist build
+          command: npx gh-pages --message "[skip ci] Updates" --dist build
 
 workflows:
   version: 2
