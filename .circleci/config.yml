@@ -42,12 +42,12 @@ jobs:
       - run: # run tests
           name: Test
           command: npm test
-      - run:
-          name: "Run Jest and Collect Coverage Reports"
-          command: jest --collectCoverage=true
-      - store_artifacts:
-          path: coverage
-          previx: coverage
+      # - run:
+      #     name: "Run Jest and Collect Coverage Reports"
+      #     command: jest --collectCoverage=true
+      # - store_artifacts:
+      #     path: coverage
+      #     previx: coverage
       - store_artifacts:
           path: test-results.xml
           prefix: tests
