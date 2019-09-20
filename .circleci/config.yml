@@ -38,15 +38,15 @@ jobs:
       - run: # run tests
           name: Test
           command: npm test
-      - run: # run coverage report
-          name: Code Coverage
-          command: "./node_modules/.bin/nyc report --reporter=text-lcov"
+      - run:
+          name: "Run Jest and Collect Coverage Reports"
+          command: jest --collectCoverage=true
+      - store_artifacts:
+          path: coverage
+          previx: coverage
       - store_artifacts:
           path: test-results.xml
           prefix: tests
-      - store_artifacts:
-          path: coverage
-          prefix: coverage
       - store_test_results:
           path: test-results.xml
 
