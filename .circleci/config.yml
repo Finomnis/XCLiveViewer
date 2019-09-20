@@ -25,7 +25,7 @@ jobs:
     steps:
       - checkout
       - setup_dependencies
-      - run: # run build
+      - run:
           name: Build
           command: npm run build
       - persist_to_workspace:
@@ -74,10 +74,12 @@ jobs:
           fingerprints:
             - "b5:3b:e4:44:28:54:fc:60:3f:a3:19:63:f3:3d:5c:7a"
       - run:
-          command: sudo ls build/
+          command: sudo ssh-keyscan -t rsa -H bitbucket.org >> ~/.ssh/known_hosts
+      - run:
+          command: ssh-keyscan -t rsa -H bitbucket.org >> ~/.ssh/known_hosts
       - run:
           name: Deploy
-          command: echo "yes\n" | sudo gh-pages --message "[skip ci] Updates" --dist build
+          command: sudo gh-pages --message "[skip ci] Updates" --dist build
 
 workflows:
   version: 2
@@ -88,3 +90,4 @@ workflows:
       - deploy:
           requires:
             - build
+            - test
