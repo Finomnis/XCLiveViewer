@@ -73,9 +73,11 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "b5:3b:e4:44:28:54:fc:60:3f:a3:19:63:f3:3d:5c:7a"
-      - run: # deploy
+      - run:
+          command: sudo ls build/
+      - run:
           name: Deploy
-          command: gh-pages --message "[skip ci] Updates" --dist build
+          command: sudo gh-pages --message "[skip ci] Updates" --dist build
 
 workflows:
   version: 2
