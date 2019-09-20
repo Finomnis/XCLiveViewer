@@ -62,7 +62,7 @@ jobs:
       - setup_dependencies
       - run:
           name: Install gh-pages
-          command: sudo npm install -g gh-pages
+          command: npm install gh-pages
       - run:
           name: Setup Git Configs
           command: |
@@ -79,7 +79,7 @@ jobs:
           command: ssh-keyscan -t rsa -H bitbucket.org >> ~/.ssh/known_hosts
       - run:
           name: Deploy
-          command: sudo gh-pages --message "[skip ci] Updates" --dist build
+          command: ./node_modules/.bin/gh-pages --message "[skip ci] Updates" --dist build
 
 workflows:
   version: 2
