@@ -28,6 +28,10 @@ jobs:
       - run: # run build
           name: Build
           command: npm run build
+      - persist_to_workspace:
+          root: build
+          paths:
+            - *
 
   test:
     executor: node
@@ -64,6 +68,8 @@ jobs:
           command: |
             git config user.email "build@circleci.com"
             git config user.name "circleci-build"
+      - attach_workspace:
+          at: build
       - add_ssh_keys:
           fingerprints:
             - "b5:3b:e4:44:28:54:fc:60:3f:a3:19:63:f3:3d:5c:7a"
@@ -76,9 +82,7 @@ workflows:
   pipeline:
     jobs:
       - build
-      - test:
-          requires:
-            - build
+      - test
       - deploy:
           requires:
             - build
