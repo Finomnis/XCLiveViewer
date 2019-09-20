@@ -1,0 +1,14 @@
+- Create react app with 'npm init react-app <name>'
+    This creates an app with webpack, babel, a live web server and .git repository.
+- Sync with github
+- Add circleci config (change deploy key)
+
+
+
+- Add Materials-UI:
+  - npm install @material-ui/core
+  - npm install @material-ui/icons
+  - add robonto font to the html
+
+- Other packets:
+  - react-swipeable-views
