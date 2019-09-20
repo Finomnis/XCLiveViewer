@@ -20,7 +20,7 @@ function TabPanel(props) {
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
-      <Box p={0}>{children}</Box>
+      <Box>{children}</Box>
     </Typography>
   );
 }
@@ -41,7 +41,7 @@ function a11yProps(index) {
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    width: 500
+    width: "100%"
   }
 }));
 
