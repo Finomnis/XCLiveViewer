@@ -58,11 +58,12 @@ jobs:
       - setup_dependencies
       - run:
           name: Install gh-pages
-          command: npm install -g gh-pages
+          command: sudo npm install -g gh-pages
       - run:
-          command: git config user.email "build@circleci.com"
-      - run:
-          command: git config user.name "circleci-build"
+          name: Setup Git Configs
+          command: |
+            git config user.email "build@circleci.com"
+            git config user.name "circleci-build"
       - add_ssh_keys:
           fingerprints:
             - "b5:3b:e4:44:28:54:fc:60:3f:a3:19:63:f3:3d:5c:7a"
