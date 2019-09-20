@@ -38,3 +38,10 @@ jobs: # a collection of steps
       # - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
       #     path: test-results.xml
       # # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
+
+      - run: # install gh-pages
+          name: install-gh-pages
+          command: npm install -g gh-pages
+      - run: # deploy
+          name: deploy
+          command: gh-pages --message "[skip ci] Updates" --dist build
