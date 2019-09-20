@@ -11,7 +11,7 @@ commands:
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
-          name: install-dependencies
+          name: Install NPM Dependencies
           command: npm install
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
@@ -26,7 +26,7 @@ jobs:
       - checkout
       - setup_dependencies
       - run: # run build
-          name: build
+          name: Build
           command: npm run build
 
   test:
@@ -36,10 +36,10 @@ jobs:
       - checkout
       - setup_dependencies
       - run: # run tests
-          name: test
+          name: Test
           command: npm test
       - run: # run coverage report
-          name: code-coverage
+          name: Code Coverage
           command: "./node_modules/.bin/nyc report --reporter=text-lcov"
       - store_artifacts:
           path: test-results.xml
@@ -56,11 +56,17 @@ jobs:
     steps:
       - checkout
       - setup_dependencies
-      - run: # install gh-pages
-          name: install-gh-pages
-          command: npm install -g gh-pages
+      - run:
+          name: Install and configure dependencies
+          command: |
+            npm install -g --silent gh-pages
+            git config user.email "build@circleci.com"
+            git config user.name "circleci-build"
+      - add_ssh_keys:
+          fingerprints:
+            - "b5:3b:e4:44:28:54:fc:60:3f:a3:19:63:f3:3d:5c:7a"
       - run: # deploy
-          name: deploy
+          name: Deploy
           command: gh-pages --message "[skip ci] Updates" --dist build
 
 workflows:
