@@ -21,12 +21,12 @@ commands:
   setup_dependencies_deploy:
     steps:
       - restore_cache:
-          key: dependency-cache-deploy-{{ checksum "package.json" }}
+          key: dependency-cache-gh-pages
       - run:
           name: Install gh-pages
           command: npm install gh-pages
       - save_cache:
-          key: dependency-cache-deploy-{{ checksum "package.json" }}
+          key: dependency-cache-gh-pages
           paths:
             - ./node_modules
 
