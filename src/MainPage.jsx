@@ -2,8 +2,6 @@ import React from "react";
 import Box from "@material-ui/core/Box";
 import SwipeableViews from "react-swipeable-views";
 import { BottomNavigation, BottomNavigationAction } from "@material-ui/core";
-import { useTheme } from "@material-ui/core";
-import { styles as BottomNavigationStyles } from "@material-ui/core/BottomNavigation/BottomNavigation";
 
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
@@ -13,15 +11,24 @@ import "./MainPage.css";
 
 export default function MainPage() {
   const [tabId, setTabId] = React.useState(0);
+  const [windowHeight, setWindowHeight] = React.useState(0);
 
+  // Workaround for mobile screens reporting an incorrect window height
+  const updateWindowHeight = () => {
+    setWindowHeight(window.innerHeight);
+  };
+  React.useEffect(() => {
+    updateWindowHeight();
+    window.addEventListener("resize", updateWindowHeight);
+    return () => window.removeEventListener("resize", updateWindowHeight);
+  }, []);
+
+  // Callbacks for changing the current page
   const handleNavigationButton = (_event, newValue) => setTabId(newValue);
   const handleSwipeChange = value => setTabId(value);
 
-  const bottomNavigationHeight = BottomNavigationStyles(useTheme()).root.height;
-  console.log(bottomNavigationHeight);
-
   return (
-    <Box height={window.innerHeight} display="flex" flexDirection="column">
+    <Box height={windowHeight} display="flex" flexDirection="column">
       <Box flexGrow={1} clone>
         <SwipeableViews index={tabId} onChangeIndex={handleSwipeChange}>
           <div>Item One</div>
@@ -29,15 +36,17 @@ export default function MainPage() {
           <div>Item Three</div>
         </SwipeableViews>
       </Box>
-      <BottomNavigation
-        value={tabId}
-        onChange={handleNavigationButton}
-        showLabels
-      >
-        <BottomNavigationAction label="Map" icon={<MapIcon />} />
-        <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-        <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
-      </BottomNavigation>
+      <Box boxShadow={3}>
+        <BottomNavigation
+          value={tabId}
+          onChange={handleNavigationButton}
+          showLabels
+        >
+          <BottomNavigationAction label="Map" icon={<MapIcon />} />
+          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+          <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+        </BottomNavigation>
+      </Box>
     </Box>
   );
 }
