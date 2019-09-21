@@ -1,0 +1,10 @@
+.react-swipeable-view-container > div[aria-hidden="false"] {
+  visibility: visible;
+  opacity: 1;
+}
+
+.react-swipeable-view-container > div[aria-hidden="true"] {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.5s, opacity 0.5s linear;
+}
