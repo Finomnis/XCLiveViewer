@@ -39,7 +39,7 @@ export default function MainPage() {
           <Box>Item Three</Box>
         </SwipeableViews>
       </Box>
-      <Box zIndex={1} boxShadow={3}>
+      <Box zIndex={100} boxShadow={3}>
         <BottomNavigation
           value={tabId}
           onChange={handleNavigationButton}
