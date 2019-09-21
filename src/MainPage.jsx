@@ -2,6 +2,8 @@ import React from "react";
 import Box from "@material-ui/core/Box";
 import SwipeableViews from "react-swipeable-views";
 import { BottomNavigation, BottomNavigationAction } from "@material-ui/core";
+import { useTheme } from "@material-ui/core";
+import { styles as BottomNavigationStyles } from "@material-ui/core/BottomNavigation/BottomNavigation";
 
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
@@ -15,8 +17,11 @@ export default function MainPage() {
   const handleNavigationButton = (_event, newValue) => setTabId(newValue);
   const handleSwipeChange = value => setTabId(value);
 
+  const bottomNavigationHeight = BottomNavigationStyles(useTheme()).root.height;
+  console.log(bottomNavigationHeight);
+
   return (
-    <Box height="100vh" display="flex" flexDirection="column">
+    <Box height={window.innerHeight} display="flex" flexDirection="column">
       <Box flexGrow={1} clone>
         <SwipeableViews index={tabId} onChangeIndex={handleSwipeChange}>
           <div>Item One</div>
