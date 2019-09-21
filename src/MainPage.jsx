@@ -9,7 +9,7 @@ import MapIcon from "@material-ui/icons/Map";
 
 import "./MainPage.css";
 
-import Map from "./pages/Map";
+import LiveMap from "./pages/LiveMap";
 
 export default function MainPage() {
   const [tabId, setTabId] = React.useState(0);
@@ -33,7 +33,7 @@ export default function MainPage() {
       <Box flexGrow={1} clone>
         <SwipeableViews disabled index={tabId}>
           <Box>
-            <Map></Map>
+            <LiveMap></LiveMap>
           </Box>
           <Box>Item Two</Box>
           <Box>Item Three</Box>
