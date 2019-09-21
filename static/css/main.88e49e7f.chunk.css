@@ -1,0 +1,2 @@
+.react-swipeable-view-container>div[aria-hidden=false]{visibility:visible;opacity:1}.react-swipeable-view-container>div[aria-hidden=true]{visibility:hidden;opacity:0;-webkit-transition:visibility 0s .5s,opacity .5s linear;transition:visibility 0s .5s,opacity .5s linear}body{margin:0;padding:0}
+/*# sourceMappingURL=main.88e49e7f.chunk.css.map */
