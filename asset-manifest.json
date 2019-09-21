@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/XCLiveViewer/static/css/main.88e49e7f.chunk.css",
-    "main.js": "/XCLiveViewer/static/js/main.fa7b9929.chunk.js",
-    "main.js.map": "/XCLiveViewer/static/js/main.fa7b9929.chunk.js.map",
+    "main.js": "/XCLiveViewer/static/js/main.1df2d59b.chunk.js",
+    "main.js.map": "/XCLiveViewer/static/js/main.1df2d59b.chunk.js.map",
     "runtime-main.js": "/XCLiveViewer/static/js/runtime-main.1c143e6b.js",
     "runtime-main.js.map": "/XCLiveViewer/static/js/runtime-main.1c143e6b.js.map",
-    "static/js/2.afe74032.chunk.js": "/XCLiveViewer/static/js/2.afe74032.chunk.js",
-    "static/js/2.afe74032.chunk.js.map": "/XCLiveViewer/static/js/2.afe74032.chunk.js.map",
+    "static/js/2.9962510c.chunk.js": "/XCLiveViewer/static/js/2.9962510c.chunk.js",
+    "static/js/2.9962510c.chunk.js.map": "/XCLiveViewer/static/js/2.9962510c.chunk.js.map",
     "index.html": "/XCLiveViewer/index.html",
-    "precache-manifest.78aec010323d18a545a241af038c4356.js": "/XCLiveViewer/precache-manifest.78aec010323d18a545a241af038c4356.js",
+    "precache-manifest.2ec476b9a692ad13d270646c35ab5f04.js": "/XCLiveViewer/precache-manifest.2ec476b9a692ad13d270646c35ab5f04.js",
     "service-worker.js": "/XCLiveViewer/service-worker.js",
     "static/css/main.88e49e7f.chunk.css.map": "/XCLiveViewer/static/css/main.88e49e7f.chunk.css.map"
   }
