@@ -1,3 +1,7 @@
+.react-swipeable-view-container {
+  height: 100%;
+}
+
 .react-swipeable-view-container > div[aria-hidden="false"] {
   visibility: visible;
   opacity: 1;

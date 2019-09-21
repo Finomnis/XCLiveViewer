@@ -9,6 +9,8 @@ import MapIcon from "@material-ui/icons/Map";
 
 import "./MainPage.css";
 
+import Map from "./pages/Map";
+
 export default function MainPage() {
   const [tabId, setTabId] = React.useState(0);
   const [windowHeight, setWindowHeight] = React.useState(0);
@@ -25,18 +27,19 @@ export default function MainPage() {
 
   // Callbacks for changing the current page
   const handleNavigationButton = (_event, newValue) => setTabId(newValue);
-  const handleSwipeChange = value => setTabId(value);
 
   return (
     <Box height={windowHeight} display="flex" flexDirection="column">
       <Box flexGrow={1} clone>
-        <SwipeableViews index={tabId} onChangeIndex={handleSwipeChange}>
-          <div>Item One</div>
-          <div>Item Two</div>
-          <div>Item Three</div>
+        <SwipeableViews disabled index={tabId}>
+          <Box>
+            <Map></Map>
+          </Box>
+          <Box>Item Two</Box>
+          <Box>Item Three</Box>
         </SwipeableViews>
       </Box>
-      <Box boxShadow={3}>
+      <Box zIndex={1} boxShadow={3}>
         <BottomNavigation
           value={tabId}
           onChange={handleNavigationButton}
