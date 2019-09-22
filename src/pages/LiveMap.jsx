@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useLayoutEffect } from "react";
 import Box from "@material-ui/core/Box";
 import useGoogleMapsApi from "../ext/GoogleMapsApiLoader";
 import { LoadingPage, ErrorPage } from "./StatusPages";
@@ -59,11 +59,11 @@ const mapStyle = [
 
 const LiveMap = () => {
   const [mapReady, mapError, google] = useGoogleMapsApi();
-  const mapsRef = useState(React.createRef())[0];
+  const mapsRef = useRef();
   const [map, setMap] = useState(null);
 
   // Initialize Map
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (mapReady && !map) {
       setMap(
         new google.maps.Map(mapsRef.current, {
