@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Box from "@material-ui/core/Box";
 import useGoogleMapsApi from "../ext/GoogleMapsApiLoader";
+import { LoadingPage, ErrorPage } from "./StatusPages";
 
 const LiveMap = () => {
   const [mapReady, mapError, google] = useGoogleMapsApi();
@@ -27,20 +28,11 @@ const LiveMap = () => {
         display={mapReady ? "block" : "none"}
         ref={mapsRef}
       ></Box>
-      <Box
-        width="100%"
-        height="100%"
-        display={!mapReady && !mapError ? "block" : "none"}
-      >
-        Loading...
-      </Box>
-      <Box
-        width="100%"
-        height="100%"
-        display={!mapReady && mapError ? "block" : "none"}
-      >
-        Error!
-      </Box>
+      <LoadingPage
+        message="Loading Maps ..."
+        hideIf={mapReady || mapError}
+      ></LoadingPage>
+      <ErrorPage message="Unable to load map!" hideIf={!mapError}></ErrorPage>
     </React.Fragment>
   );
 };
