@@ -32,11 +32,15 @@ export default function MainPage() {
     <Box height={windowHeight} display="flex" flexDirection="column">
       <Box flexGrow={1} clone>
         <SwipeableViews disabled index={tabId}>
-          <Box>
+          <Box width="100%" height="100%">
             <LiveMap></LiveMap>
           </Box>
-          <Box>Item Two</Box>
-          <Box>Item Three</Box>
+          <Box width="100%" height="100%">
+            Item Two
+          </Box>
+          <Box width="100%" height="100%">
+            Item Three
+          </Box>
         </SwipeableViews>
       </Box>
       <Box zIndex={100} boxShadow={3}>

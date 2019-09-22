@@ -1,22 +1,48 @@
-import React from "react";
-import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
+import React, { useState, useEffect } from "react";
+import Box from "@material-ui/core/Box";
+import useGoogleMapsApi from "../ext/GoogleMapsApiLoader";
 
-export class LiveMap extends React.Component {
-  onMarkerClick = args => {
-    console.log(args);
-  };
+const LiveMap = () => {
+  const [mapReady, mapError, google] = useGoogleMapsApi();
+  const mapsRef = useState(React.createRef())[0];
+  const [map, setMap] = useState(null);
 
-  render() {
-    const style = { width: "100%", height: "100%" };
+  // Initialize Map
+  useEffect(() => {
+    if (mapReady && !map) {
+      setMap(
+        new google.maps.Map(mapsRef.current, {
+          center: { lat: -34.397, lng: 150.644 },
+          zoom: 8
+        })
+      );
+    }
+  }, [mapReady, map, google, mapsRef]);
 
-    return (
-      <Map google={this.props.google} zoom={14} style={style}>
-        <Marker onClick={this.onMarkerClick} name={"Current location"} />
-      </Map>
-    );
-  }
-}
+  return (
+    <React.Fragment>
+      <Box
+        width="100%"
+        height="100%"
+        display={mapReady ? "block" : "none"}
+        ref={mapsRef}
+      ></Box>
+      <Box
+        width="100%"
+        height="100%"
+        display={!mapReady && !mapError ? "block" : "none"}
+      >
+        Loading...
+      </Box>
+      <Box
+        width="100%"
+        height="100%"
+        display={!mapReady && mapError ? "block" : "none"}
+      >
+        Error!
+      </Box>
+    </React.Fragment>
+  );
+};
 
-export default GoogleApiWrapper({
-  apiKey: process.env.REACT_APP_GAPI_KEY
-})(LiveMap);
+export default LiveMap;
