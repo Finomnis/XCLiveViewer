@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { EventEmitter } from "events";
 import mapEventToState from "../util/EventToReactState";
 
