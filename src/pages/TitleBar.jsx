@@ -34,7 +34,7 @@ const TitleBar = () => {
       case ConnectionState.ERROR:
         return <ErrorIcon color="error" />;
       case ConnectionState.ESTABLISHED:
-        return <SignalCellularConnectedNoInternet4BarIcon />;
+        return <SignalCellularNullIcon />;
       case ConnectionState.INACTIVE:
         return <SignalCellularConnectedNoInternet4BarIcon />;
       case ConnectionState.NO_CONNECTION:
