@@ -2,60 +2,7 @@ import React, { useState, useRef, useLayoutEffect } from "react";
 import Box from "@material-ui/core/Box";
 import useGoogleMapsApi from "../ext/GoogleMapsApiLoader";
 import { LoadingPage, ErrorPage } from "./StatusPages";
-
-const mapStyle = [
-  {
-    featureType: "all",
-    stylers: [
-      {
-        visibility: "simplified"
-      }
-    ]
-  },
-  {
-    featureType: "administrative.land_parcel",
-    stylers: [
-      {
-        visibility: "off"
-      }
-    ]
-  },
-  {
-    featureType: "administrative.neighborhood",
-    stylers: [
-      {
-        visibility: "off"
-      }
-    ]
-  },
-  {
-    featureType: "poi",
-    elementType: "labels.text",
-    stylers: [
-      {
-        visibility: "off"
-      }
-    ]
-  },
-  {
-    featureType: "road",
-    elementType: "labels",
-    stylers: [
-      {
-        visibility: "off"
-      }
-    ]
-  },
-  {
-    featureType: "water",
-    elementType: "labels.text",
-    stylers: [
-      {
-        visibility: "off"
-      }
-    ]
-  }
-];
+import mapStyle from "./MapStyle.json";
 
 const LiveMap = () => {
   const [mapReady, mapError, google] = useGoogleMapsApi();
