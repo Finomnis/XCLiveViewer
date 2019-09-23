@@ -11,7 +11,6 @@ import ErrorIcon from "@material-ui/icons/ErrorRounded";
 import SignalCellular4BarIcon from "@material-ui/icons/SignalCellular4Bar";
 import SignalCellularConnectedNoInternet4BarIcon from "@material-ui/icons/SignalCellularConnectedNoInternet4Bar";
 import SignalCellularNullIcon from "@material-ui/icons/SignalCellularNull";
-import SignalCellular0BarIcon from "@material-ui/icons/SignalCellular0Bar";
 
 import { useXContestConnectionState } from "../location_provider/XContest/XContestInterface";
 import { ConnectionState } from "../location_provider/XContest/XContestInterface";
@@ -35,7 +34,7 @@ const TitleBar = () => {
       case ConnectionState.ERROR:
         return <ErrorIcon color="error" />;
       case ConnectionState.ESTABLISHED:
-        return <SignalCellular0BarIcon />;
+        return <SignalCellularConnectedNoInternet4BarIcon />;
       case ConnectionState.INACTIVE:
         return <SignalCellularConnectedNoInternet4BarIcon />;
       case ConnectionState.NO_CONNECTION:
