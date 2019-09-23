@@ -1,11 +1,20 @@
 import React from "react";
 import { Box } from "@material-ui/core";
 
-import { useXContestPilots } from "../tools/XContestInterface";
+import {
+  useXContestPilots,
+  useXContestConnectionState
+} from "../tools/XContestInterface";
 
 const PilotSelector = () => {
+  const connectionState = useXContestConnectionState();
   const pilotList = useXContestPilots();
-  return <Box>{pilotList.length}</Box>;
+  return (
+    <React.Fragment>
+      <Box>State: {connectionState}</Box>
+      <Box>{pilotList.length}</Box>
+    </React.Fragment>
+  );
 };
 
 export default PilotSelector;
