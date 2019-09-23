@@ -22,7 +22,7 @@ export default function MainPage() {
   const updateWindowHeight = () => {
     setWindowHeight(window.innerHeight);
   };
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     updateWindowHeight();
     window.addEventListener("resize", updateWindowHeight);
     return () => window.removeEventListener("resize", updateWindowHeight);
