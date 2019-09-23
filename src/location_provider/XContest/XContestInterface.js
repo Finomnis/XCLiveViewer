@@ -21,7 +21,6 @@ class XContestInterface {
   }
 
   onConnectionStateChanged = state => {
-    console.log("New connection state: ", state);
     this.eventEmitter.emit("connectionStateChanged", state);
   };
 
