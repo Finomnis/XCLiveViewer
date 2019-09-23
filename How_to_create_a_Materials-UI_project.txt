@@ -12,3 +12,9 @@
 
 - Other packets:
   - react-swipeable-views
+
+
+- VS Code Addons:
+    - (Ayu Mirage) -> better: Dark+ (default dark)
+    - Simple React Snippets
+    - Prettier
