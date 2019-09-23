@@ -13,6 +13,7 @@ import "./MainPage.css";
 
 import LiveMap from "./pages/LiveMap";
 import PilotSelector from "./pages/PilotSelector";
+import TitleBar from "./pages/TitleBar";
 
 export default function MainPage() {
   const [tabId, setTabId] = React.useState(1);
@@ -33,6 +34,9 @@ export default function MainPage() {
 
   return (
     <Box height={windowHeight} display="flex" flexDirection="column">
+      <Box zIndex={1}>
+        <TitleBar></TitleBar>
+      </Box>
       <Box flexGrow={1} clone>
         <SwipeableViews disabled index={tabId}>
           <Box width="100%" height="100%">
@@ -46,7 +50,7 @@ export default function MainPage() {
           </Box>
         </SwipeableViews>
       </Box>
-      <Box zIndex={100} boxShadow={3}>
+      <Box zIndex={1} boxShadow={3}>
         <BottomNavigation
           value={tabId}
           onChange={handleNavigationButton}
