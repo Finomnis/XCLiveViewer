@@ -9,10 +9,13 @@ import MapIcon from "@material-ui/icons/Map";
 
 import "./MainPage.css";
 
+// TODO import LazyLoading from "./util/LazyLoading";
+
 import LiveMap from "./pages/LiveMap";
+import PilotSelector from "./pages/PilotSelector";
 
 export default function MainPage() {
-  const [tabId, setTabId] = React.useState(0);
+  const [tabId, setTabId] = React.useState(1);
   const [windowHeight, setWindowHeight] = React.useState(0);
 
   // Workaround for mobile screens reporting an incorrect window height
@@ -36,7 +39,7 @@ export default function MainPage() {
             <LiveMap></LiveMap>
           </Box>
           <Box width="100%" height="100%">
-            Item Two
+            <PilotSelector></PilotSelector>
           </Box>
           <Box width="100%" height="100%">
             Item Three
