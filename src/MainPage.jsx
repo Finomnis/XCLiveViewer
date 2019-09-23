@@ -34,7 +34,7 @@ export default function MainPage() {
 
   return (
     <Box height={windowHeight} display="flex" flexDirection="column">
-      <Box zIndex={1}>
+      <Box zIndex={100}>
         <TitleBar></TitleBar>
       </Box>
       <Box flexGrow={1} clone>
@@ -50,7 +50,7 @@ export default function MainPage() {
           </Box>
         </SwipeableViews>
       </Box>
-      <Box zIndex={1} boxShadow={3}>
+      <Box zIndex={100} boxShadow={3}>
         <BottomNavigation
           value={tabId}
           onChange={handleNavigationButton}

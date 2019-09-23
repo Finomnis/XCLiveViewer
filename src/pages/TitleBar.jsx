@@ -1,43 +1,79 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
+import { makeStyles } from "@material-ui/core/styles";
+import Box from "@material-ui/core/Box";
+
 import MenuIcon from "@material-ui/icons/Menu";
+import ErrorIcon from "@material-ui/icons/ErrorRounded";
+import SignalCellular4BarIcon from "@material-ui/icons/SignalCellular4Bar";
+import SignalCellularConnectedNoInternet4BarIcon from "@material-ui/icons/SignalCellularConnectedNoInternet4Bar";
+import SignalCellularNullIcon from "@material-ui/icons/SignalCellularNull";
+import SignalCellular0BarIcon from "@material-ui/icons/SignalCellular0Bar";
+
+import { useXContestConnectionState } from "../location_provider/XContest/XContestInterface";
+import { ConnectionState } from "../location_provider/XContest/XContestInterface";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
   menuButton: {
     marginRight: theme.spacing(2)
-  },
-  title: {
-    flexGrow: 1
   }
 }));
 
 const TitleBar = () => {
   const classes = useStyles();
+  const connectionState = useXContestConnectionState();
+
+  const renderConnectionIcon = () => {
+    switch (connectionState) {
+      case ConnectionState.ACTIVE:
+        return <SignalCellular4BarIcon />;
+      case ConnectionState.CONNECTING:
+        return <SignalCellular0BarIcon />;
+      case ConnectionState.ERROR:
+        return <ErrorIcon color="error" />;
+      case ConnectionState.ESTABLISHED:
+        return <SignalCellularConnectedNoInternet4BarIcon />;
+      case ConnectionState.INACTIVE:
+        return <SignalCellularConnectedNoInternet4BarIcon />;
+      case ConnectionState.NO_CONNECTION:
+        return <SignalCellularNullIcon />;
+      default:
+        return <SignalCellularNullIcon />;
+    }
+  };
+
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <IconButton
-          edge="start"
-          className={classes.menuButton}
-          color="inherit"
-          aria-label="menu"
-        >
-          <MenuIcon />
-        </IconButton>
-        <Typography variant="h6" className={classes.title}>
-          News
-        </Typography>
-        <Button color="inherit">Login</Button>
-      </Toolbar>
-    </AppBar>
+    <div>
+      <AppBar position="static">
+        <Toolbar>
+          <Box clone>
+            <IconButton
+              className={classes.menuButton}
+              edge="start"
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+          </Box>
+
+          <Box flexGrow={1} clone>
+            <Typography variant="h6">XC Live Viewer</Typography>
+          </Box>
+
+          <IconButton
+            disableRipple
+            disableFocusRipple
+            edge="end"
+            color="inherit"
+          >
+            {renderConnectionIcon()}
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+    </div>
   );
 };
 
