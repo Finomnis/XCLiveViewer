@@ -4,7 +4,7 @@ import { Box } from "@material-ui/core";
 import {
   useXContestPilots,
   useXContestConnectionState
-} from "../tools/XContestInterface";
+} from "../location_provider/XContest/XContestInterface";
 
 const PilotSelector = () => {
   const connectionState = useXContestConnectionState();

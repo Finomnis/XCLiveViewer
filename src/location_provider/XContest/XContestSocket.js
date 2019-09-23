@@ -1,17 +1,6 @@
-import { EventEmitter } from "events";
-import mapEventToState from "../util/EventToReactState";
+import { ConnectionState } from "./XContestInterface";
 
-const ConnectionState = {
-  CONNECTING: "connecting", //orange
-  ERROR: "error", //red
-  ESTABLISHED: "established", //yellow
-  ACTIVE: "active", //green
-  INACTIVE: "inactive", //orange
-  NO_CONNECTION: "no connection", //red
-  NO_INFORMATION: "no information" //gray
-};
-
-class XContestSocket {
+export default class XContestSocket {
   constructor(onStateChanged, onInfoMessage, onTracklogMessage) {
     this.setConnectionState = onStateChanged;
     this.connect();
@@ -83,49 +72,3 @@ class XContestSocket {
     console.log("WS:Error!");
   };
 }
-
-class XContestInterface {
-  constructor() {
-    this.pilots = {};
-    this.shortTracks = {};
-    this.eventEmitter = new EventEmitter();
-    this.socket = new XContestSocket(this.onConnectionStateChanged);
-  }
-
-  onConnectionStateChanged = state => {
-    console.log("New connection state: ", state);
-    this.eventEmitter.emit("connectionStateChanged", state);
-  };
-
-  onInfoMessageReceived = state => {};
-
-  onTracklogMessageReceived = state => {};
-}
-
-// Singleton stuff
-let _instance = null;
-const getXContestInterface = () => {
-  if (!_instance) {
-    _instance = new XContestInterface();
-  }
-  return _instance;
-};
-
-export const useXContestPilots = mapEventToState(
-  () => getXContestInterface().eventEmitter,
-  "pilotStateChanged",
-  []
-);
-
-export const useXContestConnectionState = mapEventToState(
-  () => getXContestInterface().eventEmitter,
-  "connectionStateChanged",
-  ConnectionState.NO_INFORMATION
-);
-
-// Hook. Fires every time the short tracks list got updated.
-export const useXContestShortTracks = mapEventToState(
-  () => getXContestInterface().eventEmitter,
-  "shortTracksChanged",
-  {}
-);
