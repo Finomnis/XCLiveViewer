@@ -17,14 +17,19 @@ class XContestInterface {
     this.pilots = {};
     this.shortTracks = {};
     this.eventEmitter = new EventEmitter();
-    this.socket = new XContestSocket(this.onConnectionStateChanged);
+    this.socket = new XContestSocket(
+      this.onConnectionStateChanged,
+      this.onInfoMessageReceived
+    );
   }
 
   onConnectionStateChanged = state => {
     this.eventEmitter.emit("connectionStateChanged", state);
   };
 
-  onInfoMessageReceived = state => {};
+  onInfoMessageReceived = msg => {
+    console.log(msg);
+  };
 
   onTracklogMessageReceived = state => {};
 }

@@ -3,6 +3,7 @@ import { ConnectionState } from "./XContestInterface";
 export default class XContestSocket {
   constructor(onStateChanged, onInfoMessage, onTracklogMessage) {
     this.setConnectionState = onStateChanged;
+    this.dispatchInfoMessage = onInfoMessage;
     this.connect();
   }
 
@@ -22,7 +23,8 @@ export default class XContestSocket {
   }
 
   onOpen = () => {
-    console.log("WS:Open!");
+    this.handleReset();
+    console.log("WebSocket: Open!");
     this.setConnectionState(ConnectionState.ESTABLISHED);
 
     // Set area filter to the entire world
@@ -43,12 +45,11 @@ export default class XContestSocket {
     this.sock.send(JSON.stringify({ tag: "WebFollow", contents: [] }));
   };
 
-  onMessage = msg => {
-    console.log("WS:Message!");
+  onMessage = evt => {
+    console.log("WebSocket: Message!");
     this.setConnectionState(ConnectionState.ACTIVE);
 
-    let received_msg = JSON.parse(msg.data);
-    console.log("Received: ", received_msg);
+    let msg = JSON.parse(evt.data);
 
     // Expect the next message in 60 seconds. If not, change the status message.
     clearTimeout(this.watchdog);
@@ -56,19 +57,36 @@ export default class XContestSocket {
       this.setConnectionState(ConnectionState.INACTIVE);
     }, 70000);
 
-    // Send to user
-    //TODO process_msg(received_msg);
+    // Process the message
+    this.processMessage(msg);
   };
 
-  onClose = msg => {
-    console.log("WS:Close!");
+  onClose = evt => {
+    console.log("WebSocket: Close!");
     this.setConnectionState(ConnectionState.NO_CONNECTION);
     // websocket is closed.
-    setTimeout(this.connect.bind(this), 3000);
-    console.log("Connection is closed.", msg);
+    setTimeout(this.connect.bind(this), 1000);
   };
 
-  onError = msg => {
-    console.log("WS:Error!");
+  onError = evt => {
+    console.log("WebSocket: Error!");
+  };
+
+  // Message Processing
+  handleReset = () => {
+    console.log("TODO: handle reset!");
+  };
+  processMessage = msg => {
+    if (!("tag" in msg)) {
+      console.log("Warning: Invalid message format!", msg);
+      return;
+    }
+    switch (msg.tag) {
+      case "LiveFlightInfos":
+        this.dispatchInfoMessage(msg.contents);
+        break;
+      default:
+        console.log(`Warning: Unknown message tag '${msg.tag}'!`, msg);
+    }
   };
 }

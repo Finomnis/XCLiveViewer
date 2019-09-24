@@ -1,4 +1,3 @@
-- Implement title bar
 - Implement further processing of websocket messages
 - Implement pilot selection list
 - Implement selected friends (maybe cookies? website specific storage?)
@@ -6,3 +5,12 @@
 Notes:
 - The tracks on the map should have a different color for every pilot
 - The markers should be a some kind of arrow / google maps marker with a state symbol insight (double arrow for live, ? for no symbol, some symbol for landed)
+    - Normal flight: import NavigationIcon from '@material-ui/icons/Navigation';
+                     or import PlayCircleFilledRoundedIcon from '@material-ui/icons/PlayCircleFilledRounded';
+    - No response: import HelpIcon from '@material-ui/icons/Help';
+    - Landed: import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
+              or import ArrowDropDownCircleRoundedIcon from '@material-ui/icons/ArrowDropDownCircleRounded';
+              or import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+
+DONE:
+- Implement title bar
