@@ -4,6 +4,7 @@ export default class XContestSocket {
   constructor(onStateChanged, onInfoMessage, onTracklogMessage) {
     this.setConnectionState = onStateChanged;
     this.dispatchInfoMessage = onInfoMessage;
+    this.dispatchTracklogMessage = onTracklogMessage;
     this.connect();
   }
 
@@ -84,6 +85,9 @@ export default class XContestSocket {
     switch (msg.tag) {
       case "LiveFlightInfos":
         this.dispatchInfoMessage(msg.contents);
+        break;
+      case "LiveFlightChunk":
+        this.dispatchTracklogMessage(msg);
         break;
       default:
         console.log(`Warning: Unknown message tag '${msg.tag}'!`, msg);

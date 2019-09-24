@@ -12,7 +12,7 @@ const PilotSelector = () => {
   return (
     <React.Fragment>
       <Box>State: {connectionState}</Box>
-      <Box>{pilotList.length}</Box>
+      <Box>{Object.keys(pilotList).length}</Box>
     </React.Fragment>
   );
 };

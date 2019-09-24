@@ -19,7 +19,8 @@ class XContestInterface {
     this.eventEmitter = new EventEmitter();
     this.socket = new XContestSocket(
       this.onConnectionStateChanged,
-      this.onInfoMessageReceived
+      this.onInfoMessageReceived,
+      this.onTracklogMessageReceived
     );
   }
 
@@ -31,7 +32,9 @@ class XContestInterface {
     console.log(msg);
   };
 
-  onTracklogMessageReceived = state => {};
+  onTracklogMessageReceived = msg => {
+    console.log("Trackog Message: ", msg);
+  };
 }
 
 // Singleton stuff
@@ -46,7 +49,7 @@ const getXContestInterface = () => {
 export const useXContestPilots = mapEventToState(
   () => getXContestInterface().eventEmitter,
   "pilotStateChanged",
-  []
+  {}
 );
 
 export const useXContestConnectionState = mapEventToState(
