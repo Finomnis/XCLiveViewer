@@ -12,7 +12,7 @@ import "./MainPage.css";
 // TODO import LazyLoading from "./util/LazyLoading";
 
 import LiveMap from "./pages/LiveMap";
-import PilotSelector from "./pages/PilotSelector";
+import Pilots from "./pages/Pilots";
 import TitleBar from "./pages/TitleBar";
 
 export default function MainPage() {
@@ -39,13 +39,13 @@ export default function MainPage() {
       </Box>
       <Box flexGrow={1} clone>
         <SwipeableViews disabled index={tabId}>
-          <Box width="100%" height="100%">
+          <Box width="100%" height="100%" position="relative">
             <LiveMap></LiveMap>
           </Box>
-          <Box width="100%" height="100%">
-            <PilotSelector></PilotSelector>
+          <Box width="100%" height="100%" position="relative">
+            <Pilots></Pilots>
           </Box>
-          <Box width="100%" height="100%">
+          <Box width="100%" height="100%" position="relative">
             Item Three
           </Box>
         </SwipeableViews>
