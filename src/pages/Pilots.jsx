@@ -33,8 +33,12 @@ const Pilots = () => {
         bottom={theme.spacing(2)}
         right={theme.spacing(2)}
       >
-        <Fab size="small" color="primary">
-          <AddIcon onClick={() => setPilotSelectorOpen(true)} />
+        <Fab
+          size="small"
+          color="primary"
+          onClick={() => setPilotSelectorOpen(true)}
+        >
+          <AddIcon />
         </Fab>
       </Box>
       <PilotSelector
