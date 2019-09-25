@@ -2,6 +2,7 @@
 - Implement pilot selection list
 - Implement selected friends (maybe cookies? website specific storage?)
 - Create settings page
+- Add status popover to connectionstate button
 
 Notes:
 - The tracks on the map should have a different color for every pilot
