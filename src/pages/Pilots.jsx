@@ -14,7 +14,7 @@ const Pilots = () => {
 
   return (
     <React.Fragment>
-      <Box height="100%" overflow="scroll">
+      <Box height="100%" style={{ "overflow-y": "scroll" }}>
         {content}
       </Box>
 
