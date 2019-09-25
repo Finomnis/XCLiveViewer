@@ -54,7 +54,6 @@ const columns = [
 ];
 
 const PilotSelector = () => {
-  const connectionState = useXContestConnectionState();
   const pilotList = useXContestPilots();
   console.log(pilotList);
   return (
