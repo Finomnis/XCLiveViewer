@@ -1,5 +1,8 @@
 import React from "react";
-import { Box } from "@material-ui/core";
+import { Box, useMediaQuery, useTheme } from "@material-ui/core";
+
+import { Button, Dialog, DialogTitle, DialogActions } from "@material-ui/core";
+
 import {
   Table,
   TableBody,
@@ -8,10 +11,7 @@ import {
   TableCell
 } from "@material-ui/core";
 
-import {
-  useXContestPilots,
-  useXContestConnectionState
-} from "../location_provider/XContest/XContestInterface";
+import { useXContestPilots } from "../location_provider/XContest/XContestInterface";
 
 const columns = [
   {
@@ -53,11 +53,19 @@ const columns = [
   }
 ];
 
-const PilotSelector = () => {
+const PilotSelector = props => {
+  const theme = useTheme();
   const pilotList = useXContestPilots();
-  console.log(pilotList);
+
+  const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
+
+  // TODO add search bar
+  // Create virtual pilot if nobody found
+  // Add selectable pilots and functionality of the 'Add' button
+
   return (
-    <React.Fragment>
+    <Dialog open={props.open} onClose={props.onClose} fullScreen={fullScreen}>
+      <DialogTitle>Add new pilots:</DialogTitle>
       <Table stickyHeader size="small">
         <TableHead>
           <TableRow>
@@ -93,7 +101,15 @@ const PilotSelector = () => {
           })}
         </TableBody>
       </Table>
-    </React.Fragment>
+      <DialogActions>
+        <Button onClick={props.onClose} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={() => {}} color="primary">
+          Add
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 

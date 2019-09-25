@@ -4,9 +4,11 @@ import { Fab } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import Box from "@material-ui/core/Box";
+import PilotSelector from "./PilotSelector";
 
 const Pilots = () => {
   const theme = useTheme();
+  const [pilotSelectorOpen, setPilotSelectorOpen] = useState(false);
 
   const [pilots, addPilots, removePilots] = useChosenPilots();
 
@@ -20,15 +22,9 @@ const Pilots = () => {
     return <Box key={pilotId}>{displayedName}</Box>;
   });
 
-  const chooseNewPilot = () => {
-    // TODO
-    // open pilotselector as popup window
-    // send addChosenPilots
-  };
-
   return (
     <React.Fragment>
-      <Box height="100%" style={{ overflowY: "scroll" }}>
+      <Box height="100%" style={{ overflowY: "auto" }}>
         {content}
       </Box>
 
@@ -38,9 +34,13 @@ const Pilots = () => {
         right={theme.spacing(2)}
       >
         <Fab size="small" color="primary">
-          <AddIcon onClick={chooseNewPilot} />
+          <AddIcon onClick={() => setPilotSelectorOpen(true)} />
         </Fab>
       </Box>
+      <PilotSelector
+        open={pilotSelectorOpen}
+        onClose={() => setPilotSelectorOpen(false)}
+      />
     </React.Fragment>
   );
 };
