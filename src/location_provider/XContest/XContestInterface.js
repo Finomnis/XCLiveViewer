@@ -14,7 +14,7 @@ export const ConnectionState = {
 
 class XContestInterface {
   constructor() {
-    this.pilots = {};
+    this.pilots = [];
     this.shortTracks = {};
     this.eventEmitter = new EventEmitter();
     this.socket = new XContestSocket(
@@ -30,6 +30,22 @@ class XContestInterface {
 
   onInfoMessageReceived = msg => {
     console.log(msg);
+    this.pilots = [];
+    for (const [trackId, track] of msg) {
+      // Skip if we have a newer track of the same person
+      if (track.overriden) continue;
+
+      this.pilots.push({
+        user: track.info.user,
+        flightId: trackId
+      });
+
+      this.shortTracks[trackId] = {
+        track
+      };
+    }
+    this.eventEmitter.emit("pilotStateChanged", this.pilots);
+    this.eventEmitter.emit("shortTracksChanged", this.shortTracks);
   };
 
   onTracklogMessageReceived = msg => {
@@ -49,7 +65,7 @@ const getXContestInterface = () => {
 export const useXContestPilots = mapEventToState(
   () => getXContestInterface().eventEmitter,
   "pilotStateChanged",
-  {}
+  []
 );
 
 export const useXContestConnectionState = mapEventToState(

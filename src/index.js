@@ -2,6 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import "./index.css";
+
+import "flag-icon-css/css/flag-icon.min.css";
+
 import * as serviceWorker from "./serviceWorker";
 
 // Read the .env file
