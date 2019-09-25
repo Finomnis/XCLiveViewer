@@ -8,17 +8,23 @@ import Box from "@material-ui/core/Box";
 const Pilots = () => {
   const theme = useTheme();
 
-  const [chosenPilots, addChosenPilots, removeChosenPilots] = useChosenPilots();
+  const [pilots, addPilots, removePilots] = useChosenPilots();
 
   // TODO sort pilots
 
-  const content = Object.entries(chosenPilots).map(([pilotId, pilotName]) => {
+  const content = Object.entries(pilots).map(([pilotId, pilotName]) => {
     let displayedName = pilotName;
     if (pilotName === null) {
       displayedName = pilotId;
     }
     return <Box key={pilotId}>{displayedName}</Box>;
   });
+
+  const chooseNewPilot = () => {
+    // TODO
+    // open pilotselector as popup window
+    // send addChosenPilots
+  };
 
   return (
     <React.Fragment>
@@ -32,7 +38,7 @@ const Pilots = () => {
         right={theme.spacing(2)}
       >
         <Fab size="small" color="primary">
-          <AddIcon />
+          <AddIcon onClick={chooseNewPilot} />
         </Fab>
       </Box>
     </React.Fragment>
