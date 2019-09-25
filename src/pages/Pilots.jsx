@@ -9,12 +9,12 @@ const Pilots = () => {
 
   let content = [];
   for (let i = 0; i < 100; i++) {
-    content.push(<Box>{i.toString()}</Box>);
+    content.push(<Box key={i}>{i.toString()}</Box>);
   }
 
   return (
     <React.Fragment>
-      <Box height="100%" style={{ "overflow-y": "scroll" }}>
+      <Box height="100%" style={{ overflowY: "scroll" }}>
         {content}
       </Box>
 
