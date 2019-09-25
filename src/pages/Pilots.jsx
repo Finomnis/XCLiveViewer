@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import { Fab } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
@@ -7,10 +8,17 @@ import Box from "@material-ui/core/Box";
 const Pilots = () => {
   const theme = useTheme();
 
-  let content = [];
-  for (let i = 0; i < 100; i++) {
-    content.push(<Box key={i}>{i.toString()}</Box>);
-  }
+  const [chosenPilots, addChosenPilots, removeChosenPilots] = useChosenPilots();
+
+  // TODO sort pilots
+
+  const content = Object.entries(chosenPilots).map(([pilotId, pilotName]) => {
+    let displayedName = pilotName;
+    if (pilotName === null) {
+      displayedName = pilotId;
+    }
+    return <Box key={pilotId}>{displayedName}</Box>;
+  });
 
   return (
     <React.Fragment>
@@ -32,3 +40,44 @@ const Pilots = () => {
 };
 
 export default Pilots;
+
+function useChosenPilots() {
+  //TODO replace with persistant storage
+  const [chosenPilots, setChosenPilots] = useState({});
+
+  // Add new pilots
+  const addPilots = pilotIds => {
+    const newPilotState = { ...chosenPilots };
+
+    let changed = false;
+    for (const pilotId of pilotIds) {
+      if (!(pilotId in newPilotState)) {
+        newPilotState[pilotId] = null;
+        changed = true;
+      }
+    }
+
+    if (changed) {
+      setChosenPilots(newPilotState);
+    }
+  };
+
+  // Remove pilots
+  const removePilots = pilotIds => {
+    const newPilotState = { ...chosenPilots };
+
+    let changed = false;
+    for (const pilotId of pilotIds) {
+      if (pilotId in newPilotState) {
+        delete newPilotState[pilotId];
+        changed = true;
+      }
+    }
+
+    if (changed) {
+      setChosenPilots(newPilotState);
+    }
+  };
+
+  return [chosenPilots, addPilots, removePilots];
+}

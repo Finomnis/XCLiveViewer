@@ -1,7 +1,7 @@
 - Implement further processing of websocket messages
 - Implement pilot selection list
 - Implement selected friends (maybe cookies? website specific storage?)
-
+- Create settings page
 
 Notes:
 - The tracks on the map should have a different color for every pilot
