@@ -2,6 +2,7 @@
 - Implement pilot selection list
 - Implement selected friends (maybe cookies? website specific storage?)
 
+
 Notes:
 - The tracks on the map should have a different color for every pilot
 - The markers should be a some kind of arrow / google maps marker with a state symbol insight (double arrow for live, ? for no symbol, some symbol for landed)
