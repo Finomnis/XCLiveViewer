@@ -3,8 +3,8 @@ import Box from "@material-ui/core/Box";
 import SwipeableViews from "react-swipeable-views";
 import { BottomNavigation, BottomNavigationAction } from "@material-ui/core";
 
-import FavoriteIcon from "@material-ui/icons/Favorite";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
+import PeopleIcon from "@material-ui/icons/People";
 import MapIcon from "@material-ui/icons/Map";
 
 import "./MainPage.css";
@@ -57,7 +57,7 @@ export default function MainPage() {
           showLabels
         >
           <BottomNavigationAction label="Map" icon={<MapIcon />} />
-          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+          <BottomNavigationAction label="Pilots" icon={<PeopleIcon />} />
           <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
         </BottomNavigation>
       </Box>
