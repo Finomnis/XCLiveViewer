@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
+import Badge from "@material-ui/core/Badge";
 
 import MenuIcon from "@material-ui/icons/Menu";
 import ErrorIcon from "@material-ui/icons/ErrorRounded";
@@ -14,12 +15,35 @@ import SignalCellularNullIcon from "@material-ui/icons/SignalCellularNull";
 
 import { useXContestConnectionState } from "../location_provider/XContest/XContestInterface";
 import { ConnectionState } from "../location_provider/XContest/XContestInterface";
+import { CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
     marginRight: theme.spacing(2)
   }
 }));
+
+const LoadingBadge = props => {
+  return (
+    <Badge
+      //overlap="circle"
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "right"
+      }}
+      badgeContent={
+        <CircularProgress
+          disableShrink={props.disableShrink}
+          color="secondary"
+          size={15}
+          thickness={10}
+        />
+      }
+    >
+      {props.children}
+    </Badge>
+  );
+};
 
 const TitleBar = () => {
   const classes = useStyles();
@@ -30,11 +54,19 @@ const TitleBar = () => {
       case ConnectionState.ACTIVE:
         return <SignalCellular4BarIcon />;
       case ConnectionState.CONNECTING:
-        return <SignalCellularNullIcon />;
+        return (
+          <LoadingBadge>
+            <SignalCellularNullIcon />
+          </LoadingBadge>
+        );
       case ConnectionState.ERROR:
         return <ErrorIcon color="error" />;
       case ConnectionState.ESTABLISHED:
-        return <SignalCellularNullIcon />;
+        return (
+          <LoadingBadge disableShrink>
+            <SignalCellularNullIcon />
+          </LoadingBadge>
+        );
       case ConnectionState.INACTIVE:
         return <SignalCellularConnectedNoInternet4BarIcon />;
       case ConnectionState.NO_CONNECTION:
