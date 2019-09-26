@@ -69,7 +69,17 @@ const columns = [
 const PilotSelector = props => {
   const theme = useTheme();
   const pilotList = useXContestPilots();
+
+  // State
   const [selected, setSelected] = useState([]);
+  const [search, setSearch] = useState("");
+
+  const closeWindow = () => {
+    // Reset state
+    setSearch("");
+    setSelected([]);
+    props.onClose();
+  };
 
   const handleClick = (_event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -93,16 +103,18 @@ const PilotSelector = props => {
 
   const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
+  const isSelected = name => selected.indexOf(name) !== -1;
+  const wasAlreadyAdded = name => props.alreadyAdded.indexOf(name) !== -1;
+  const matchesSearch = name => {
+    if (search === "") {
+      return true;
+    }
+    return name.toLowerCase().includes(search.toLowerCase());
+  };
+
   // TODO add search bar
   // Create virtual pilot if nobody found
   // Add selectable pilots and functionality of the 'Add' button
-
-  const isSelected = name => selected.indexOf(name) !== -1;
-
-  const closeWindow = () => {
-    setSelected([]);
-    props.onClose();
-  };
 
   return (
     <Dialog open={props.open} onClose={closeWindow} fullScreen={fullScreen}>
@@ -117,6 +129,7 @@ const PilotSelector = props => {
           label="Search"
           type="search"
           fullWidth
+          onChange={event => setSearch(event.target.value)}
         />
       </Box>
       <Box flex="1 1 auto" marginY="8px" style={{ overflowY: "auto" }}>
@@ -137,9 +150,13 @@ const PilotSelector = props => {
           </TableHead>
           <TableBody>
             {pilotList
-              .filter(
-                row => props.alreadyAdded.indexOf(row.user.username) === -1
-              )
+              .filter(row => {
+                return (
+                  !wasAlreadyAdded(row.user.username) &&
+                  (matchesSearch(row.user.username) ||
+                    matchesSearch(row.user.fullname))
+                );
+              })
               .map(row => {
                 const isItemSelected = isSelected(row.user.username);
                 return (
