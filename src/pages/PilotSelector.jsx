@@ -102,7 +102,6 @@ const PilotSelector = props => {
               return (
                 <TableRow
                   hover
-                  role="checkbox"
                   tabIndex={-1}
                   key={row.user.login}
                 >
