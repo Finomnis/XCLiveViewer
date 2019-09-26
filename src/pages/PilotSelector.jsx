@@ -66,6 +66,19 @@ const columns = [
   }
 ];
 
+function createPlaceholderPilot(name) {
+  return {
+    user: {
+      login: null,
+      username: name,
+      fullname: "Offline User",
+      gender: "-",
+      nationality: { iso: "--", name: "--" }
+    },
+    flightId: null
+  };
+}
+
 const PilotSelector = props => {
   const theme = useTheme();
   const pilotList = useXContestPilots();
@@ -114,9 +127,14 @@ const PilotSelector = props => {
   };
 
   // Create virtual pilot if nobody found
-  const filteredPilots = pilotList.filter(row => {
+  let filteredPilots = pilotList.filter(row => {
     return matchesSearch(row.user.username) || matchesSearch(row.user.fullname);
   });
+
+  // Add dummy pilot if list is empty and search string is valid
+  if (filteredPilots.length === 0 && !/\s/.test(search) && search.length > 0) {
+    filteredPilots.push(createPlaceholderPilot(search));
+  }
 
   return (
     <Dialog open={props.open} onClose={closeWindow} fullScreen={fullScreen}>
