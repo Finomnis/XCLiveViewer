@@ -1,6 +1,7 @@
 import { EventEmitter } from "events";
 import mapEventToState from "../../util/EventToReactState";
 import XContestSocket from "./XContestSocket";
+import XContestAnimation from "./XContestAnimation";
 
 export const ConnectionState = {
   CONNECTING: "connecting", //orange
@@ -21,7 +22,16 @@ class XContestInterface {
       this.onInfoMessageReceived,
       this.onTracklogMessageReceived
     );
+    this.animation = new XContestAnimation(this.setSubscribedFlights);
   }
+
+  setSubscribedFlights = flights => {
+    this.socket.setSubscribedFlights(flights);
+  };
+
+  setSubscribedPilots = pilots => {
+    this.animation.setSubscribedPilots(pilots);
+  };
 
   onConnectionStateChanged = state => {
     this.eventEmitter.emit("connectionStateChanged", state);
@@ -34,21 +44,23 @@ class XContestInterface {
       // Skip if we have a newer track of the same person
       if (track.overriden) continue;
 
-      track.trackId = trackId;
+      track.flightId = trackId;
 
       this.pilots[track.info.user.username] = track;
     }
     this.eventEmitter.emit("pilotStateChanged", this.pilots);
+    this.animation.pushNewInfo(this.pilots);
   };
 
   onTracklogMessageReceived = msg => {
     console.log("Trackog Message: ", msg);
+    this.animation.pushNewData(msg.flightUuid, msg.trackChunk);
   };
 }
 
 // Singleton stuff
 let _instance = null;
-const getXContestInterface = () => {
+export const getXContestInterface = () => {
   if (!_instance) {
     _instance = new XContestInterface();
   }

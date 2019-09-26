@@ -1,10 +1,21 @@
 import createPersistedState from "use-persisted-state";
+import { getXContestInterface } from "../location_provider/XContest/XContestInterface";
 
 const persistentChosenPilots = createPersistedState("chosen-pilots");
 
+export function getChosenPilots() {
+  return JSON.parse(localStorage.getItem("chosen-pilots"));
+}
+
 export function useChosenPilots() {
   //TODO replace with persistant storage
-  const [chosenPilots, setChosenPilots] = persistentChosenPilots({});
+  const [chosenPilots, setChosenPilotsPersistent] = persistentChosenPilots({});
+
+  const setChosenPilots = pilots => {
+    // Explicitely tell XContestInterface, as it is not a Component and cannot use hooks
+    getXContestInterface().setSubscribedPilots(pilots);
+    setChosenPilotsPersistent(pilots);
+  };
 
   // Add new pilots
   const addPilots = pilotIds => {

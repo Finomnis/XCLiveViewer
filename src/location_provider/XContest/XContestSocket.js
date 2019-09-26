@@ -5,6 +5,7 @@ export default class XContestSocket {
     this.setConnectionState = onStateChanged;
     this.dispatchInfoMessage = onInfoMessage;
     this.dispatchTracklogMessage = onTracklogMessage;
+    this.subscribedFlights = [];
     this.connect();
   }
 
@@ -22,6 +23,33 @@ export default class XContestSocket {
       alert("WebSocket NOT supported by your Browser!");
     }
   }
+
+  formatSubscribedFlights = () => {
+    // TODO add setting for track length
+    const startDate = new Date(Date.now() - 1000 * 60 * 15);
+
+    startDate.setMilliseconds(0);
+    const startIsoDate = startDate.toISOString();
+
+    const formattedFlights = this.subscribedFlights.map(flight => {
+      return { flightUuid: flight, start: startIsoDate };
+    });
+
+    return formattedFlights;
+  };
+
+  setSubscribedFlights = flights => {
+    this.subscribedFlights = flights;
+
+    if (this.sock.readyState === WebSocket.OPEN) {
+      this.sock.send(
+        JSON.stringify({
+          tag: "WebFollow",
+          contents: this.formatSubscribedFlights()
+        })
+      );
+    }
+  };
 
   onOpen = () => {
     this.handleReset();
@@ -43,7 +71,12 @@ export default class XContestSocket {
     );
 
     // Tell the webserver which flights we want in more detail. TODO.
-    this.sock.send(JSON.stringify({ tag: "WebFollow", contents: [] }));
+    this.sock.send(
+      JSON.stringify({
+        tag: "WebFollow",
+        contents: this.formatSubscribedFlights()
+      })
+    );
   };
 
   onMessage = evt => {
