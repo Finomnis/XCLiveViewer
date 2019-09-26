@@ -99,8 +99,13 @@ const PilotSelector = props => {
 
   const isSelected = name => selected.indexOf(name) !== -1;
 
+  const closeWindow = () => {
+    setSelected([]);
+    props.onClose();
+  };
+
   return (
-    <Dialog open={props.open} onClose={props.onClose} fullScreen={fullScreen}>
+    <Dialog open={props.open} onClose={closeWindow} fullScreen={fullScreen}>
       <DialogTitle>Add new pilots:</DialogTitle>
       <Box paddingLeft="1em" paddingRight="1em">
         <TextField
@@ -158,14 +163,13 @@ const PilotSelector = props => {
         </Table>
       </Box>
       <DialogActions>
-        <Button onClick={props.onClose} color="primary">
+        <Button onClick={closeWindow} color="primary">
           Cancel
         </Button>
         <Button
           onClick={() => {
             props.onAddPilots(selected);
-            setSelected([]);
-            props.onClose();
+            closeWindow();
           }}
           color="primary"
         >
