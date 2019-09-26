@@ -1,6 +1,6 @@
 import React, { useState, useRef, useLayoutEffect } from "react";
 import Box from "@material-ui/core/Box";
-import useGoogleMapsApi from "../ext/GoogleMapsApiLoader";
+import useGoogleMapsApi from "../common/GoogleMapsApiLoader";
 import { LoadingPage, ErrorPage } from "./StatusPages";
 import mapStyle from "./MapStyle.json";
 
