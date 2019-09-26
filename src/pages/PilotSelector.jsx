@@ -42,6 +42,7 @@ const columns = [
           <Box
             fontSize="large"
             marginLeft="4px"
+            boxShadow={1}
             style={{ verticalAlign: "middle" }}
             className={
               "flag-icon flag-icon-" + row.user.nationality.iso.toLowerCase()
