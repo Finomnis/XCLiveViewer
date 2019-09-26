@@ -19,7 +19,11 @@ const Pilots = () => {
     if (pilotName === null) {
       displayedName = pilotId;
     }
-    return <Box key={pilotId}>{displayedName}</Box>;
+    return (
+      <Box key={pilotId} onClick={() => removePilots([pilotId])}>
+        {displayedName}
+      </Box>
+    );
   });
 
   return (

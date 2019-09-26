@@ -1,14 +1,15 @@
 import React from "react";
-import { Box, useMediaQuery, useTheme, Typography } from "@material-ui/core";
+import {
+  Box,
+  useMediaQuery,
+  useTheme,
+  Typography,
+  Toolbar
+} from "@material-ui/core";
 import { useState } from "react";
 
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  TextField
-} from "@material-ui/core";
+import { lighten } from "@material-ui/core/styles";
+import { Button, Dialog, DialogActions, TextField } from "@material-ui/core";
 
 import {
   Table,
@@ -72,6 +73,7 @@ const PilotSelector = props => {
   // State
   const [selected, setSelected] = useState([]);
   const [search, setSearch] = useState("");
+  const numSelected = selected.length;
 
   const closeWindow = () => {
     // Reset state
@@ -117,7 +119,31 @@ const PilotSelector = props => {
 
   return (
     <Dialog open={props.open} onClose={closeWindow} fullScreen={fullScreen}>
-      <DialogTitle>Add new pilots:</DialogTitle>
+      <Toolbar
+        style={
+          numSelected === 0
+            ? {}
+            : theme.palette.type === "light"
+            ? {
+                color: theme.palette.secondary.main,
+                backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+              }
+            : {
+                color: theme.palette.text.primary,
+                backgroundColor: theme.palette.secondary.dark
+              }
+        }
+      >
+        {numSelected > 0 ? (
+          <Typography component="div" color="inherit" variant="subtitle1">
+            {numSelected} selected
+          </Typography>
+        ) : (
+          <Typography component="div" variant="h6" id="tableTitle">
+            Add new pilots:
+          </Typography>
+        )}
+      </Toolbar>
       <Box paddingLeft="1em" paddingRight="1em">
         <TextField
           autoFocus
@@ -183,6 +209,7 @@ const PilotSelector = props => {
           Cancel
         </Button>
         <Button
+          disabled={numSelected === 0}
           onClick={() => {
             props.onAddPilots(selected);
             closeWindow();
