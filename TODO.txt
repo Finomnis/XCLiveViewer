@@ -2,7 +2,8 @@
 - Implement pilot selection list
 - Implement selected friends (maybe cookies? website specific storage?)
 - Create settings page
-- Add status popover to connectionstate button
+
+- Make ?add=xxx url that automatically adds given pilots (without removing existing ones. Replacing can be done by first deleting your own ones and then calling the url)
 
 Notes:
 - The tracks on the map should have a different color for every pilot
@@ -16,3 +17,4 @@ Notes:
 
 DONE:
 - Implement title bar
+- Add status popover to connectionstate button
