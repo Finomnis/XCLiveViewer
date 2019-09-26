@@ -15,7 +15,6 @@ export const ConnectionState = {
 class XContestInterface {
   constructor() {
     this.pilots = [];
-    this.flightInfos = {};
     this.eventEmitter = new EventEmitter();
     this.socket = new XContestSocket(
       this.onConnectionStateChanged,
@@ -34,6 +33,8 @@ class XContestInterface {
     for (const [trackId, track] of msg) {
       // Skip if we have a newer track of the same person
       if (track.overriden) continue;
+
+      track.trackId = trackId;
 
       this.pilots[track.info.user.username] = track;
     }
