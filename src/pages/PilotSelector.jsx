@@ -1,7 +1,13 @@
 import React from "react";
 import { Box, useMediaQuery, useTheme } from "@material-ui/core";
 
-import { Button, Dialog, DialogTitle, DialogActions } from "@material-ui/core";
+import {
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent
+} from "@material-ui/core";
 
 import {
   Table,
@@ -67,41 +73,43 @@ const PilotSelector = props => {
   return (
     <Dialog open={props.open} onClose={props.onClose} fullScreen={fullScreen}>
       <DialogTitle>Add new pilots:</DialogTitle>
-      <Table stickyHeader size="small">
-        <TableHead>
-          <TableRow>
-            {columns.map(column => (
-              <TableCell
-                key={column.id}
-                align={column.align}
-                style={{ minWidth: column.minWidth }}
-              >
-                {column.label}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {pilotList.map(row => {
-            return (
-              <TableRow
-                hover
-                role="checkbox"
-                tabIndex={-1}
-                key={row.user.login}
-              >
-                {columns.map(column => {
-                  return (
-                    <TableCell key={column.id} align={column.align}>
-                      {column.render(row)}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+      <DialogContent style={{ paddingLeft: 0, paddingRight: 0 }}>
+        <Table stickyHeader size="small">
+          <TableHead>
+            <TableRow>
+              {columns.map(column => (
+                <TableCell
+                  key={column.id}
+                  align={column.align}
+                  style={{ minWidth: column.minWidth }}
+                >
+                  {column.label}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {pilotList.map(row => {
+              return (
+                <TableRow
+                  hover
+                  role="checkbox"
+                  tabIndex={-1}
+                  key={row.user.login}
+                >
+                  {columns.map(column => {
+                    return (
+                      <TableCell key={column.id} align={column.align}>
+                        {column.render(row)}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </DialogContent>
       <DialogActions>
         <Button onClick={props.onClose} color="primary">
           Cancel
