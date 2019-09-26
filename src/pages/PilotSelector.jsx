@@ -113,9 +113,10 @@ const PilotSelector = props => {
     return name.toLowerCase().includes(search.toLowerCase());
   };
 
-  // TODO add search bar
   // Create virtual pilot if nobody found
-  // Add selectable pilots and functionality of the 'Add' button
+  const filteredPilots = pilotList.filter(row => {
+    return matchesSearch(row.user.username) || matchesSearch(row.user.fullname);
+  });
 
   return (
     <Dialog open={props.open} onClose={closeWindow} fullScreen={fullScreen}>
@@ -144,7 +145,7 @@ const PilotSelector = props => {
           </Typography>
         )}
       </Toolbar>
-      <Box paddingLeft="1em" paddingRight="1em">
+      <Box paddingLeft="1em" paddingRight="1em" paddingTop="4px">
         <TextField
           autoFocus
           margin="dense"
@@ -174,33 +175,38 @@ const PilotSelector = props => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {pilotList
-              .filter(row => {
+            {filteredPilots.map(row => {
+              const isItemSelected = isSelected(row.user.username);
+
+              const itemDisabled = wasAlreadyAdded(row.user.username);
+              const style = itemDisabled
+                ? { filter: "grayscale(100%) opacity(30%)" }
+                : {};
+
+              const columnContent = columns.map(column => {
                 return (
-                  !wasAlreadyAdded(row.user.username) &&
-                  (matchesSearch(row.user.username) ||
-                    matchesSearch(row.user.fullname))
+                  <TableCell key={column.id} align={column.align}>
+                    <Box style={style}>{column.render(row)}</Box>
+                  </TableCell>
                 );
-              })
-              .map(row => {
-                const isItemSelected = isSelected(row.user.username);
+              });
+
+              if (itemDisabled) {
                 return (
-                  <TableRow
-                    tabIndex={-1}
-                    key={row.user.username}
-                    selected={isItemSelected}
-                    onClick={event => handleClick(event, row.user.username)}
-                  >
-                    {columns.map(column => {
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.render(row)}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
+                  <TableRow key={row.user.username}>{columnContent}</TableRow>
                 );
-              })}
+              }
+
+              return (
+                <TableRow
+                  key={row.user.username}
+                  selected={isItemSelected}
+                  onClick={event => handleClick(event, row.user.username)}
+                >
+                  {columnContent}
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </Box>

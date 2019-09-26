@@ -54,7 +54,7 @@ export default class XContestSocket {
 
     // Expect the next message in 60 seconds. If not, change the status message.
     clearTimeout(this.watchdog);
-    this.watchdog = setTimeout(function() {
+    this.watchdog = setTimeout(() => {
       this.setConnectionState(ConnectionState.INACTIVE);
     }, 70000);
 
