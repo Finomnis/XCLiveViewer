@@ -2,6 +2,10 @@
 - Implement pilot selection list
 - Implement selected friends (maybe cookies? website specific storage?)
 - Create settings page
+    - Add settings:
+        - 15 minutes tracks vs full length
+
+- Sort suggested pilots by distance to self
 
 Animation:
 - One central animation class
