@@ -1,11 +1,6 @@
 import React from "react";
-import {
-  Checkbox,
-  Box,
-  useMediaQuery,
-  useTheme,
-  Typography
-} from "@material-ui/core";
+import { Box, useMediaQuery, useTheme, Typography } from "@material-ui/core";
+import { useState } from "react";
 
 import {
   Button,
@@ -31,17 +26,19 @@ const columns = [
     label: "Name",
     minWidth: 0,
     render: row => {
-      return [
-        row.user.fullname,
-        <Typography
-          component="span"
-          variant="caption"
-          color="textSecondary"
-          style={{ paddingLeft: ".3em" }}
-        >
-          [{row.user.username}]
-        </Typography>
-      ];
+      return (
+        <React.Fragment>
+          {row.user.fullname}
+          <Typography
+            component="span"
+            variant="caption"
+            color="textSecondary"
+            style={{ paddingLeft: ".3em" }}
+          >
+            [{row.user.username}]
+          </Typography>
+        </React.Fragment>
+      );
     }
   },
   {
@@ -71,12 +68,35 @@ const columns = [
 const PilotSelector = props => {
   const theme = useTheme();
   const pilotList = useXContestPilots();
+  const [selected, setSelected] = useState([]);
+
+  const handleClick = (_event, name) => {
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
+    }
+
+    setSelected(newSelected);
+  };
 
   const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
   // TODO add search bar
   // Create virtual pilot if nobody found
   // Add selectable pilots and functionality of the 'Add' button
+
+  const isSelected = name => selected.indexOf(name) !== -1;
 
   return (
     <Dialog open={props.open} onClose={props.onClose} fullScreen={fullScreen}>
@@ -98,23 +118,29 @@ const PilotSelector = props => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {pilotList.map(row => {
-              return (
-                <TableRow
-                  hover
-                  tabIndex={-1}
-                  key={row.user.login}
-                >
-                  {columns.map(column => {
-                    return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.render(row)}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
+            {pilotList
+              .filter(
+                row => props.alreadyAdded.indexOf(row.user.username) === -1
+              )
+              .map(row => {
+                const isItemSelected = isSelected(row.user.username);
+                return (
+                  <TableRow
+                    tabIndex={-1}
+                    key={row.user.username}
+                    selected={isItemSelected}
+                    onClick={event => handleClick(event, row.user.username)}
+                  >
+                    {columns.map(column => {
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {column.render(row)}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </DialogContent>
@@ -122,7 +148,14 @@ const PilotSelector = props => {
         <Button onClick={props.onClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={() => {}} color="primary">
+        <Button
+          onClick={() => {
+            props.onAddPilots(selected);
+            setSelected([]);
+            props.onClose();
+          }}
+          color="primary"
+        >
           Add
         </Button>
       </DialogActions>

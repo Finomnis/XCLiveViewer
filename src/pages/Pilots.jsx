@@ -44,6 +44,8 @@ const Pilots = () => {
       <PilotSelector
         open={pilotSelectorOpen}
         onClose={() => setPilotSelectorOpen(false)}
+        onAddPilots={addPilots}
+        alreadyAdded={Object.keys(pilots)}
       />
     </React.Fragment>
   );
