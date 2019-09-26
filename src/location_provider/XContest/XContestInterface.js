@@ -15,7 +15,7 @@ export const ConnectionState = {
 class XContestInterface {
   constructor() {
     this.pilots = [];
-    this.shortTracks = {};
+    this.flightInfos = {};
     this.eventEmitter = new EventEmitter();
     this.socket = new XContestSocket(
       this.onConnectionStateChanged,
@@ -30,22 +30,14 @@ class XContestInterface {
 
   onInfoMessageReceived = msg => {
     console.log(msg);
-    this.pilots = [];
+    this.pilots = {};
     for (const [trackId, track] of msg) {
       // Skip if we have a newer track of the same person
       if (track.overriden) continue;
 
-      this.pilots.push({
-        user: track.info.user,
-        flightId: trackId
-      });
-
-      this.shortTracks[trackId] = {
-        track
-      };
+      this.pilots[track.info.user.username] = track;
     }
     this.eventEmitter.emit("pilotStateChanged", this.pilots);
-    this.eventEmitter.emit("shortTracksChanged", this.shortTracks);
   };
 
   onTracklogMessageReceived = msg => {
@@ -72,11 +64,4 @@ export const useXContestConnectionState = mapEventToState(
   () => getXContestInterface().eventEmitter,
   "connectionStateChanged",
   ConnectionState.NO_INFORMATION
-);
-
-// Hook. Fires every time the short tracks list got updated.
-export const useXContestShortTracks = mapEventToState(
-  () => getXContestInterface().eventEmitter,
-  "shortTracksChanged",
-  {}
 );

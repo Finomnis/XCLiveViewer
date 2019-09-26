@@ -68,14 +68,16 @@ const columns = [
 
 function createPlaceholderPilot(name) {
   return {
-    user: {
-      login: null,
-      username: name,
-      fullname: "Offline User",
-      gender: "-",
-      nationality: { iso: "--", name: "--" }
-    },
-    flightId: null
+    info: {
+      user: {
+        login: null,
+        username: name,
+        fullname: "Offline User",
+        gender: "-",
+        nationality: { iso: "--", name: "--" }
+      },
+      flightId: null
+    }
   };
 }
 
@@ -127,8 +129,11 @@ const PilotSelector = props => {
   };
 
   // Create virtual pilot if nobody found
-  let filteredPilots = pilotList.filter(row => {
-    return matchesSearch(row.user.username) || matchesSearch(row.user.fullname);
+  let filteredPilots = Object.values(pilotList).filter(userData => {
+    return (
+      matchesSearch(userData.info.user.username) ||
+      matchesSearch(userData.info.user.fullname)
+    );
   });
 
   // Add dummy pilot if list is empty and search string is valid
@@ -194,9 +199,11 @@ const PilotSelector = props => {
           </TableHead>
           <TableBody>
             {filteredPilots.map(row => {
-              const isItemSelected = isSelected(row.user.username);
+              const username = row.info.user.username;
 
-              const itemDisabled = wasAlreadyAdded(row.user.username);
+              const isItemSelected = isSelected(username);
+
+              const itemDisabled = wasAlreadyAdded(username);
               const style = itemDisabled
                 ? { filter: "grayscale(100%) opacity(30%)" }
                 : {};
@@ -204,22 +211,20 @@ const PilotSelector = props => {
               const columnContent = columns.map(column => {
                 return (
                   <TableCell key={column.id} align={column.align}>
-                    <Box style={style}>{column.render(row)}</Box>
+                    <Box style={style}>{column.render(row.info)}</Box>
                   </TableCell>
                 );
               });
 
               if (itemDisabled) {
-                return (
-                  <TableRow key={row.user.username}>{columnContent}</TableRow>
-                );
+                return <TableRow key={username}>{columnContent}</TableRow>;
               }
 
               return (
                 <TableRow
-                  key={row.user.username}
+                  key={username}
                   selected={isItemSelected}
-                  onClick={event => handleClick(event, row.user.username)}
+                  onClick={event => handleClick(event, username)}
                 >
                   {columnContent}
                 </TableRow>

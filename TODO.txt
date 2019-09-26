@@ -3,6 +3,12 @@
 - Implement selected friends (maybe cookies? website specific storage?)
 - Create settings page
 
+Animation:
+- One central animation class
+    - Continuously computes the current posiitons/paths with requestAnimationFrame
+    - Can be subscribed by useXContestAnimation()
+    - Stops updating once no subscribers are left
+
 - Make ?add=xxx url that automatically adds given pilots (without removing existing ones. Replacing can be done by first deleting your own ones and then calling the url)
 
 Notes:
