@@ -1,5 +1,11 @@
 import React from "react";
-import { Box, useMediaQuery, useTheme } from "@material-ui/core";
+import {
+  Checkbox,
+  Box,
+  useMediaQuery,
+  useTheme,
+  Typography
+} from "@material-ui/core";
 
 import {
   Button,
@@ -25,15 +31,17 @@ const columns = [
     label: "Name",
     minWidth: 0,
     render: row => {
-      return row.user.fullname;
-    }
-  },
-  {
-    id: "id",
-    label: "ID",
-    minWidth: 0,
-    render: row => {
-      return row.user.username;
+      return [
+        row.user.fullname,
+        <Typography
+          component="span"
+          variant="caption"
+          color="textSecondary"
+          style={{ paddingLeft: ".3em" }}
+        >
+          [{row.user.username}]
+        </Typography>
+      ];
     }
   },
   {
@@ -82,6 +90,7 @@ const PilotSelector = props => {
                   key={column.id}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
+                  component="th"
                 >
                   {column.label}
                 </TableCell>
