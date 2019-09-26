@@ -7,7 +7,8 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
-  DialogContent
+  DialogContent,
+  TextField
 } from "@material-ui/core";
 
 import {
@@ -101,7 +102,19 @@ const PilotSelector = props => {
   return (
     <Dialog open={props.open} onClose={props.onClose} fullScreen={fullScreen}>
       <DialogTitle>Add new pilots:</DialogTitle>
-      <DialogContent style={{ paddingLeft: 0, paddingRight: 0 }}>
+      <Box paddingLeft="1em" paddingRight="1em">
+        <TextField
+          autoFocus
+          margin="dense"
+          autoComplete="off"
+          variant="outlined"
+          id="search_field"
+          label="Search"
+          type="search"
+          fullWidth
+        />
+      </Box>
+      <Box flex="1 1 auto" marginY="8px" style={{ overflowY: "auto" }}>
         <Table stickyHeader size="small">
           <TableHead>
             <TableRow>
@@ -143,7 +156,7 @@ const PilotSelector = props => {
               })}
           </TableBody>
         </Table>
-      </DialogContent>
+      </Box>
       <DialogActions>
         <Button onClick={props.onClose} color="primary">
           Cancel
