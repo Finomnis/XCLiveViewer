@@ -4,7 +4,11 @@ import { getXContestInterface } from "../location_provider/XContest/XContestInte
 const persistentChosenPilots = createPersistedState("chosen-pilots");
 
 export function getChosenPilots() {
-  return JSON.parse(localStorage.getItem("chosen-pilots"));
+  const result = JSON.parse(localStorage.getItem("chosen-pilots"));
+  if (result === null) {
+    return {};
+  }
+  return result;
 }
 
 export function useChosenPilots() {
