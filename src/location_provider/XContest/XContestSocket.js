@@ -7,10 +7,12 @@ export default class XContestSocket {
     this.dispatchTracklogMessage = onTracklogMessage;
     this.subscribedFlights = [];
     this.connect();
+    this.connected = false;
   }
 
   connect() {
     if ("WebSocket" in window) {
+      this.connected = false;
       this.setConnectionState(ConnectionState.CONNECTING);
       this.sock = new WebSocket("wss://live.xcontest.org/websock/webclient");
       this.sock.onopen = this.onOpen;
@@ -41,7 +43,7 @@ export default class XContestSocket {
   setSubscribedFlights = flights => {
     this.subscribedFlights = flights;
 
-    if (this.sock.readyState === WebSocket.OPEN) {
+    if (this.sock.readyState === WebSocket.OPEN && this.connected) {
       this.sock.send(
         JSON.stringify({
           tag: "WebFollow",
@@ -55,6 +57,7 @@ export default class XContestSocket {
     this.handleReset();
     console.log("WebSocket: Open!");
     this.setConnectionState(ConnectionState.ESTABLISHED);
+    this.connected = true;
 
     // Set area filter to the entire world
     this.sock.send(
@@ -96,6 +99,7 @@ export default class XContestSocket {
   };
 
   onClose = evt => {
+    this.connected = false;
     console.log("WebSocket: Close!");
     this.setConnectionState(ConnectionState.NO_CONNECTION);
     // websocket is closed.
@@ -103,6 +107,7 @@ export default class XContestSocket {
   };
 
   onError = evt => {
+    this.connected = false;
     console.log("WebSocket: Error!");
   };
 
