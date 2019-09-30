@@ -6,6 +6,7 @@
         - 15 minutes tracks vs full length
 
 - Sort suggested pilots by distance to self
+- Add distance+direction and live state to pilot selection (potentially second row)
 
 Animation:
 - One central animation class
