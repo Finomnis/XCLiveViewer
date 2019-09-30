@@ -170,7 +170,7 @@ const PilotSelector = props => {
       </Toolbar>
       <Box paddingLeft="1em" paddingRight="1em" paddingTop="4px">
         <TextField
-          autoFocus
+          //autoFocus
           margin="dense"
           autoComplete="off"
           variant="outlined"
