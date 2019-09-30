@@ -45,7 +45,7 @@ export default class XContestAnimation {
     let importantFlightSet = new Set(importantFlights);
 
     if (!eqSet(importantFlightSet, this._subscribedFlights)) {
-      console.log("Swap: ", importantFlightSet, this._subscribedFlights);
+      console.log("Swap: ", this._subscribedFlights, importantFlightSet);
       this._setSubscribedFlights(importantFlightSet);
     }
   };
