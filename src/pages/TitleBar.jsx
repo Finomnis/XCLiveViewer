@@ -56,7 +56,14 @@ const TitleBar = () => {
   const classes = useStyles();
   const connectionState = useXContestConnectionState();
 
+  const popoverActions = React.useRef();
   const [connectionPopAnchor, setConnectionPopAnchor] = useState(null);
+
+  React.useLayoutEffect(() => {
+    if (popoverActions.current) {
+      popoverActions.current.updatePosition();
+    }
+  }, [connectionState, connectionPopAnchor]);
 
   const renderConnectionIcon = () => {
     switch (connectionState) {
@@ -124,6 +131,7 @@ const TitleBar = () => {
           vertical: "top",
           horizontal: "right"
         }}
+        action={popoverActions}
       >
         <Box className={classes.popover}>
           <Typography>{connectionState}</Typography>
