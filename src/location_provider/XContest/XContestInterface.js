@@ -29,10 +29,6 @@ class XContestInterface {
     this.socket.setSubscribedFlights(flights);
   };
 
-  setSubscribedPilots = pilots => {
-    this.animation.setSubscribedPilots(pilots);
-  };
-
   onConnectionStateChanged = state => {
     this.eventEmitter.emit("connectionStateChanged", state);
   };

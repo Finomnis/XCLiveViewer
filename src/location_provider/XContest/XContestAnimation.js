@@ -1,4 +1,7 @@
-import { getChosenPilots } from "../../common/PersistentState/ChosenPilots";
+import {
+  getChosenPilots,
+  getChosenPilotsObject
+} from "../../common/PersistentState/ChosenPilots";
 import RunningDerivation from "../../util/RunningDerivation";
 import { getDistance } from "geolib";
 
@@ -140,6 +143,7 @@ export default class XContestAnimation {
       this._subscribedFlights = flights;
       setSubscribedFlights(Array.from(flights));
     };
+    getChosenPilotsObject().registerCallback(this.setSubscribedPilots);
   }
 
   // External
