@@ -6,6 +6,7 @@ import AddIcon from "@material-ui/icons/Add";
 import Box from "@material-ui/core/Box";
 import PilotSelector from "./PilotSelector";
 import { useChosenPilots } from "../common/PersistentState/ChosenPilots";
+import AnimatedPilotList from "./AnimatedPilotList";
 
 const Pilots = () => {
   const theme = useTheme();
@@ -15,23 +16,12 @@ const Pilots = () => {
 
   // TODO sort pilots
 
-  const content = Object.entries(pilots).map(([pilotId, pilotName]) => {
-    let displayedName = pilotName;
-    if (pilotName === null) {
-      displayedName = pilotId;
-    }
-    return (
-      <Box key={pilotId} onClick={() => removePilots([pilotId])}>
-        {displayedName}
-      </Box>
-    );
-  });
-
   return (
     <React.Fragment>
-      <Box height="100%" style={{ overflowY: "auto" }}>
-        {content}
-      </Box>
+      <AnimatedPilotList
+        pilotList={pilots}
+        removePilots={removePilots}
+      ></AnimatedPilotList>
 
       <Box
         position="absolute"

@@ -4,6 +4,7 @@ import {
 } from "../../common/PersistentState/ChosenPilots";
 import RunningDerivation from "../../util/RunningDerivation";
 import { getDistance } from "geolib";
+import { useState, useEffect } from "react";
 
 function eqSet(as, bs) {
   if (as.size !== bs.size) return false;
@@ -11,7 +12,7 @@ function eqSet(as, bs) {
   return true;
 }
 
-export class FlightAnimation {
+class FlightAnimation {
   constructor() {
     this.data = [];
     this.counter_gpsVario = new RunningDerivation(0.7);
@@ -21,6 +22,10 @@ export class FlightAnimation {
       (start, end) => getDistance(start, end, 0.01),
       () => false
     );
+
+    // Animation
+    this.animationArrayPos = null;
+    this.mapsPath = [];
   }
 
   updateData = data => {
@@ -130,14 +135,27 @@ export class FlightAnimation {
         elem.baroVario = baroVario;
         elem.velocity = velocity;
       }
+
+      // Reset animation
+      this.reset_animation();
     }
 
     console.log("Animation updated.", this.data);
+  };
+
+  resetAnimation = () => {
+    this.animationArrayPos = null;
+    this.mapsPath = [];
+  };
+
+  updateAnimation = currentTime => {
+    console.log("updateAnimation " + currentTime);
   };
 }
 
 export default class XContestAnimation {
   constructor(setSubscribedFlights) {
+    this._currentAnimationData = {};
     this._callbacks = [];
     this._subscribedPilots = getChosenPilots();
     this._subscribedFlights = new Set();
@@ -148,7 +166,30 @@ export default class XContestAnimation {
       setSubscribedFlights(Array.from(flights));
     };
     getChosenPilotsObject().registerCallback(this.setSubscribedPilots);
+    requestAnimationFrame(this.animationLoop);
   }
+
+  // Animation loop
+  animationLoop = args => {
+    //console.log(args);
+    const newAnimationData = {};
+    Object.keys(this._subscribedPilots).forEach(pilot => {
+      if (pilot in this._pilotInfos) {
+        const flightId = this._pilotInfos[pilot].flightId;
+        newAnimationData[pilot] = flightId;
+      }
+    });
+
+    this._updateAnimationData(newAnimationData);
+    requestAnimationFrame(this.animationLoop);
+  };
+
+  _updateAnimationData = data => {
+    this._currentAnimationData = data;
+    for (const cb of this._callbacks) {
+      cb(data);
+    }
+  };
 
   // External
   setSubscribedPilots = subscribedPilots => {
@@ -168,8 +209,31 @@ export default class XContestAnimation {
   };
 
   // callback gets called every frame with new data
-  registerCallback(cb) {}
-  unregisterCallback(cb) {}
+  registerCallback = cb => {
+    if (!this._callbacks.includes(cb)) this._callbacks.push(cb);
+  };
+  unregisterCallback = cb => {
+    const index = this._callbacks.indexOf(cb);
+    if (index >= 0) {
+      this._callbacks.splice(index, 1);
+    }
+  };
+
+  useAnimatedData = () => {
+    const [value, setValue] = useState(this._currentAnimationData);
+
+    useEffect(() => {
+      const cb = newValue => {
+        // trigger component update on change
+        setValue(newValue);
+      };
+
+      this.registerCallback(cb);
+      return () => this.unregisterCallback(cb);
+    }, []);
+
+    return value;
+  };
 
   // Internal
   _updateSubscribedFlights = () => {
