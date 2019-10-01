@@ -7,7 +7,7 @@ import { getDistance } from "geolib";
 
 function eqSet(as, bs) {
   if (as.size !== bs.size) return false;
-  for (var a of as) if (!bs.has(a)) return false;
+  for (const a of as) if (!bs.has(a)) return false;
   return true;
 }
 
