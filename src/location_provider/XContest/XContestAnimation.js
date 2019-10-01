@@ -1,4 +1,4 @@
-import { getChosenPilots } from "../../common/PersistentState";
+import { getChosenPilots } from "../../common/PersistentState/ChosenPilots";
 import RunningDerivation from "../../util/RunningDerivation";
 import { getDistance } from "geolib";
 

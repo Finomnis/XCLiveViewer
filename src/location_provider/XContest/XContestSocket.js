@@ -1,4 +1,5 @@
 import { ConnectionState } from "./XContestInterface";
+import { getSetting, Settings } from "../../common/PersistentState/Settings";
 
 export default class XContestSocket {
   constructor(onStateChanged, onInfoMessage, onTracklogMessage) {
@@ -27,11 +28,15 @@ export default class XContestSocket {
   }
 
   formatSubscribedFlights = () => {
-    // TODO add setting for track length
-    const startDate = new Date(Date.now() - 1000 * 60 * 15);
+    const setting_pathLength = getSetting(Settings.PATH_LENGTH).getValue();
+    const setting_fullPath = getSetting(Settings.FULL_PATHS).getValue();
 
-    startDate.setMilliseconds(0);
-    const startIsoDate = startDate.toISOString();
+    let startIsoDate = null;
+    if (!setting_fullPath) {
+      const startDate = new Date(Date.now() - 1000 * setting_pathLength);
+      startDate.setMilliseconds(0);
+      startIsoDate = startDate.toISOString();
+    }
 
     const formattedFlights = this.subscribedFlights.map(flight => {
       return { flightUuid: flight, start: startIsoDate };

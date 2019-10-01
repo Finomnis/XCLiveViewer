@@ -5,7 +5,7 @@ import { useTheme } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import Box from "@material-ui/core/Box";
 import PilotSelector from "./PilotSelector";
-import { useChosenPilots } from "../common/PersistentState";
+import { useChosenPilots } from "../common/PersistentState/ChosenPilots";
 
 const Pilots = () => {
   const theme = useTheme();
