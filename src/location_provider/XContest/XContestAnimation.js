@@ -61,7 +61,9 @@ export class FlightAnimation {
         };
         this.data.push(newElem);
       }
-    } else {
+    }
+    // TODO add else back in. Out for now, to ensure both paths are working as intended
+    /*else*/ {
       // Otherwise, merge
 
       // Compute new elements
@@ -129,6 +131,8 @@ export class FlightAnimation {
         elem.velocity = velocity;
       }
     }
+
+    console.log("Animation updated.", this.data);
   };
 }
 
