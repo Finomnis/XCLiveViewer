@@ -9,6 +9,14 @@ export default class XContestSocket {
     this.subscribedFlights = [];
     this.connect();
     this.connected = false;
+
+    // Register hooks, so we get notified when these settings change
+    getSetting(Settings.PATH_LENGTH).registerCallback(
+      this.refreshSubscribedFlights
+    );
+    getSetting(Settings.FULL_PATHS).registerCallback(
+      this.refreshSubscribedFlights
+    );
   }
 
   connect() {
@@ -45,9 +53,7 @@ export default class XContestSocket {
     return formattedFlights;
   };
 
-  setSubscribedFlights = flights => {
-    this.subscribedFlights = flights;
-
+  refreshSubscribedFlights = () => {
     if (this.sock.readyState === WebSocket.OPEN && this.connected) {
       this.sock.send(
         JSON.stringify({
@@ -56,6 +62,11 @@ export default class XContestSocket {
         })
       );
     }
+  };
+
+  setSubscribedFlights = flights => {
+    this.subscribedFlights = flights;
+    this.refreshSubscribedFlights();
   };
 
   onOpen = () => {
