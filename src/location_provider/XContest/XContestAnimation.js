@@ -40,14 +40,10 @@ export default class XContestAnimation {
     Object.keys(this._subscribedPilots).forEach(pilot => {
       if (pilot in this._pilotInfos) {
         const flightId = this._pilotInfos[pilot].flightId;
-        newAnimationData[pilot] =
-          flightId +
-          " " +
-          highPrecisionTime.toString() +
-          " " +
-          absTime.toString() +
-          " " +
-          syncedTime.toString();
+        if (flightId in this._flightAnimations) {
+          const flightAnim = this._flightAnimations[flightId];
+          newAnimationData[pilot] = flightAnim.updateAnimation(syncedTime);
+        }
       }
     });
 
