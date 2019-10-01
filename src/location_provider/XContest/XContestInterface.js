@@ -38,7 +38,6 @@ class XContestInterface {
   };
 
   onInfoMessageReceived = msg => {
-    console.log(msg);
     this.pilots = {};
     for (const [trackId, track] of msg) {
       // Skip if we have a newer track of the same person
@@ -53,7 +52,6 @@ class XContestInterface {
   };
 
   onTracklogMessageReceived = msg => {
-    console.log("Trackog Message: ", msg);
     this.animation.pushNewData(msg.flightUuid, msg.trackChunk);
   };
 }

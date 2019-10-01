@@ -27,11 +27,11 @@ export default class RunningDerivation {
       return null;
     }
 
-    let dt = (new_t - this.old_t) / 1000.0;
+    let dt = new_t - this.old_t;
     let diff = this.computeDiff(this.old_val, new_val);
     let deriv = diff / dt;
 
-    let weight = Math.pow(smoothingFactor, dt);
+    let weight = Math.pow(this.smoothingFactor, dt);
     if (this.running_avg === null) {
       this.running_avg = deriv;
     } else {
@@ -41,5 +41,11 @@ export default class RunningDerivation {
     this.old_val = new_val;
     this.old_t = new_t;
     return this.running_avg;
+  }
+
+  reset() {
+    this.old_val = null;
+    this.old_t = null;
+    this.running_avg = null;
   }
 }
