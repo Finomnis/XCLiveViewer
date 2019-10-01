@@ -61,12 +61,11 @@ export class FlightAnimation {
     } else {
       // Otherwise, merge
 
-      const pos = { lat: elem.lat, lon: elem.lon };
-
       // Compute new elements
       const newElements = [];
       for (const elem of data) {
         const timestamp = parseTime(elem.timestamp);
+        const pos = { lat: elem.lat, lon: elem.lon };
         const newElem = {
           baroAlt: elem.baroAlt,
           gpsAlt: elem.gpsAlt,
