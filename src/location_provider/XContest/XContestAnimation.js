@@ -36,6 +36,7 @@ export class FlightAnimation {
       // If start time is after our own data, simply append
       for (const elem of data) {
         const timestamp = parseTime(elem.timestamp);
+        const pos = { lat: elem.lat, lon: elem.lon };
 
         // Compute new running average values
         const gpsVario = this.counter_gpsVario.update(elem.gpsAlt, timestamp);
@@ -43,20 +44,13 @@ export class FlightAnimation {
           elem.baroAlt,
           timestamp
         );
-        const velocity = this.counter_velocity.update(
-          {
-            lat: elem.lat,
-            lon: elem.lon
-          },
-          timestamp
-        );
+        const velocity = this.counter_velocity.update(pos, timestamp);
 
         const newElem = {
           baroAlt: elem.baroAlt,
           gpsAlt: elem.gpsAlt,
           elevation: elem.elevation,
-          lat: elem.lat,
-          lon: elem.lon,
+          pos: pos,
           gpsVario: gpsVario,
           baroVario: baroVario,
           velocity: velocity,
@@ -67,6 +61,8 @@ export class FlightAnimation {
     } else {
       // Otherwise, merge
 
+      const pos = { lat: elem.lat, lon: elem.lon };
+
       // Compute new elements
       const newElements = [];
       for (const elem of data) {
@@ -75,8 +71,7 @@ export class FlightAnimation {
           baroAlt: elem.baroAlt,
           gpsAlt: elem.gpsAlt,
           elevation: elem.elevation,
-          lat: elem.lat,
-          lon: elem.lon,
+          pos: pos,
           gpsVario: null,
           baroVario: null,
           velocity: null,
@@ -125,13 +120,7 @@ export class FlightAnimation {
       for (let elem of this.data) {
         const gpsVario = this.counter_gpsVario.update(elem.gpsAlt, elem.t);
         const baroVario = this.counter_baroVarion.update(elem.baroAlt, elem.t);
-        const velocity = this.counter_velocity.update(
-          {
-            lat: elem.lat,
-            lon: elem.lon
-          },
-          elem.t
-        );
+        const velocity = this.counter_velocity.update(elem.pos, elem.t);
 
         elem.gpsVario = gpsVario;
         elem.baroVario = baroVario;
