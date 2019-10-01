@@ -19,7 +19,7 @@ const Pilots = () => {
   return (
     <React.Fragment>
       <AnimatedPilotList
-        pilotList={pilots}
+        pilots={pilots}
         removePilots={removePilots}
       ></AnimatedPilotList>
 

@@ -170,13 +170,13 @@ export default class XContestAnimation {
   }
 
   // Animation loop
-  animationLoop = args => {
+  animationLoop = highPrecisionTime => {
     //console.log(args);
     const newAnimationData = {};
     Object.keys(this._subscribedPilots).forEach(pilot => {
       if (pilot in this._pilotInfos) {
         const flightId = this._pilotInfos[pilot].flightId;
-        newAnimationData[pilot] = flightId;
+        newAnimationData[pilot] = flightId + " " + highPrecisionTime.toString();
       }
     });
 
