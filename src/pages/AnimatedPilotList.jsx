@@ -10,9 +10,22 @@ const AnimatedPilotList = props => {
     if (pilotName === null) {
       displayedName = pilotId;
     }
+
+    let pilotDebugOutput = [];
+    if (pilotId in animatedData) {
+      const animatedPilotData = animatedData[pilotId];
+
+      for (const key in animatedPilotData) {
+        pilotDebugOutput.push(
+          <Box key={key}>{key + ": " + animatedPilotData[key]}</Box>
+        );
+      }
+    }
+
     return (
       <Box key={pilotId} onClick={() => props.removePilots([pilotId])}>
-        {displayedName + " " + animatedData[pilotId]}
+        {displayedName}
+        {pilotDebugOutput}
       </Box>
     );
   });
