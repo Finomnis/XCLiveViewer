@@ -5,6 +5,7 @@ import {
 import { useState, useEffect } from "react";
 import FlightAnimation from "./FlightAnimation";
 import HighPrecisionTimeSync from "../../util/HighPrecisionTimeSync";
+import { Settings, getSetting } from "../../common/PersistentState/Settings";
 
 function eqSet(as, bs) {
   if (as.size !== bs.size) return false;
@@ -21,6 +22,17 @@ export default class XContestAnimation {
     this._pilotInfos = {};
     this._flightAnimations = {};
     this._highPrecisionTimeSync = new HighPrecisionTimeSync();
+    const settings_timeOffset = getSetting(Settings.ANIMATION_DELAY);
+    const settings_lowLatencyMode = getSetting(Settings.LOW_LATENCY);
+    this._setting_timeOffset = settings_timeOffset.getValue();
+    this._setting_lowLatencyMode = settings_lowLatencyMode.getValue();
+    settings_timeOffset.registerCallback(value => {
+      this._setting_timeOffset = value;
+    });
+    settings_lowLatencyMode.registerCallback(value => {
+      this._setting_lowLatencyMode = value;
+    });
+
     this._setSubscribedFlights = flights => {
       this._subscribedFlights = flights;
       setSubscribedFlights(Array.from(flights));
@@ -36,13 +48,18 @@ export default class XContestAnimation {
       highPrecisionTime,
       absTime
     );
+
+    const offsetTime = syncedTime - 1000 * this._setting_timeOffset;
     const newAnimationData = {};
     Object.keys(this._subscribedPilots).forEach(pilot => {
       if (pilot in this._pilotInfos) {
         const flightId = this._pilotInfos[pilot].flightId;
         if (flightId in this._flightAnimations) {
           const flightAnim = this._flightAnimations[flightId];
-          newAnimationData[pilot] = flightAnim.updateAnimation(syncedTime);
+          newAnimationData[pilot] = flightAnim.updateAnimation(
+            offsetTime,
+            this._setting_lowLatencyMode
+          );
         }
       }
     });

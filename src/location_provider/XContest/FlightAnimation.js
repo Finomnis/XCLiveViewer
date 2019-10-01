@@ -126,7 +126,7 @@ class FlightAnimation {
       }
 
       // Reset animation
-      this.reset_animation();
+      this.resetAnimation();
     }
 
     console.log("Animation updated.", this.data);
@@ -137,8 +137,19 @@ class FlightAnimation {
     this.mapsPath = [];
   };
 
-  updateAnimation = currentTime => {
-    console.log("updateAnimation " + currentTime);
+  updateAnimation = (animationTimeMillis, lowLatencyMode) => {
+    const result = {
+      baroAlt: null,
+      gpsAlt: null,
+      elevation: null,
+      pos: null,
+      gpsVario: null,
+      baroVario: null,
+      velocity: null,
+      track: null
+    };
+
+    return result;
   };
 }
 
