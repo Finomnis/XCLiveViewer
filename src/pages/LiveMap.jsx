@@ -1,8 +1,10 @@
-import React, { useState, useRef, useLayoutEffect } from "react";
+import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
 import Box from "@material-ui/core/Box";
 import useGoogleMapsApi from "../common/GoogleMapsApiLoader";
 import { LoadingPage, ErrorPage } from "./StatusPages";
 import mapStyle from "./MapStyle.json";
+import { getXContestInterface } from "../location_provider/XContest/XContestInterface";
+import MapAnimator from "./MapAnimator";
 
 const LiveMap = () => {
   const [mapReady, mapError, google] = useGoogleMapsApi();
@@ -25,6 +27,23 @@ const LiveMap = () => {
       );
     }
   }, [mapReady, map, google, mapsRef]);
+
+  // Register map for updates
+  useEffect(() => {
+    if (map) {
+      const mapAnimator = new MapAnimator(map);
+      const mapAnimatorUpdateCallback = data => mapAnimator.update(data);
+      getXContestInterface().animation.registerCallback(
+        mapAnimatorUpdateCallback
+      );
+
+      return () => {
+        getXContestInterface().animation.unregisterCallback(
+          mapAnimatorUpdateCallback
+        );
+      };
+    }
+  }, [map]);
 
   return (
     <React.Fragment>
