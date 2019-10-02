@@ -21,26 +21,43 @@ export default class MapAnimator {
   };
 
   update = data => {
-    const pilotsInfo = getXContestInterface().getPilotInfos();
-    this.cleanupOldMarkers(data);
-    for (const pilot in data) {
-      if (!(pilot in pilotsInfo)) continue;
-      const pilotInfo = pilotsInfo[pilot];
+    const pilotsInfos = getXContestInterface().getPilotInfos();
+    this.cleanupOldMarkers(pilotsInfos);
+    for (const pilot in pilotsInfos) {
+      const info = pilotsInfos[pilot];
 
-      const pilotData = data[pilot];
-      if (pilotData === null || pilotData.pos.lat === null) continue;
+      // Retreive knowledge
+      const pos = { lat: info.lastFix.lat, lng: info.lastFix.lon };
+      let trackWaitingToStart = false;
+      let trackEnded = true;
+      let landed = info.landed;
 
+      // Replace knowledge with better (live) knowledge if available
+      if (
+        pilot in data &&
+        !(data[pilot] === null || data[pilot].pos.lat === null)
+      ) {
+        const pilotData = data[pilot];
+
+        pos.lat = pilotData.pos.lat;
+        pos.lng = pilotData.pos.lng;
+
+        trackWaitingToStart = pilotData.startOfTrack;
+        trackEnded = pilotData.endOfTrack;
+      }
+
+      // Add marker if it doesn't exist
       if (!(pilot in this.markers)) {
         this.markers[pilot] = new this.google.maps.Marker({
           map: this.map,
-          position: pilotData.pos,
-          title: pilotInfo.info.user.fullname
+          position: pos,
+          title: info.info.user.fullname
         });
-        console.log("Marker:", pilotData.pos);
       }
 
+      // Update all marker properties
       const marker = this.markers[pilot];
-      marker.setPosition(pilotData.pos);
+      marker.setPosition(pos);
     }
     //console.log(data);
   };
