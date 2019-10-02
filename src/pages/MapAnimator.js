@@ -20,11 +20,18 @@ export default class MapAnimator {
     }
   };
 
-  update = data => {
-    const pilotsInfos = getXContestInterface().getPilotInfos();
-    this.cleanupOldMarkers(pilotsInfos);
-    for (const pilot in pilotsInfos) {
-      const info = pilotsInfos[pilot];
+  update = (data, subscribedPilots) => {
+    const pilotInfos = getXContestInterface().getPilotInfos();
+
+    // Remove markers that we unsubscribed from
+    this.cleanupOldMarkers(subscribedPilots);
+
+    // Remove markers that went offline
+    this.cleanupOldMarkers(pilotInfos);
+
+    for (const pilot in subscribedPilots) {
+      if (!(pilot in pilotInfos)) continue;
+      const info = pilotInfos[pilot];
 
       // Retreive knowledge
       const pos = { lat: info.lastFix.lat, lng: info.lastFix.lon };

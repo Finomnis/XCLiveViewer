@@ -33,7 +33,7 @@ const LiveMap = () => {
   useEffect(() => {
     if (map && google) {
       const mapAnimator = new MapAnimator(map, google);
-      const mapAnimatorUpdateCallback = data => mapAnimator.update(data);
+      const mapAnimatorUpdateCallback = mapAnimator.update;
       getXContestInterface().animation.registerCallback(
         mapAnimatorUpdateCallback
       );
