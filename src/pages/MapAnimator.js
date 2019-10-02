@@ -24,7 +24,7 @@ export default class MapAnimator {
     const pilotsInfo = getXContestInterface().getPilotInfos();
     this.cleanupOldMarkers(data);
     for (const pilot in data) {
-      if (!pilot in pilotsInfo) continue;
+      if (!(pilot in pilotsInfo)) continue;
       const pilotInfo = pilotsInfo[pilot];
 
       const pilotData = data[pilot];
