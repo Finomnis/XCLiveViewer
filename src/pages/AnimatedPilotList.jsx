@@ -17,15 +17,26 @@ const AnimatedPilotList = props => {
 
       for (const key in animatedPilotData) {
         pilotDebugOutput.push(
-          <Box key={key}>{key + ": " + animatedPilotData[key]}</Box>
+          <tr key={key}>
+            <td>{key}</td>
+            <td>
+              {(Math.round(100 * animatedPilotData[key]) / 100).toString()}
+            </td>
+          </tr>
         );
       }
     }
 
     return (
-      <Box key={pilotId} onClick={() => props.removePilots([pilotId])}>
+      <Box
+        margin="10px"
+        key={pilotId}
+        onClick={() => props.removePilots([pilotId])}
+      >
         {displayedName}
-        {pilotDebugOutput}
+        <table>
+          <tbody>{pilotDebugOutput}</tbody>
+        </table>
       </Box>
     );
   });
