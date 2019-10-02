@@ -19,6 +19,7 @@ const LiveMap = () => {
           center: { lat: 46.509012, lng: 11.827984 },
           mapTypeId: "terrain",
           zoom: 12,
+          maxZoom: 15,
           disableDefaultUI: true,
           scaleControl: true,
           fullscreenControl: true,
