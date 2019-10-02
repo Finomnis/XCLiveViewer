@@ -142,43 +142,34 @@ class FlightAnimation {
     this.mapsPath = [];
   };
 
-  blendData = (data1, data2, pct) => {
-    const result = {
-      baroAlt: null,
-      gpsAlt: null,
-      elevation: null,
+  takeData = data => {
+    return {
+      baroAlt: data.baroAlt,
+      gpsAlt: data.gpsAlt,
+      elevation: data.elevation,
       pos: {
-        lat: null,
-        lon: null
+        lat: data.pos.lat,
+        lon: data.pos.lon
       },
-      gpsVario: null,
-      baroVario: null,
-      velocity: null
+      gpsVario: data.gpsVario,
+      baroVario: data.baroVario,
+      velocity: data.velocity
     };
+  };
 
-    if (data1 !== null) {
-      if (data2 === null) {
-        result.baroAlt = data1.baroAlt;
-        result.gpsAlt = data1.gpsAlt;
-        result.elevation = data1.elevation;
-        result.pos.lat = data1.pos.lat;
-        result.pos.lon = data1.pos.lon;
-        result.gpsVario = data1.gpsVario;
-        result.baroVario = data1.baroVario;
-        result.velocity = data1.velocity;
-      } else {
-        //TODO optionally replace with catmull-rom interpolation
-        result.baroAlt = lerp(data1.baroAlt, data2.baroAlt, pct);
-        result.gpsAlt = lerp(data1.gpsAlt, data2.gpsAlt, pct);
-        result.elevation = lerp(data1.elevation, data2.elevation, pct);
-        result.pos.lat = lerp(data1.pos.lat, data2.pos.lat, pct);
-        result.pos.lon = lerp(data1.pos.lon, data2.pos.lon, pct);
-        result.gpsVario = lerp(data1.gpsVario, data2.gpsVario, pct);
-        result.baroVario = lerp(data1.baroVario, data2.baroVario, pct);
-        result.velocity = lerp(data1.velocity, data2.velocity, pct);
-      }
-    }
-    return result;
+  blendData = (data1, data2, pct) => {
+    return {
+      baroAlt: lerp(data1.baroAlt, data2.baroAlt, pct),
+      gpsAlt: lerp(data1.gpsAlt, data2.gpsAlt, pct),
+      elevation: lerp(data1.elevation, data2.elevation, pct),
+      pos: {
+        lat: lerp(data1.pos.lat, data2.pos.lat, pct),
+        lon: lerp(data1.pos.lon, data2.pos.lon, pct)
+      },
+      gpsVario: lerp(data1.gpsVario, data2.gpsVario, pct),
+      baroVario: lerp(data1.baroVario, data2.baroVario, pct),
+      velocity: lerp(data1.velocity, data2.velocity, pct)
+    };
   };
 
   updateAnimation = (animationTimeMillis, lowLatencyMode) => {
@@ -200,26 +191,23 @@ class FlightAnimation {
       }
     }
 
-    let data0 = null;
-    let data1 = null;
-    let blend = 0;
+    let blendedData = null;
     if (this.data.length > 0) {
       if (this.animationArrayPos <= 0) {
-        data0 = this.data[0];
+        blendedData = this.takeData(this.data[0]);
       } else if (this.animationArrayPos >= this.data.length) {
-        data0 = this.data[this.data.length - 1];
+        blendedData = this.takeData(this.data[this.data.length - 1]);
       } else {
-        data0 = this.data[this.animationArrayPos - 1];
-        data1 = this.data[this.animationArrayPos];
-        blend = (animationTimeSeconds - data0.t) / (data1.t - data0.t);
+        const data0 = this.data[this.animationArrayPos - 1];
+        const data1 = this.data[this.animationArrayPos];
+        const blend = (animationTimeSeconds - data0.t) / (data1.t - data0.t);
+        blendedData = this.blendData(data0, data1, blend);
       }
     }
-    const blendedData = this.blendData(data0, data1, blend);
 
     const result = {
       ...blendedData,
-      currentPos: this.animationArrayPos,
-      blend: blend
+      currentPos: this.animationArrayPos
     };
 
     return result;
