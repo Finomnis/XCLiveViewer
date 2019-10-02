@@ -192,11 +192,15 @@ class FlightAnimation {
     }
 
     let blendedData = null;
+    let endOfTrack = false;
+    let startOfTrack = false;
     if (this.data.length > 0) {
       if (this.animationArrayPos <= 0) {
         blendedData = this.takeData(this.data[0]);
+        startOfTrack = true;
       } else if (this.animationArrayPos >= this.data.length) {
         blendedData = this.takeData(this.data[this.data.length - 1]);
+        endOfTrack = true;
       } else {
         const data0 = this.data[this.animationArrayPos - 1];
         const data1 = this.data[this.animationArrayPos];
@@ -207,7 +211,9 @@ class FlightAnimation {
 
     const result = {
       ...blendedData,
-      currentPos: this.animationArrayPos
+      currentPos: this.animationArrayPos,
+      startOfTrack: startOfTrack,
+      endOfTrack: endOfTrack
     };
 
     return result;
