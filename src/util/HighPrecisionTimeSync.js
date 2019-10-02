@@ -13,7 +13,6 @@ class HighPrecisionTimeSync {
     if (offBy > this.tolerance || offBy < -this.tolerance) {
       this.offset -= offBy;
       estimatedTime = currentHighPrecisionTime + this.offset;
-      console.log("adjusted:", offBy);
     }
 
     return estimatedTime;
