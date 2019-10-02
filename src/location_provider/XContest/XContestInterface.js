@@ -47,6 +47,8 @@ class XContestInterface {
     this.animation.pushNewInfo(this.pilots);
   };
 
+  getPilotInfos = () => this.pilots;
+
   onTracklogMessageReceived = msg => {
     this.animation.pushNewData(msg.flightUuid, msg.trackChunk);
   };

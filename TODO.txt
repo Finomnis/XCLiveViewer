@@ -1,21 +1,21 @@
-- Implement further processing of websocket messages
-- Implement pilot selection list
-- Implement selected friends (maybe cookies? website specific storage?)
 - Create settings page
     - Add settings:
         - 15 minutes tracks vs full length
 - Throttle fps
 
-- Sort suggested pilots by distance to self
+- Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
+- Add nice icons to map
+- Colorize map paths + icons
+
+- Implement Pilots List
+    - Sort: online/offline, distance
+    - Multiline or extendable, run some tests
+
 - Add distance+direction and live state to pilot selection (potentially second row)
-
-Animation:
-- One central animation class
-    - Continuously computes the current posiitons/paths with requestAnimationFrame
-    - Can be subscribed by useXContestAnimation()
-    - Stops updating once no subscribers are left
-
+- Sort suggested pilots by distance to self
 - Make ?add=xxx url that automatically adds given pilots (without removing existing ones. Replacing can be done by first deleting your own ones and then calling the url)
+
+
 
 Notes:
 - The tracks on the map should have a different color for every pilot
@@ -27,6 +27,15 @@ Notes:
               or import ArrowDropDownCircleRoundedIcon from '@material-ui/icons/ArrowDropDownCircleRounded';
               or import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
+
 DONE:
 - Implement title bar
 - Add status popover to connectionstate button
+- Implement further processing of websocket messages
+- Implement pilot selection list
+- Implement selected friends (maybe cookies? website specific storage?)
+Animation:
+- One central animation class
+    - Continuously computes the current posiitons/paths with requestAnimationFrame
+    - Can be subscribed by useXContestAnimation()
+    - Stops updating once no subscribers are left

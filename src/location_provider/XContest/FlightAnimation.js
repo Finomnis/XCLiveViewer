@@ -35,7 +35,7 @@ class FlightAnimation {
       // If start time is after our own data, simply append
       for (const elem of data) {
         const timestamp = parseTime(elem.timestamp);
-        const pos = { lat: elem.lat, lon: elem.lon };
+        const pos = { lat: elem.lat, lng: elem.lon };
 
         const baroAlt = elem.baroAlt === 0 ? null : elem.baroAlt;
         const gpsAlt = elem.gpsAlt === 0 ? null : elem.gpsAlt;
@@ -66,7 +66,7 @@ class FlightAnimation {
       const newElements = [];
       for (const elem of data) {
         const timestamp = parseTime(elem.timestamp);
-        const pos = { lat: elem.lat, lon: elem.lon };
+        const pos = { lat: elem.lat, lng: elem.lon };
         const baroAlt = elem.baroAlt === 0 ? null : elem.baroAlt;
         const gpsAlt = elem.gpsAlt === 0 ? null : elem.gpsAlt;
 
@@ -149,7 +149,7 @@ class FlightAnimation {
       elevation: data.elevation,
       pos: {
         lat: data.pos.lat,
-        lon: data.pos.lon
+        lng: data.pos.lng
       },
       gpsVario: data.gpsVario,
       baroVario: data.baroVario,
@@ -164,7 +164,7 @@ class FlightAnimation {
       elevation: lerp(data1.elevation, data2.elevation, pct),
       pos: {
         lat: lerp(data1.pos.lat, data2.pos.lat, pct),
-        lon: lerp(data1.pos.lon, data2.pos.lon, pct)
+        lng: lerp(data1.pos.lng, data2.pos.lng, pct)
       },
       gpsVario: lerp(data1.gpsVario, data2.gpsVario, pct),
       baroVario: lerp(data1.baroVario, data2.baroVario, pct),

@@ -30,8 +30,8 @@ const LiveMap = () => {
 
   // Register map for updates
   useEffect(() => {
-    if (map) {
-      const mapAnimator = new MapAnimator(map);
+    if (map && google) {
+      const mapAnimator = new MapAnimator(map, google);
       const mapAnimatorUpdateCallback = data => mapAnimator.update(data);
       getXContestInterface().animation.registerCallback(
         mapAnimatorUpdateCallback
@@ -43,7 +43,7 @@ const LiveMap = () => {
         );
       };
     }
-  }, [map]);
+  }, [map, google]);
 
   return (
     <React.Fragment>
