@@ -1,5 +1,5 @@
 const findBisect = (targetValue, length, dataFn) => {
-  if (length < 1) return -1;
+  if (length < 1) return 0;
 
   let minIndex = -1;
   let maxIndex = length;

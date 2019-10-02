@@ -18,9 +18,9 @@ it("FindBisect", () => {
   expect(findBisect(81, 10, n => n * n)).toEqual(9);
   expect(findBisect(82, 10, n => n * n)).toEqual(10);
 
-  expect(findBisect(-1, 0, n => n * n)).toEqual(-1);
-  expect(findBisect(0, 0, n => n * n)).toEqual(-1);
-  expect(findBisect(1, 0, n => n * n)).toEqual(-1);
+  expect(findBisect(-1, 0, n => n * n)).toEqual(0);
+  expect(findBisect(0, 0, n => n * n)).toEqual(0);
+  expect(findBisect(1, 0, n => n * n)).toEqual(0);
 
   expect(findBisect(-1, 1, n => n * n)).toEqual(0);
   expect(findBisect(0, 1, n => n * n)).toEqual(0);
