@@ -4,6 +4,7 @@
 - Create settings page
     - Add settings:
         - 15 minutes tracks vs full length
+- Throttle fps
 
 - Sort suggested pilots by distance to self
 - Add distance+direction and live state to pilot selection (potentially second row)

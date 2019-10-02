@@ -2,7 +2,7 @@ export default class RunningDerivation {
   constructor(
     smoothingFactor,
     derivation_func = (a, b) => b - a,
-    invalid_func = a => a === 0
+    invalid_func = a => a === null
   ) {
     this.computeDiff = derivation_func;
     this.isInvalid = invalid_func;

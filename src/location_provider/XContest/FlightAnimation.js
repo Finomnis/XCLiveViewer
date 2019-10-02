@@ -1,5 +1,7 @@
 import RunningDerivation from "../../util/RunningDerivation";
 import { getDistance } from "geolib";
+import findBisect from "../../util/FindBisect";
+import { lerp } from "../../util/Interpolation";
 
 class FlightAnimation {
   constructor() {
@@ -35,17 +37,17 @@ class FlightAnimation {
         const timestamp = parseTime(elem.timestamp);
         const pos = { lat: elem.lat, lon: elem.lon };
 
+        const baroAlt = elem.baroAlt === 0 ? null : elem.baroAlt;
+        const gpsAlt = elem.gpsAlt === 0 ? null : elem.gpsAlt;
+
         // Compute new running average values
-        const gpsVario = this.counter_gpsVario.update(elem.gpsAlt, timestamp);
-        const baroVario = this.counter_baroVarion.update(
-          elem.baroAlt,
-          timestamp
-        );
+        const gpsVario = this.counter_gpsVario.update(gpsAlt, timestamp);
+        const baroVario = this.counter_baroVarion.update(baroAlt, timestamp);
         const velocity = this.counter_velocity.update(pos, timestamp);
 
         const newElem = {
-          baroAlt: elem.baroAlt,
-          gpsAlt: elem.gpsAlt,
+          baroAlt: baroAlt,
+          gpsAlt: gpsAlt,
           elevation: elem.elevation,
           pos: pos,
           gpsVario: gpsVario,
@@ -57,7 +59,7 @@ class FlightAnimation {
       }
     }
     // TODO add else back in. Out for now, to ensure both paths are working as intended
-    /*else*/ {
+    else {
       // Otherwise, merge
 
       // Compute new elements
@@ -65,9 +67,12 @@ class FlightAnimation {
       for (const elem of data) {
         const timestamp = parseTime(elem.timestamp);
         const pos = { lat: elem.lat, lon: elem.lon };
+        const baroAlt = elem.baroAlt === 0 ? null : elem.baroAlt;
+        const gpsAlt = elem.gpsAlt === 0 ? null : elem.gpsAlt;
+
         const newElem = {
-          baroAlt: elem.baroAlt,
-          gpsAlt: elem.gpsAlt,
+          baroAlt: baroAlt,
+          gpsAlt: gpsAlt,
           elevation: elem.elevation,
           pos: pos,
           gpsVario: null,
@@ -137,16 +142,84 @@ class FlightAnimation {
     this.mapsPath = [];
   };
 
-  updateAnimation = (animationTimeMillis, lowLatencyMode) => {
+  blendData = (data1, data2, pct) => {
     const result = {
       baroAlt: null,
       gpsAlt: null,
       elevation: null,
-      pos: null,
+      pos: {
+        lat: null,
+        lon: null
+      },
       gpsVario: null,
       baroVario: null,
-      velocity: null,
-      track: null
+      velocity: null
+    };
+
+    if (data1 !== null) {
+      if (data2 === null) {
+        result.baroAlt = data1.baroAlt;
+        result.gpsAlt = data1.gpsAlt;
+        result.elevation = data1.elevation;
+        result.pos.lat = data1.pos.lat;
+        result.pos.lon = data1.pos.lon;
+        result.gpsVario = data1.gpsVario;
+        result.baroVario = data1.baroVario;
+        result.velocity = data1.velocity;
+      } else {
+        //TODO optionally replace with catmull-rom interpolation
+        result.baroAlt = lerp(data1.baroAlt, data2.baroAlt, pct);
+        result.gpsAlt = lerp(data1.gpsAlt, data2.gpsAlt, pct);
+        result.elevation = lerp(data1.elevation, data2.elevation, pct);
+        result.pos.lat = lerp(data1.pos.lat, data2.pos.lat, pct);
+        result.pos.lon = lerp(data1.pos.lon, data2.pos.lon, pct);
+        result.gpsVario = lerp(data1.gpsVario, data2.gpsVario, pct);
+        result.baroVario = lerp(data1.baroVario, data2.baroVario, pct);
+        result.velocity = lerp(data1.velocity, data2.velocity, pct);
+      }
+    }
+    return result;
+  };
+
+  updateAnimation = (animationTimeMillis, lowLatencyMode) => {
+    const animationTimeSeconds = animationTimeMillis / 1000;
+
+    // Compute current array position
+    if (this.animationArrayPos === null) {
+      this.animationArrayPos = findBisect(
+        animationTimeSeconds,
+        this.data.length,
+        pos => this.data[pos].t
+      );
+    } else {
+      while (
+        this.animationArrayPos < this.data.length &&
+        this.data[this.animationArrayPos].t < animationTimeSeconds
+      ) {
+        this.animationArrayPos += 1;
+      }
+    }
+
+    let data0 = null;
+    let data1 = null;
+    let blend = 0;
+    if (this.data.length > 0) {
+      if (this.animationArrayPos <= 0) {
+        data0 = this.data[0];
+      } else if (this.animationArrayPos >= this.data.length) {
+        data0 = this.data[this.data.length - 1];
+      } else {
+        data0 = this.data[this.animationArrayPos - 1];
+        data1 = this.data[this.animationArrayPos];
+        blend = (animationTimeSeconds - data0.t) / (data1.t - data0.t);
+      }
+    }
+    const blendedData = this.blendData(data0, data1, blend);
+
+    const result = {
+      ...blendedData,
+      currentPos: this.animationArrayPos,
+      blend: blend
     };
 
     return result;
