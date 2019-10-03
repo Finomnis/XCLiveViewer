@@ -21,9 +21,6 @@ import { ConnectionState } from "../location_provider/XContest/XContestInterface
 import { CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
-  menuButton: {
-    marginRight: theme.spacing(2)
-  },
   popover: {
     padding: theme.spacing(1),
     align: "right"
@@ -96,9 +93,8 @@ const TitleBar = () => {
     <div>
       <AppBar position="static">
         <Toolbar>
-          <Box clone>
+          <Box marginRight={2}>
             <IconButton
-              className={classes.menuButton}
               edge="start"
               color="inherit"
             >
