@@ -15,7 +15,7 @@ import LiveMap from "./pages/LiveMap";
 import Pilots from "./pages/Pilots";
 import TitleBar from "./pages/TitleBar";
 
-export default function MainPage() {
+const MainPage = () => {
   const [tabId, setTabId] = React.useState(1);
   const [windowHeight, setWindowHeight] = React.useState(0);
 
@@ -63,4 +63,6 @@ export default function MainPage() {
       </Box>
     </Box>
   );
-}
+};
+
+export default MainPage;
