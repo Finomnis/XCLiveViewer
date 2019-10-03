@@ -20,6 +20,15 @@
 - Implement Pilots List
     - Sort: online/offline, distance
     - Multiline or extendable, run some tests
+    - UI elements:
+        - name
+        - icon
+        - airtime
+        - (takeoff, country flag)
+        - altitude/altitude histogram
+        - altitude gnd
+        - vario
+        - (velocity)
 
 - Add distance+direction and live state to pilot selection (potentially second row)
 - Sort suggested pilots by distance to self
