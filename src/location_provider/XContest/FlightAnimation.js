@@ -4,7 +4,7 @@ import findBisect from "../../util/FindBisect";
 import { lerp } from "../../util/Interpolation";
 
 class FlightAnimation {
-  constructor() {
+  constructor(flightInfo) {
     this.data = [];
     this.counter_gpsVario = new RunningDerivation(0.7);
     this.counter_baroVarion = new RunningDerivation(0.7);
@@ -17,6 +17,8 @@ class FlightAnimation {
     // Animation
     this.animationArrayPos = null;
     this.mapsPath = [];
+
+    this.updateInfos(flightInfo);
   }
 
   updateInfos = infos => {

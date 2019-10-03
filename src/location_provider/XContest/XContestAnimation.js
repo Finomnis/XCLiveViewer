@@ -95,9 +95,8 @@ export default class XContestAnimation {
   };
   pushNewData = (trackId, trackData) => {
     console.log("newTrackdata: ", trackId, trackData);
-    if (!(trackId in this._flightAnimations))
-      this._flightAnimations[trackId] = new FlightAnimation();
-    this._flightAnimations[trackId].updateData(trackData);
+    if (trackId in this._flightAnimations)
+      this._flightAnimations[trackId].updateData(trackData);
   };
 
   // callback gets called every frame with new data
@@ -128,13 +127,39 @@ export default class XContestAnimation {
   };
 
   // Internal
-    let importantFlights = Object.values(this._pilotInfos)
   _updateImportantFlights = () => {
+    // Filter important flights
+    let importantFlights = {};
+    Object.values(this._pilotInfos)
       .filter(val => val.info.user.username in this._subscribedPilots)
-      .map(val => val.flightId);
+      .forEach(val => {
+        importantFlights[val.flightId] = val;
+      });
 
-    let importantFlightSet = new Set(importantFlights);
+    let importantFlightSet = new Set(Object.keys(importantFlights));
 
+    // Cleanup old entries of _flightAnimations
+    {
+      const toRemove = [];
+      for (const flightId in this._flightAnimations) {
+        if (!(flightId in importantFlights)) {
+          toRemove.push(flightId);
+        }
+      }
+      for (const flightId of toRemove) {
+        console.log("Removing flightAnimation of '" + flightId + "' ...");
+        delete this._flightAnimations[flightId];
+      }
+    }
+
+    // Add new flightAnimations
+    Object.entries(importantFlights).forEach(([flightId, flightInfo]) => {
+      if (!(flightId in this._flightAnimations)) {
+        this._flightAnimations[flightId] = new FlightAnimation(flightInfo);
+      }
+    });
+
+    // Send subscription change to socket
     if (!eqSet(importantFlightSet, this._subscribedFlights)) {
       console.log(
         "Changing flight subscribtion: ",
