@@ -133,7 +133,7 @@ export default class XContestSocket {
   };
   processMessage = msg => {
     if (!("tag" in msg)) {
-      console.log("Warning: Invalid message format!", msg);
+      console.warn("Warning: Invalid message format!", msg);
       return;
     }
     switch (msg.tag) {
@@ -144,7 +144,7 @@ export default class XContestSocket {
         this.dispatchTracklogMessage(msg);
         break;
       default:
-        console.log(`Warning: Unknown message tag '${msg.tag}'!`, msg);
+        console.warn(`Warning: Unknown message tag '${msg.tag}'!`, msg);
     }
   };
 }
