@@ -19,6 +19,7 @@ import SignalCellularNullIcon from "@material-ui/icons/SignalCellularNull";
 import { useXContestConnectionState } from "../location_provider/XContest/XContestInterface";
 import { ConnectionState } from "../location_provider/XContest/XContestInterface";
 import { CircularProgress } from "@material-ui/core";
+import MainMenu from "./MainMenu";
 
 const useStyles = makeStyles(theme => ({
   popover: {
@@ -55,6 +56,8 @@ const TitleBar = () => {
 
   const popoverActions = React.useRef();
   const [connectionPopAnchor, setConnectionPopAnchor] = useState(null);
+
+  const [mainMenuOpen, setMainMenuOpen] = useState(false);
 
   React.useLayoutEffect(() => {
     if (popoverActions.current) {
@@ -97,6 +100,7 @@ const TitleBar = () => {
             <IconButton
               edge="start"
               color="inherit"
+              onClick={() => setMainMenuOpen(true)}
             >
               <MenuIcon />
             </IconButton>
@@ -133,6 +137,10 @@ const TitleBar = () => {
           <Typography>{connectionState}</Typography>
         </Box>
       </Popover>
+      <MainMenu
+        open={mainMenuOpen}
+        onClose={() => setMainMenuOpen(false)}
+      ></MainMenu>
     </div>
   );
 };
