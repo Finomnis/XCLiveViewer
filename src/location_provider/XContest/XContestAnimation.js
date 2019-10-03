@@ -33,7 +33,7 @@ export default class XContestAnimation {
       this._setting_lowLatencyMode = value;
     });
 
-    this._setSubscribedFlights = flights => {
+    this._setSubscribedFlightsCallback = flights => {
       this._subscribedFlights = flights;
       setSubscribedFlights(Array.from(flights));
     };
@@ -128,8 +128,12 @@ export default class XContestAnimation {
     let importantFlightSet = new Set(importantFlights);
 
     if (!eqSet(importantFlightSet, this._subscribedFlights)) {
-      console.log("Swap: ", this._subscribedFlights, importantFlightSet);
-      this._setSubscribedFlights(importantFlightSet);
+      console.log(
+        "Changing flight subscribtion: ",
+        this._subscribedFlights,
+        importantFlightSet
+      );
+      this._setSubscribedFlightsCallback(importantFlightSet);
     }
   };
 }
