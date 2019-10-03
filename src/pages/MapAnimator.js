@@ -20,38 +20,17 @@ export default class MapAnimator {
     }
   };
 
-  update = (data, subscribedPilots) => {
+  update = data => {
     const pilotInfos = getXContestInterface().getPilotInfos();
 
     // Remove markers that we unsubscribed from
-    this.cleanupOldMarkers(subscribedPilots);
+    this.cleanupOldMarkers(data);
 
-    // Remove markers that went offline
-    this.cleanupOldMarkers(pilotInfos);
-
-    for (const pilot in subscribedPilots) {
-      if (!(pilot in pilotInfos)) continue;
+    Object.entries(data).forEach(([pilot, pilotData]) => {
+      if (!(pilot in pilotInfos)) return;
       const info = pilotInfos[pilot];
 
-      // Retreive knowledge
-      const pos = { lat: info.lastFix.lat, lng: info.lastFix.lon };
-      let trackWaitingToStart = false;
-      let trackEnded = true;
-      let landed = info.landed;
-
-      // Replace knowledge with better (live) knowledge if available
-      if (
-        pilot in data &&
-        !(data[pilot] === null || data[pilot].pos.lat === null)
-      ) {
-        const pilotData = data[pilot];
-
-        pos.lat = pilotData.pos.lat;
-        pos.lng = pilotData.pos.lng;
-
-        trackWaitingToStart = pilotData.startOfTrack;
-        trackEnded = pilotData.endOfTrack;
-      }
+      const pos = { lat: pilotData.pos.lat, lng: pilotData.pos.lng };
 
       // Add marker if it doesn't exist
       if (!(pilot in this.markers)) {
@@ -65,7 +44,7 @@ export default class MapAnimator {
       // Update all marker properties
       const marker = this.markers[pilot];
       marker.setPosition(pos);
-    }
+    });
     //console.log(data);
   };
 }

@@ -71,7 +71,7 @@ export default class XContestAnimation {
   _submitAnimationFrame = data => {
     this._currentAnimationData = data;
     for (const cb of this._callbacks) {
-      cb(data, this._subscribedPilots);
+      cb(data);
     }
   };
 
