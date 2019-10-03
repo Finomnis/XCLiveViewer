@@ -78,12 +78,12 @@ export default class XContestAnimation {
   // External
   setSubscribedPilots = subscribedPilots => {
     this._subscribedPilots = subscribedPilots;
-    this._updateSubscribedFlights();
+    this._updateImportantFlights();
   };
   pushNewInfo = pilotInfo => {
     console.log("newInfo: ", pilotInfo);
     this._pilotInfos = pilotInfo;
-    this._updateSubscribedFlights();
+    this._updateImportantFlights();
   };
   pushNewData = (trackId, trackData) => {
     console.log("newTrackdata: ", trackId, trackData);
@@ -120,8 +120,8 @@ export default class XContestAnimation {
   };
 
   // Internal
-  _updateSubscribedFlights = () => {
     let importantFlights = Object.values(this._pilotInfos)
+  _updateImportantFlights = () => {
       .filter(val => val.info.user.username in this._subscribedPilots)
       .map(val => val.flightId);
 
