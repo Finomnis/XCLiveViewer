@@ -142,6 +142,20 @@ class FlightAnimation {
     this.mapsPath = [];
   };
 
+  takeEmptyData = () => {
+    return {
+      baroAlt: null,
+      gpsAlt: null,
+      elevation: null,
+      pos: {
+        lat: null,
+        lng: null
+      },
+      gpsVario: null,
+      baroVario: null,
+      velocity: null
+    };
+  };
   takeData = data => {
     return {
       baroAlt: data.baroAlt,
@@ -207,6 +221,8 @@ class FlightAnimation {
         const blend = (animationTimeSeconds - data0.t) / (data1.t - data0.t);
         blendedData = this.blendData(data0, data1, blend);
       }
+    } else {
+      blendedData = this.takeEmptyData();
     }
 
     const result = {
