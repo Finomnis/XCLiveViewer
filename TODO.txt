@@ -7,7 +7,9 @@ IMPORTANT:
 - Create settings page
     - Add settings:
         - 15 minutes tracks vs full length
-- Throttle fps
+- Throttle fps to 10/s
+
+- Implement low latency mode
 
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
 - Add nice icons to map
