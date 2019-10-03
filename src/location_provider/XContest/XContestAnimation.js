@@ -64,11 +64,11 @@ export default class XContestAnimation {
       }
     });
 
-    this._updateAnimationData(newAnimationData);
+    this._submitAnimationFrame(newAnimationData);
     requestAnimationFrame(this.animationLoop);
   };
 
-  _updateAnimationData = data => {
+  _submitAnimationFrame = data => {
     this._currentAnimationData = data;
     for (const cb of this._callbacks) {
       cb(data, this._subscribedPilots);
