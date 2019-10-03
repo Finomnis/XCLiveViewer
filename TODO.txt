@@ -1,6 +1,4 @@
-IMPORTANT: 
-    - The explicit checking of PilotInfo+SubscribedPilots that we did in MapAnimator should get moved into XContestAnimation.
-        It should already return only online+subscribed pilots, and should then also include fallback data from PilotInfos
+- Implement path
 
 - Add LiveFlightLanded message: {tag: "LiveFlightLanded", flightUuid: "9a9b770b-dfad-4ce5-b089-356e8529bbd9"}
 
@@ -14,7 +12,7 @@ IMPORTANT:
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
 - Add nice icons to map
 - Colorize map paths + icons
-- Add button that enables automatic map scale and posiiton
+- Add button that enables automatic map scale and position
     - should include all selected pilots + some space
 - Add button that enables/disables GPS (own position)
 - Add optional nosleep.js (and add setting)
@@ -51,3 +49,5 @@ Animation:
     - Continuously computes the current posiitons/paths with requestAnimationFrame
     - Can be subscribed by useXContestAnimation()
     - Stops updating once no subscribers are left
+- The explicit checking of PilotInfo+SubscribedPilots that we did in MapAnimator should get moved into XContestAnimation.
+    It should already return only online+subscribed pilots, and should then also include fallback data from PilotInfos

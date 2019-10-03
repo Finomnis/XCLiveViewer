@@ -105,8 +105,6 @@ class FlightAnimation {
       // Reset animation
       this.liveDataCache.reset();
     }
-
-    console.log("Animation updated.", this.liveData);
   };
 
   getInterpolatedData = (data, cache, timeStamp) => {

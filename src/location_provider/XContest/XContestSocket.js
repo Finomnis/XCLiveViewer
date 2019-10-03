@@ -71,7 +71,7 @@ export default class XContestSocket {
 
   onOpen = () => {
     this.handleReset();
-    console.log("WebSocket: Open!");
+    console.debug("WebSocket: Open!");
     this.setConnectionState(ConnectionState.ESTABLISHED);
     this.connected = true;
 
@@ -99,7 +99,7 @@ export default class XContestSocket {
   };
 
   onMessage = evt => {
-    console.log("WebSocket: Message!");
+    console.debug("WebSocket: Message!");
     this.setConnectionState(ConnectionState.ACTIVE);
 
     let msg = JSON.parse(evt.data);
@@ -116,7 +116,7 @@ export default class XContestSocket {
 
   onClose = evt => {
     this.connected = false;
-    console.log("WebSocket: Close!");
+    console.debug("WebSocket: Close!");
     this.setConnectionState(ConnectionState.NO_CONNECTION);
     // websocket is closed.
     setTimeout(this.connect.bind(this), 1000);
@@ -124,7 +124,7 @@ export default class XContestSocket {
 
   onError = evt => {
     this.connected = false;
-    console.log("WebSocket: Error!");
+    console.debug("WebSocket: Error!");
   };
 
   // Message Processing
