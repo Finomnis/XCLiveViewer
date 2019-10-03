@@ -58,6 +58,11 @@ class DataGens {
       velocity: lerp(data1.velocity, data2.velocity, pct)
     };
   }
+
+  static blendDataSpline(data0, data1, data2, data3, pct) {
+    // TODO add catmull-rom spline interpolation
+    return null;
+  }
 }
 
 class FlightAnimation {
