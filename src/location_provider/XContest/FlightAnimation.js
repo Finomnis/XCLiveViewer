@@ -5,7 +5,7 @@ import { lerp } from "../../util/Interpolation";
 
 class FlightAnimation {
   constructor(flightInfo) {
-    this.data = [];
+    this.liveData = [];
     this.counter_gpsVario = new RunningDerivation(0.7);
     this.counter_baroVarion = new RunningDerivation(0.7);
     this.counter_velocity = new RunningDerivation(
@@ -35,8 +35,8 @@ class FlightAnimation {
     // Compute start time
     const data_start_time = parseTime(data[0].timestamp);
     if (
-      this.data.length === 0 ||
-      this.data[this.data.length - 1].t < data_start_time
+      this.liveData.length === 0 ||
+      this.liveData[this.liveData.length - 1].t < data_start_time
     ) {
       // If start time is after our own data, simply append
       for (const elem of data) {
@@ -61,7 +61,7 @@ class FlightAnimation {
           velocity: velocity,
           t: timestamp
         };
-        this.data.push(newElem);
+        this.liveData.push(newElem);
       }
     }
     // TODO add else back in. Out for now, to ensure both paths are working as intended
@@ -90,8 +90,8 @@ class FlightAnimation {
       }
 
       // Merge
-      const oldElements = this.data;
-      this.data = [];
+      const oldElements = this.liveData;
+      this.liveData = [];
 
       let oldPos = 0;
       let newPos = 0;
@@ -99,23 +99,23 @@ class FlightAnimation {
       while (true) {
         if (oldPos >= oldElements.length && newPos >= newElements.length) break;
         else if (oldPos >= oldElements.length) {
-          this.data.push(newElements[newPos]);
+          this.liveData.push(newElements[newPos]);
           newPos += 1;
         } else if (newPos >= newElements.length) {
-          this.data.push(oldElements[oldPos]);
+          this.liveData.push(oldElements[oldPos]);
           oldPos += 1;
         } else {
           const oldEl = oldElements[oldPos];
           const newEl = newElements[newPos];
 
           if (newEl.t < oldEl.t) {
-            this.data.push(newEl);
+            this.liveData.push(newEl);
             newPos += 1;
           } else if (oldEl.t < newEl.t) {
-            this.data.push(oldEl);
+            this.liveData.push(oldEl);
             oldPos += 1;
           } else {
-            this.data.push(newEl);
+            this.liveData.push(newEl);
             oldPos += 1;
             newPos += 1;
           }
@@ -126,7 +126,7 @@ class FlightAnimation {
       this.counter_gpsVario.reset();
       this.counter_baroVarion.reset();
       this.counter_velocity.reset();
-      for (let elem of this.data) {
+      for (let elem of this.liveData) {
         const gpsVario = this.counter_gpsVario.update(elem.gpsAlt, elem.t);
         const baroVario = this.counter_baroVarion.update(elem.baroAlt, elem.t);
         const velocity = this.counter_velocity.update(elem.pos, elem.t);
@@ -140,7 +140,7 @@ class FlightAnimation {
       this.resetAnimation();
     }
 
-    console.log("Animation updated.", this.data);
+    console.log("Animation updated.", this.liveData);
   };
 
   resetAnimation = () => {
@@ -199,13 +199,13 @@ class FlightAnimation {
     if (this.animationArrayPos === null) {
       this.animationArrayPos = findBisect(
         animationTimeSeconds,
-        this.data.length,
-        pos => this.data[pos].t
+        this.liveData.length,
+        pos => this.liveData[pos].t
       );
     } else {
       while (
-        this.animationArrayPos < this.data.length &&
-        this.data[this.animationArrayPos].t < animationTimeSeconds
+        this.animationArrayPos < this.liveData.length &&
+        this.liveData[this.animationArrayPos].t < animationTimeSeconds
       ) {
         this.animationArrayPos += 1;
       }
@@ -214,16 +214,16 @@ class FlightAnimation {
     let blendedData = null;
     let endOfTrack = false;
     let startOfTrack = false;
-    if (this.data.length > 0) {
+    if (this.liveData.length > 0) {
       if (this.animationArrayPos <= 0) {
-        blendedData = this.takeData(this.data[0]);
+        blendedData = this.takeData(this.liveData[0]);
         startOfTrack = true;
-      } else if (this.animationArrayPos >= this.data.length) {
-        blendedData = this.takeData(this.data[this.data.length - 1]);
+      } else if (this.animationArrayPos >= this.liveData.length) {
+        blendedData = this.takeData(this.liveData[this.liveData.length - 1]);
         endOfTrack = true;
       } else {
-        const data0 = this.data[this.animationArrayPos - 1];
-        const data1 = this.data[this.animationArrayPos];
+        const data0 = this.liveData[this.animationArrayPos - 1];
+        const data1 = this.liveData[this.animationArrayPos];
         const blend = (animationTimeSeconds - data0.t) / (data1.t - data0.t);
         blendedData = this.blendData(data0, data1, blend);
       }
