@@ -1,3 +1,7 @@
+IMPORTANT: 
+    - The explicit checking of PilotInfo+SubscribedPilots that we did in MapAnimator should get moved into XContestAnimation.
+        It should already return only online+subscribed pilots, and should then also include fallback data from PilotInfos
+
 - Create settings page
     - Add settings:
         - 15 minutes tracks vs full length
@@ -6,6 +10,10 @@
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
 - Add nice icons to map
 - Colorize map paths + icons
+- Add button that enables automatic map scale and posiiton
+    - should include all selected pilots + some space
+- Add button that enables/disables GPS (own position)
+- Add optional nosleep.js (and add setting)
 
 - Implement Pilots List
     - Sort: online/offline, distance
