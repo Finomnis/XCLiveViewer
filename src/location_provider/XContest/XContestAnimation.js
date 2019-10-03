@@ -84,6 +84,14 @@ export default class XContestAnimation {
     console.log("newInfo: ", pilotInfo);
     this._pilotInfos = pilotInfo;
     this._updateImportantFlights();
+
+    // Update flight info in flightAnimations
+    Object.values(pilotInfo).forEach(flightInfo => {
+      const flightId = flightInfo.flightId;
+      if (flightId in this._flightAnimations) {
+        this._flightAnimations[flightId].updateInfos(flightInfo);
+      }
+    });
   };
   pushNewData = (trackId, trackData) => {
     console.log("newTrackdata: ", trackId, trackData);

@@ -19,6 +19,10 @@ class FlightAnimation {
     this.mapsPath = [];
   }
 
+  updateInfos = infos => {
+    console.log("updateInfos", infos);
+  };
+
   updateData = data => {
     const parseTime = isoStr => {
       return Math.round(Date.parse(isoStr) / 1000);
