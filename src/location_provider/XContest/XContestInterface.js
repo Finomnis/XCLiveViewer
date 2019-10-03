@@ -20,7 +20,8 @@ class XContestInterface {
     this.socket = new XContestSocket(
       this.onConnectionStateChanged,
       this.onInfoMessageReceived,
-      this.onTracklogMessageReceived
+      this.onTracklogMessageReceived,
+      this.onFlightLandedMessageReceived
     );
     this.animation = new XContestAnimation(this.setSubscribedFlights);
   }
@@ -28,6 +29,8 @@ class XContestInterface {
   setSubscribedFlights = flights => {
     this.socket.setSubscribedFlights(flights);
   };
+
+  getPilotInfos = () => this.pilots;
 
   onConnectionStateChanged = state => {
     this.connectionState.set(state);
@@ -47,10 +50,12 @@ class XContestInterface {
     this.pilotInfos.set(this.pilots);
   };
 
-  getPilotInfos = () => this.pilots;
-
   onTracklogMessageReceived = msg => {
     this.animation.pushNewData(msg.flightUuid, msg.trackChunk);
+  };
+
+  onFlightLandedMessageReceived = flightId => {
+    this.animation.pushFlightLanded(flightId);
   };
 }
 

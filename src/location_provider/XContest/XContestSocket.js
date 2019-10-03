@@ -2,10 +2,16 @@ import { ConnectionState } from "./XContestInterface";
 import { getSetting, Settings } from "../../common/PersistentState/Settings";
 
 export default class XContestSocket {
-  constructor(onStateChanged, onInfoMessage, onTracklogMessage) {
+  constructor(
+    onStateChanged,
+    onInfoMessage,
+    onTracklogMessage,
+    onFlightLanded
+  ) {
     this.setConnectionState = onStateChanged;
     this.dispatchInfoMessage = onInfoMessage;
     this.dispatchTracklogMessage = onTracklogMessage;
+    this.dispatchFlightLandedMessage = onFlightLanded;
     this.subscribedFlights = [];
     this.connect();
     this.connected = false;
@@ -142,6 +148,9 @@ export default class XContestSocket {
         break;
       case "LiveFlightChunk":
         this.dispatchTracklogMessage(msg);
+        break;
+      case "LiveFlightLanded":
+        this.dispatchFlightLandedMessage(msg.flightUuid);
         break;
       default:
         console.warn(`Warning: Unknown message tag '${msg.tag}'!`, msg);

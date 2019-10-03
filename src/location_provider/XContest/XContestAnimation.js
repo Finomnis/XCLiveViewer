@@ -80,6 +80,7 @@ export default class XContestAnimation {
     this._subscribedPilots = subscribedPilots;
     this._updateImportantFlights();
   };
+
   pushNewInfo = pilotInfo => {
     console.log("newInfo: ", pilotInfo);
     this._pilotInfos = pilotInfo;
@@ -93,16 +94,23 @@ export default class XContestAnimation {
       }
     });
   };
+
   pushNewData = (trackId, trackData) => {
     console.log("newTrackdata: ", trackId, trackData);
     if (trackId in this._flightAnimations)
       this._flightAnimations[trackId].updateData(trackData);
   };
 
+  pushFlightLanded = flightId => {
+    if (flightId in this._flightAnimations)
+      this._flightAnimations[flightId].updateLanded();
+  };
+
   // callback gets called every frame with new data
   registerCallback = cb => {
     if (!this._callbacks.includes(cb)) this._callbacks.push(cb);
   };
+
   unregisterCallback = cb => {
     const index = this._callbacks.indexOf(cb);
     if (index >= 0) {

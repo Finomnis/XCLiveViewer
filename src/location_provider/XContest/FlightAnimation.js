@@ -107,6 +107,11 @@ class FlightAnimation {
     }
   };
 
+  updateLanded = () => {
+    console.log("Received flight landed message!");
+    this.landed = true;
+  };
+
   getInterpolatedData = (data, cache, timeStamp) => {
     if (data.length < 1) return null;
 
