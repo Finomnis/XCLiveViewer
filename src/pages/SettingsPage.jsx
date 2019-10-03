@@ -10,7 +10,9 @@ import {
   ListItemText,
   Divider,
   IconButton,
-  Box
+  Box,
+  Switch,
+  ListItemSecondaryAction
 } from "@material-ui/core";
 
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -39,6 +41,9 @@ const SettingsPage = props => {
             primary="Default notification ringtone"
             secondary="Tethys"
           />
+          <ListItemSecondaryAction>
+            <Switch edge="end" onChange={() => {}} checked={false} />
+          </ListItemSecondaryAction>
         </ListItem>
       </List>
     </Dialog>
