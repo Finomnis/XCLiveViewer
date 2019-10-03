@@ -1,7 +1,6 @@
-import { EventEmitter } from "events";
-import mapEventToState from "../../util/EventToReactState";
 import XContestSocket from "./XContestSocket";
 import XContestAnimation from "./XContestAnimation";
+import EventfulState from "../../util/EventfulState";
 
 export const ConnectionState = {
   CONNECTING: "connecting", //orange
@@ -16,7 +15,8 @@ export const ConnectionState = {
 class XContestInterface {
   constructor() {
     this.pilots = [];
-    this.eventEmitter = new EventEmitter();
+    this.connectionState = new EventfulState(ConnectionState.NO_INFORMATION);
+    this.pilotInfos = new EventfulState([]);
     this.socket = new XContestSocket(
       this.onConnectionStateChanged,
       this.onInfoMessageReceived,
@@ -30,7 +30,7 @@ class XContestInterface {
   };
 
   onConnectionStateChanged = state => {
-    this.eventEmitter.emit("connectionStateChanged", state);
+    this.connectionState.set(state);
   };
 
   onInfoMessageReceived = msg => {
@@ -43,8 +43,8 @@ class XContestInterface {
 
       this.pilots[track.info.user.username] = track;
     }
-    this.eventEmitter.emit("pilotStateChanged", this.pilots);
     this.animation.pushNewInfo(this.pilots);
+    this.pilotInfos.set(this.pilots);
   };
 
   getPilotInfos = () => this.pilots;
@@ -63,14 +63,6 @@ export const getXContestInterface = () => {
   return _instance;
 };
 
-export const useXContestPilots = mapEventToState(
-  () => getXContestInterface().eventEmitter,
-  "pilotStateChanged",
-  []
-);
-
-export const useXContestConnectionState = mapEventToState(
-  () => getXContestInterface().eventEmitter,
-  "connectionStateChanged",
-  ConnectionState.NO_INFORMATION
-);
+export const useXContestPilots = () => getXContestInterface().pilotInfos.use();
+export const useXContestConnectionState = () =>
+  getXContestInterface().connectionState.use();
