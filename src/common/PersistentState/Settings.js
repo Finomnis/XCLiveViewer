@@ -25,3 +25,9 @@ const settingsObjects = {
 };
 
 export const getSetting = key => settingsObjects[key];
+
+export const resetAllSettings = () => {
+  Object.values(settingsObjects).forEach(settingsObj =>
+    settingsObj.setValue(null)
+  );
+};

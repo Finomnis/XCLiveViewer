@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   Dialog,
@@ -14,11 +14,21 @@ import {
   Switch,
   ListItemSecondaryAction,
   TextField,
-  InputAdornment
+  InputAdornment,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  DialogContentText,
+  Button
 } from "@material-ui/core";
+import UndoIcon from "@material-ui/icons/Undo";
 
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import { getSetting, Settings } from "../common/PersistentState/Settings";
+import {
+  getSetting,
+  Settings,
+  resetAllSettings
+} from "../common/PersistentState/Settings";
 
 const NumberInput = props => (
   <TextField
@@ -37,6 +47,10 @@ const NumberInput = props => (
 );
 
 const SettingsPage = props => {
+  const [resetAllSettingsDialogOpen, setResetAllSettingsDialogOpen] = useState(
+    false
+  );
+
   // Retreive the settings we want to change
   const [settingPathLength, setSettingPathLength] = getSetting(
     Settings.PATH_LENGTH
@@ -73,8 +87,47 @@ const SettingsPage = props => {
           <Box marginLeft={2} flexGrow={1}>
             <Typography variant="h6">Settings</Typography>
           </Box>
+
+          <IconButton
+            edge="end"
+            color="inherit"
+            onClick={() => setResetAllSettingsDialogOpen(true)}
+          >
+            <UndoIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
+
+      {/* RESET ALL SETTINGS DIALOG */}
+      <Dialog
+        open={resetAllSettingsDialogOpen}
+        onClose={() => setResetAllSettingsDialogOpen(false)}
+      >
+        <DialogTitle>{"Reset all settings?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            This sets all settings to their default values.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              resetAllSettings();
+              setResetAllSettingsDialogOpen(false);
+            }}
+            color="primary"
+          >
+            Yes
+          </Button>
+          <Button
+            onClick={() => setResetAllSettingsDialogOpen(false)}
+            color="primary"
+            autoFocus
+          >
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* THE ACTUAL OPTIONS */}
       <List>
