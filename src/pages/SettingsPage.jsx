@@ -12,14 +12,58 @@ import {
   IconButton,
   Box,
   Switch,
-  ListItemSecondaryAction
+  ListItemSecondaryAction,
+  TextField,
+  InputAdornment
 } from "@material-ui/core";
 
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { getSetting, Settings } from "../common/PersistentState/Settings";
+
+const NumberInput = props => (
+  <TextField
+    onChange={event => console.log(event, event.target.valueAsNumber)}
+    variant="outlined"
+    disabled={props.disabled}
+    margin="dense"
+    hiddenLabel
+    type="number"
+    value={props.value}
+    InputProps={{
+      endAdornment: <InputAdornment position="end">{props.unit}</InputAdornment>
+    }}
+    inputProps={{ min: props.min, max: props.max }}
+  />
+);
 
 const SettingsPage = props => {
+  // Retreive the settings we want to change
+  const [settingPathLength, setSettingPathLength] = getSetting(
+    Settings.PATH_LENGTH
+  ).use();
+  const [settingLimitPaths, setSettingLimitPaths] = getSetting(
+    Settings.LIMIT_PATHS
+  ).use();
+  const [settingLowLatency, setSettingLowLatency] = getSetting(
+    Settings.LOW_LATENCY
+  ).use();
+  const [settingAnimationDelay, setSettingAnimationDelay] = getSetting(
+    Settings.ANIMATION_DELAY
+  ).use();
+  const [settingFpsLimit, setSettingFpsLimit] = getSetting(
+    Settings.FPS_LIMIT
+  ).use();
+  const [settingFpsRate, setSettingFpsRate] = getSetting(
+    Settings.FPS_RATE
+  ).use();
+
+  const flipLimitPaths = () => setSettingLimitPaths(!settingLimitPaths);
+  const flipLowLatency = () => setSettingLowLatency(!settingLowLatency);
+  const flipFpsLimit = () => setSettingFpsLimit(!settingFpsLimit);
+
   return (
     <Dialog fullScreen open={props.open} onClose={props.onClose}>
+      {/* THE TITLE BAR */}
       <AppBar style={{ position: "static" }}>
         <Toolbar>
           <IconButton edge="start" color="inherit" onClick={props.onClose}>
@@ -30,19 +74,98 @@ const SettingsPage = props => {
           </Box>
         </Toolbar>
       </AppBar>
+
+      {/* THE ACTUAL OPTIONS */}
       <List>
-        {/*TODO CHANGE*/}
-        <ListItem button>
-          <ListItemText primary="Phone ringtone" secondary="Titania" />
-        </ListItem>
-        <Divider />
-        <ListItem button>
+        {/* FRAMERATE */}
+        <ListItem button onClick={flipFpsLimit}>
           <ListItemText
-            primary="Default notification ringtone"
-            secondary="Tethys"
+            primary="Limit Framerate"
+            secondary="reduces energy consumption"
           />
           <ListItemSecondaryAction>
-            <Switch edge="end" onChange={() => {}} checked={false} />
+            <Switch
+              edge="end"
+              onChange={flipFpsLimit}
+              checked={settingFpsLimit}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
+        <ListItem disabled={!settingFpsLimit}>
+          <ListItemText primary="Framerate" secondary="Valid: 1-60 fps" />
+          <ListItemSecondaryAction>
+            <NumberInput
+              value={settingFpsRate}
+              onChange={setSettingFpsRate}
+              disabled={!settingFpsLimit}
+              unit="fps"
+              min={1}
+              max={60}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
+        <Divider />
+
+        {/* TRACK LENGTH */}
+        <ListItem button onClick={flipLimitPaths}>
+          <ListItemText
+            primary="Limit Track Length"
+            secondary="reduces data consumption"
+          />
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              onChange={flipLimitPaths}
+              checked={settingLimitPaths}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
+        <ListItem disabled={!settingLimitPaths}>
+          <ListItemText
+            primary="Track Length"
+            secondary="Valid: 1-999 minutes"
+          />
+          <ListItemSecondaryAction>
+            <NumberInput
+              disabled={!settingLimitPaths}
+              value={settingPathLength}
+              onChange={setSettingPathLength}
+              unit="min"
+              min={1}
+              max={999}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
+        <Divider />
+
+        {/* ANIMATION DELAY */}
+        <ListItem button onClick={flipLowLatency}>
+          <ListItemText
+            primary="Low Latency Mode"
+            secondary="disables animations"
+          />
+          <ListItemSecondaryAction>
+            <Switch
+              edge="end"
+              onChange={flipLowLatency}
+              checked={settingLowLatency}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
+        <ListItem disabled={settingLowLatency}>
+          <ListItemText
+            primary="Animation Delay"
+            secondary="70-120 sec (default: 80)"
+          />
+          <ListItemSecondaryAction>
+            <NumberInput
+              disabled={settingLowLatency}
+              value={settingAnimationDelay}
+              onChange={setSettingAnimationDelay}
+              unit="sec"
+              min={70}
+              max={120}
+            />
           </ListItemSecondaryAction>
         </ListItem>
       </List>
