@@ -121,10 +121,7 @@ const SettingsPage = props => {
           </ListItemSecondaryAction>
         </ListItem>
         <ListItem disabled={!settingLimitPaths}>
-          <ListItemText
-            primary="Track Length"
-            secondary="Valid: 1-999 minutes"
-          />
+          <ListItemText primary="Track Length" secondary="Valid: 1-999 min" />
           <ListItemSecondaryAction>
             <NumberInput
               disabled={!settingLimitPaths}
