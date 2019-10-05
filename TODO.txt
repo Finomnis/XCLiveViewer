@@ -1,5 +1,9 @@
 - Implement path
 
+- Implement hardware back button in popups
+
+- Add Reset-All button
+
 - Finish settings page
     - Add settings:
         - 15 minutes tracks vs full length

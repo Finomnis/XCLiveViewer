@@ -3,7 +3,7 @@ import { registerPersistentState } from "./PersistentState";
 // Keys
 export const Settings = {
   PATH_LENGTH: "PATH_LENGTH",
-  FULL_PATHS: "FULL_PATHS",
+  LIMIT_PATHS: "LIMIT_PATHS",
   LOW_LATENCY: "LOW_LATENCY",
   ANIMATION_DELAY: "ANIMATION_DELAY",
   FPS_LIMIT: "FPS_LIMIT",
@@ -16,8 +16,8 @@ const createSetting = (key, value) =>
 
 // Settings objects
 const settingsObjects = {
-  PATH_LENGTH: createSetting(Settings.PATH_LENGTH, 15 * 60),
-  FULL_PATHS: createSetting(Settings.FULL_PATHS, false),
+  PATH_LENGTH: createSetting(Settings.PATH_LENGTH, 15),
+  LIMIT_PATHS: createSetting(Settings.LIMIT_PATHS, false),
   LOW_LATENCY: createSetting(Settings.LOW_LATENCY, false),
   ANIMATION_DELAY: createSetting(Settings.ANIMATION_DELAY, 80),
   FPS_LIMIT: createSetting(Settings.FPS_LIMIT, true),

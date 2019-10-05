@@ -20,7 +20,7 @@ export default class XContestSocket {
     getSetting(Settings.PATH_LENGTH).registerCallback(
       this.refreshSubscribedFlights
     );
-    getSetting(Settings.FULL_PATHS).registerCallback(
+    getSetting(Settings.LIMIT_PATHS).registerCallback(
       this.refreshSubscribedFlights
     );
   }
@@ -43,11 +43,11 @@ export default class XContestSocket {
 
   formatSubscribedFlights = () => {
     const setting_pathLength = getSetting(Settings.PATH_LENGTH).getValue();
-    const setting_fullPath = getSetting(Settings.FULL_PATHS).getValue();
+    const setting_limitPath = getSetting(Settings.LIMIT_PATHS).getValue();
 
     let startIsoDate = null;
-    if (!setting_fullPath) {
-      const startDate = new Date(Date.now() - 1000 * setting_pathLength);
+    if (setting_limitPath) {
+      const startDate = new Date(Date.now() - 1000 * 60 * setting_pathLength);
       startDate.setMilliseconds(0);
       startIsoDate = startDate.toISOString();
     }
