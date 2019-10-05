@@ -96,17 +96,15 @@ const TitleBar = () => {
     <div>
       <AppBar position="static">
         <Toolbar>
-          <Box marginRight={2}>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={() => setMainMenuOpen(true)}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Box>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={() => setMainMenuOpen(true)}
+          >
+            <MenuIcon />
+          </IconButton>
 
-          <Box flexGrow={1} clone>
+          <Box marginLeft={2} flexGrow={1}>
             <Typography variant="h6">XC Live Viewer</Typography>
           </Box>
 

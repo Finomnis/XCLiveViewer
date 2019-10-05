@@ -69,7 +69,8 @@ const SettingsPage = props => {
           <IconButton edge="start" color="inherit" onClick={props.onClose}>
             <ArrowBackIcon />
           </IconButton>
-          <Box marginLeft={2} flex="1">
+
+          <Box marginLeft={2} flexGrow={1}>
             <Typography variant="h6">Settings</Typography>
           </Box>
         </Toolbar>
