@@ -74,7 +74,7 @@ export default class XContestSocket {
       // If we request old data, unsubscribe first, to force the server to re-send us the data, with the older data included
       if (
         this.previousStartIsoDate !== null &&
-        startIsoDate < this.previousStartIsoDate
+        (startIsoDate === null || startIsoDate < this.previousStartIsoDate)
       ) {
         this.sock.send(
           JSON.stringify({
