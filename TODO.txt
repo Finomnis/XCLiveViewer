@@ -1,8 +1,5 @@
-- Implement path
 
 - Implement hardware back button in popups
-
-- Implement low latency mode
 
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
 - Add nice icons to map
@@ -58,3 +55,5 @@ Animation:
 - Add LiveFlightLanded message: {tag: "LiveFlightLanded", flightUuid: "9a9b770b-dfad-4ce5-b089-356e8529bbd9"}
 - Finish settings page
 - Throttle fps
+- Implement path
+- Implement low latency mode

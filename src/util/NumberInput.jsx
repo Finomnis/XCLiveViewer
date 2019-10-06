@@ -19,7 +19,6 @@ export default class NumberInput extends Component {
   }
 
   render() {
-    console.log(localStorage);
     return (
       <TextField
         onChange={event => {

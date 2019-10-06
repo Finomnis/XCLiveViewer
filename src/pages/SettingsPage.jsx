@@ -44,9 +44,9 @@ const SettingsPage = props => {
   const [settingLowLatency, setSettingLowLatency] = getSetting(
     Settings.LOW_LATENCY
   ).use();
-  const [settingAnimationDelay, setSettingAnimationDelay] = getSetting(
-    Settings.ANIMATION_DELAY
-  ).use();
+  //const [settingAnimationDelay, setSettingAnimationDelay] = getSetting(
+  //  Settings.ANIMATION_DELAY
+  //).use();
   const [settingFpsLimit, setSettingFpsLimit] = getSetting(
     Settings.FPS_LIMIT
   ).use();
@@ -114,36 +114,39 @@ const SettingsPage = props => {
 
       {/* THE ACTUAL OPTIONS */}
       <List>
-        {/* FRAMERATE */}
-        <ListItem button onClick={flipFpsLimit}>
+        {/* ANIMATION DELAY */}
+        <ListItem button onClick={flipLowLatency}>
           <ListItemText
-            primary="Limit Framerate"
-            secondary="reduces energy consumption"
+            primary="Low Latency Mode"
+            secondary="disables animations"
           />
           <ListItemSecondaryAction>
             <Switch
               edge="end"
-              onChange={flipFpsLimit}
-              checked={settingFpsLimit}
+              onChange={flipLowLatency}
+              checked={settingLowLatency}
             />
           </ListItemSecondaryAction>
         </ListItem>
-        <ListItem disabled={!settingFpsLimit}>
-          <ListItemText primary="Framerate" secondary="Valid: 1-60 fps" />
+        {/* <ListItem disabled={settingLowLatency}>
+          <ListItemText
+            primary="Animation Delay"
+            secondary="70-120 sec (default: 80)"
+          />
           <ListItemSecondaryAction>
             <NumberInput
-              value={settingFpsRate}
-              onChange={setSettingFpsRate}
-              disabled={!settingFpsLimit}
-              unit="fps"
-              min={1}
-              max={60}
+              disabled={settingLowLatency}
+              value={settingAnimationDelay}
+              onChange={setSettingAnimationDelay}
+              unit="sec"
+              min={70}
+              max={120}
             />
           </ListItemSecondaryAction>
-        </ListItem>
-        <Divider />
+        </ListItem> */}
 
         {/* TRACK LENGTH */}
+        <Divider />
         <ListItem button onClick={flipLimitPaths}>
           <ListItemText
             primary="Limit Track Length"
@@ -170,35 +173,32 @@ const SettingsPage = props => {
             />
           </ListItemSecondaryAction>
         </ListItem>
-        <Divider />
 
-        {/* ANIMATION DELAY */}
-        <ListItem button onClick={flipLowLatency}>
+        {/* FRAMERATE */}
+        <Divider />
+        <ListItem button onClick={flipFpsLimit}>
           <ListItemText
-            primary="Low Latency Mode"
-            secondary="disables animations"
+            primary="Limit Framerate"
+            secondary="reduces energy consumption"
           />
           <ListItemSecondaryAction>
             <Switch
               edge="end"
-              onChange={flipLowLatency}
-              checked={settingLowLatency}
+              onChange={flipFpsLimit}
+              checked={settingFpsLimit}
             />
           </ListItemSecondaryAction>
         </ListItem>
-        <ListItem disabled={settingLowLatency}>
-          <ListItemText
-            primary="Animation Delay"
-            secondary="70-120 sec (default: 80)"
-          />
+        <ListItem disabled={!settingFpsLimit}>
+          <ListItemText primary="Framerate" secondary="Valid: 1-60 fps" />
           <ListItemSecondaryAction>
             <NumberInput
-              disabled={settingLowLatency}
-              value={settingAnimationDelay}
-              onChange={setSettingAnimationDelay}
-              unit="sec"
-              min={70}
-              max={120}
+              value={settingFpsRate}
+              onChange={setSettingFpsRate}
+              disabled={!settingFpsLimit}
+              unit="fps"
+              min={1}
+              max={60}
             />
           </ListItemSecondaryAction>
         </ListItem>
