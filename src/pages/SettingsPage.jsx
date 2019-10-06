@@ -13,8 +13,6 @@ import {
   Box,
   Switch,
   ListItemSecondaryAction,
-  TextField,
-  InputAdornment,
   DialogTitle,
   DialogContent,
   DialogActions,
@@ -29,22 +27,7 @@ import {
   Settings,
   resetAllSettings
 } from "../common/PersistentState/Settings";
-
-const NumberInput = props => (
-  <TextField
-    onChange={event => console.log(event, event.target.valueAsNumber)}
-    variant="outlined"
-    disabled={props.disabled}
-    margin="dense"
-    hiddenLabel
-    type="number"
-    value={props.value}
-    InputProps={{
-      endAdornment: <InputAdornment position="end">{props.unit}</InputAdornment>
-    }}
-    inputProps={{ min: props.min, max: props.max }}
-  />
-);
+import NumberInput from "../util/NumberInput";
 
 const SettingsPage = props => {
   const [resetAllSettingsDialogOpen, setResetAllSettingsDialogOpen] = useState(
