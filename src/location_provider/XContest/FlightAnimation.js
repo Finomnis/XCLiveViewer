@@ -156,7 +156,16 @@ class FlightAnimation {
     ];
   };
 
-  updateAnimation = (animationTimeMillis, lowLatencyMode) => {
+  computeTrack = (data, cache, timestamp, limitTrack, trackLength) => {
+    return [];
+  };
+
+  updateAnimation = (
+    animationTimeMillis,
+    lowLatencyMode,
+    limitTrack,
+    trackLength
+  ) => {
     const animationTimeSeconds = animationTimeMillis / 1000;
 
     let animationResult = this.getInterpolatedData(
@@ -175,13 +184,25 @@ class FlightAnimation {
       animationResult = this.getFallbackData();
     }
 
+    let track = this.computeTrack(
+      this.liveData,
+      this.liveDataCache,
+      animationTimeSeconds,
+      limitTrack,
+      trackLength
+    );
+    if (!track) {
+      track = [];
+    }
+
     const [blendedData, startOfTrack, endOfTrack] = animationResult;
 
     const result = {
       ...blendedData,
       startOfTrack: startOfTrack,
       endOfTrack: endOfTrack,
-      landed: this.landed
+      landed: this.landed,
+      track: track
     };
 
     return result;

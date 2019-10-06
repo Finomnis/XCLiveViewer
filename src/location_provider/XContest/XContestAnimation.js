@@ -26,12 +26,16 @@ export default class XContestAnimation {
     const settings_lowLatencyMode = getSetting(Settings.LOW_LATENCY);
     const settings_limitFps = getSetting(Settings.FPS_LIMIT);
     const settings_fps = getSetting(Settings.FPS_RATE);
+    const settings_trackLength = getSetting(Settings.PATH_LENGTH);
+    const settings_limitTracks = getSetting(Settings.LIMIT_PATHS);
 
     // Cached settings values for performance improvements. Not sure if actually worth
     this._setting_timeOffset = settings_timeOffset.getValue();
     this._setting_lowLatencyMode = settings_lowLatencyMode.getValue();
     this._setting_limitFps = settings_limitFps.getValue();
     this._setting_fps = settings_fps.getValue();
+    this._setting_trackLength = settings_trackLength.getValue();
+    this._setting_limitTracks = settings_limitTracks.getValue();
     settings_timeOffset.registerCallback(value => {
       this._setting_timeOffset = value;
     });
@@ -43,6 +47,12 @@ export default class XContestAnimation {
     });
     settings_fps.registerCallback(value => {
       this._setting_fps = value;
+    });
+    settings_trackLength.registerCallback(value => {
+      this._setting_trackLength = value;
+    });
+    settings_limitTracks.registerCallback(value => {
+      this._setting_limitTracks = value;
     });
 
     this._setSubscribedFlightsCallback = flights => {
@@ -76,7 +86,9 @@ export default class XContestAnimation {
             const flightAnim = this._flightAnimations[flightId];
             newAnimationData[pilot] = flightAnim.updateAnimation(
               offsetTime,
-              this._setting_lowLatencyMode
+              this._setting_lowLatencyMode,
+              this._setting_limitTracks,
+              this._setting_trackLength
             );
           }
         }
