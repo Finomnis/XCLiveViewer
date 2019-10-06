@@ -26,9 +26,9 @@ export default class GoogleMapsTrack {
     const startTime = track[0].timestamp;
     const endTime = track[length - 1].timestamp;
     if (
-      startTime == this.currentTrackVersion.startTime &&
-      endTime == this.currentTrackVersion.endTime &&
-      length == this.currentTrackVersion.length
+      startTime === this.currentTrackVersion.startTime &&
+      endTime === this.currentTrackVersion.endTime &&
+      length === this.currentTrackVersion.length
     ) {
       return;
     }
