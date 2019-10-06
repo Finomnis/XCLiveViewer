@@ -2,15 +2,6 @@
 
 - Implement hardware back button in popups
 
-- Add Reset-All button
-
-- Finish settings page
-    - Add settings:
-        - 15 minutes tracks vs full length
-
-
-- Throttle fps to 10/s
-
 - Implement low latency mode
 
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
@@ -65,3 +56,5 @@ Animation:
 - The explicit checking of PilotInfo+SubscribedPilots that we did in MapAnimator should get moved into XContestAnimation.
     It should already return only online+subscribed pilots, and should then also include fallback data from PilotInfos
 - Add LiveFlightLanded message: {tag: "LiveFlightLanded", flightUuid: "9a9b770b-dfad-4ce5-b089-356e8529bbd9"}
+- Finish settings page
+- Throttle fps

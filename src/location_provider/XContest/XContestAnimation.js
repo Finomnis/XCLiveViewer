@@ -24,13 +24,25 @@ export default class XContestAnimation {
     this._highPrecisionTimeSync = new HighPrecisionTimeSync();
     const settings_timeOffset = getSetting(Settings.ANIMATION_DELAY);
     const settings_lowLatencyMode = getSetting(Settings.LOW_LATENCY);
+    const settings_limitFps = getSetting(Settings.FPS_LIMIT);
+    const settings_fps = getSetting(Settings.FPS_RATE);
+
+    // Cached settings values for performance improvements. Not sure if actually worth
     this._setting_timeOffset = settings_timeOffset.getValue();
     this._setting_lowLatencyMode = settings_lowLatencyMode.getValue();
+    this._setting_limitFps = settings_limitFps.getValue();
+    this._setting_fps = settings_fps.getValue();
     settings_timeOffset.registerCallback(value => {
       this._setting_timeOffset = value;
     });
     settings_lowLatencyMode.registerCallback(value => {
       this._setting_lowLatencyMode = value;
+    });
+    settings_limitFps.registerCallback(value => {
+      this._setting_limitFps = value;
+    });
+    settings_fps.registerCallback(value => {
+      this._setting_fps = value;
     });
 
     this._setSubscribedFlightsCallback = flights => {
@@ -42,29 +54,33 @@ export default class XContestAnimation {
   }
 
   // Animation loop
-  animationLoop = highPrecisionTime => {
+  _lastUpdate = Date.now();
+  animationLoop = () => {
+    // Can't use time of function parameter, because we need absolute time
     const absTime = Date.now();
-    const syncedTime = this._highPrecisionTimeSync.get(
-      highPrecisionTime,
-      absTime
-    );
 
-    const offsetTime = syncedTime - 1000 * this._setting_timeOffset;
-    const newAnimationData = {};
-    Object.keys(this._subscribedPilots).forEach(pilot => {
-      if (pilot in this._pilotInfos) {
-        const flightId = this._pilotInfos[pilot].flightId;
-        if (flightId in this._flightAnimations) {
-          const flightAnim = this._flightAnimations[flightId];
-          newAnimationData[pilot] = flightAnim.updateAnimation(
-            offsetTime,
-            this._setting_lowLatencyMode
-          );
+    if (
+      !this._setting_limitFps ||
+      absTime >= this._lastUpdate + 1000.0 / this._setting_fps
+    ) {
+      this._lastUpdate = absTime;
+
+      const offsetTime = absTime - 1000 * this._setting_timeOffset;
+      const newAnimationData = {};
+      Object.keys(this._subscribedPilots).forEach(pilot => {
+        if (pilot in this._pilotInfos) {
+          const flightId = this._pilotInfos[pilot].flightId;
+          if (flightId in this._flightAnimations) {
+            const flightAnim = this._flightAnimations[flightId];
+            newAnimationData[pilot] = flightAnim.updateAnimation(
+              offsetTime,
+              this._setting_lowLatencyMode
+            );
+          }
         }
-      }
-    });
-
-    this._submitAnimationFrame(newAnimationData);
+      });
+      this._submitAnimationFrame(newAnimationData);
+    }
     requestAnimationFrame(this.animationLoop);
   };
 
