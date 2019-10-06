@@ -43,7 +43,6 @@ export default class GoogleMapsTrack {
     this.currentTrackVersion.length = length;
 
     this.track.setPath(track);
-    console.log("Updated track!");
   };
 
   updateData = data => {
