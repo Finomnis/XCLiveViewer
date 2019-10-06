@@ -1,5 +1,6 @@
 import { lerp } from "../../util/Interpolation";
 import FlightAnimationData, { parseTime } from "./FlightAnimationData";
+import { getSetting, Settings } from "../../common/PersistentState/Settings";
 
 class FlightAnimationDataCache {
   // IMPORTANT ASSUMPTION IN THIS ENTIRE FILE:
@@ -91,7 +92,36 @@ class FlightAnimation {
 
     // Set flight infos
     this.updateInfos(flightInfos);
+
+    this.settings = {};
+    this.updateSettings();
+
+    // register settings hooks
+    getSetting(Settings.ANIMATION_DELAY).registerCallback(this.updateSettings);
+    getSetting(Settings.LOW_LATENCY).registerCallback(this.updateSettings);
+    getSetting(Settings.PATH_LENGTH).registerCallback(this.updateSettings);
+    getSetting(Settings.LIMIT_PATHS).registerCallback(this.updateSettings);
   }
+
+  destroy = () => {
+    getSetting(Settings.ANIMATION_DELAY).unregisterCallback(
+      this.updateSettings
+    );
+    getSetting(Settings.LOW_LATENCY).unregisterCallback(this.updateSettings);
+    getSetting(Settings.PATH_LENGTH).unregisterCallback(this.updateSettings);
+    getSetting(Settings.LIMIT_PATHS).unregisterCallback(this.updateSettings);
+  };
+
+  updateSettings = () => {
+    this.settings = {
+      timeOffsetSeconds: getSetting(Settings.ANIMATION_DELAY).getValue(),
+      lowLatencyMode: getSetting(Settings.LOW_LATENCY).getValue(),
+      trackLengthMinutes: getSetting(Settings.PATH_LENGTH).getValue(),
+      limitTracks: getSetting(Settings.LIMIT_PATHS).getValue()
+    };
+    this.liveDataCache.reset();
+    this.flightInfoDataCache.reset();
+  };
 
   updateInfos = infos => {
     this.landed |= infos.landed;
@@ -155,21 +185,24 @@ class FlightAnimation {
       blendedData = DataGens.blendData(data0, data1, blend);
     }
 
-    return [blendedData, startOfTrack, endOfTrack];
+    const newestDataTimestamp = data.at(data.length - 1).t;
+
+    return [blendedData, startOfTrack, endOfTrack, newestDataTimestamp];
   };
 
   getFallbackData = () => {
     return [
       DataGens.fallbackData(this.flightInfos),
       false,
-      this.flightInfos.landed
+      this.flightInfos.landed,
+      parseTime(this.flightInfos.lastFix.timestamp)
     ];
   };
 
-  computeTrack = (data, cache, timestamp, limitTrack, trackLengthSeconds) => {
+  computeTrack = (data, cache, timestamp) => {
     if (data.length < 1) return null;
 
-    const oldestTimestamp = timestamp - trackLengthSeconds;
+    const oldestTimestamp = timestamp - this.settings.trackLengthMinutes * 60;
 
     let track = cache.mapsPath;
 
@@ -189,7 +222,7 @@ class FlightAnimation {
     }
 
     // Delete old data
-    if (limitTrack) {
+    if (this.settings.limitTracks) {
       const removeChunkSize = 32;
       let numRemove = 0;
       while (
@@ -207,13 +240,10 @@ class FlightAnimation {
     return track;
   };
 
-  updateAnimation = (
-    animationTimeMillis,
-    lowLatencyMode,
-    limitTrack,
-    trackLengthMinutes
-  ) => {
-    const animationTimeSeconds = animationTimeMillis / 1000;
+  updateAnimation = animationTimeMillis => {
+    const animationTimeSeconds = this.settings.lowLatencyMode
+      ? animationTimeMillis / 1000
+      : animationTimeMillis / 1000 - this.settings.timeOffsetSeconds;
 
     let animationResult = this.getInterpolatedData(
       this.liveData,
@@ -234,30 +264,47 @@ class FlightAnimation {
     let track = this.computeTrack(
       this.liveData,
       this.liveDataCache,
-      animationTimeSeconds,
-      limitTrack,
-      trackLengthMinutes * 60
+      animationTimeSeconds
     );
     if (!track) {
       track = this.computeTrack(
         this.flightInfoData,
         this.flightInfoDataCache,
-        animationTimeSeconds,
-        limitTrack,
-        trackLengthMinutes * 60
+        animationTimeSeconds
       );
     }
     if (!track) {
       track = [];
     }
 
-    const [blendedData, startOfTrack, endOfTrack] = animationResult;
+    let [
+      blendedData,
+      startOfTrack,
+      endOfTrack,
+      newestDataTimestamp
+    ] = animationResult;
+
+    // Special case for endOfTrack for lowLatencyMode
+    if (this.settings.lowLatencyMode) {
+      if (this.landed) {
+        // If 'landed' got signalled, immediately also end the track,
+        // as the 'landed' signal comes simultaneously to the last track message
+        endOfTrack = true;
+      } else {
+        // Otherwise, determine by how long ago we last heard from the pilot whether
+        // the track is broken or not.
+        // Has to be treated different than the default case, because in lowLatencyMode we
+        // are always at the end of the track.
+        endOfTrack = newestDataTimestamp < animationTimeSeconds - 80;
+      }
+    }
 
     const result = {
       ...blendedData,
       startOfTrack: startOfTrack,
       endOfTrack: endOfTrack,
       landed: this.landed,
+      newestDataTimestamp: newestDataTimestamp,
       track: track
     };
 

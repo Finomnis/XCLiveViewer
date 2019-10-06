@@ -22,37 +22,17 @@ export default class XContestAnimation {
     this._pilotInfos = {};
     this._flightAnimations = {};
     this._highPrecisionTimeSync = new HighPrecisionTimeSync();
-    const settings_timeOffset = getSetting(Settings.ANIMATION_DELAY);
-    const settings_lowLatencyMode = getSetting(Settings.LOW_LATENCY);
     const settings_limitFps = getSetting(Settings.FPS_LIMIT);
     const settings_fps = getSetting(Settings.FPS_RATE);
-    const settings_trackLength = getSetting(Settings.PATH_LENGTH);
-    const settings_limitTracks = getSetting(Settings.LIMIT_PATHS);
 
     // Cached settings values for performance improvements. Not sure if actually worth
-    this._setting_timeOffset = settings_timeOffset.getValue();
-    this._setting_lowLatencyMode = settings_lowLatencyMode.getValue();
     this._setting_limitFps = settings_limitFps.getValue();
     this._setting_fps = settings_fps.getValue();
-    this._setting_trackLength = settings_trackLength.getValue();
-    this._setting_limitTracks = settings_limitTracks.getValue();
-    settings_timeOffset.registerCallback(value => {
-      this._setting_timeOffset = value;
-    });
-    settings_lowLatencyMode.registerCallback(value => {
-      this._setting_lowLatencyMode = value;
-    });
     settings_limitFps.registerCallback(value => {
       this._setting_limitFps = value;
     });
     settings_fps.registerCallback(value => {
       this._setting_fps = value;
-    });
-    settings_trackLength.registerCallback(value => {
-      this._setting_trackLength = value;
-    });
-    settings_limitTracks.registerCallback(value => {
-      this._setting_limitTracks = value;
     });
 
     this._setSubscribedFlightsCallback = flights => {
@@ -77,19 +57,13 @@ export default class XContestAnimation {
         this._nextUpdate = absTime;
       }
 
-      const offsetTime = absTime - 1000 * this._setting_timeOffset;
       const newAnimationData = {};
       Object.keys(this._subscribedPilots).forEach(pilot => {
         if (pilot in this._pilotInfos) {
           const flightId = this._pilotInfos[pilot].flightId;
           if (flightId in this._flightAnimations) {
             const flightAnim = this._flightAnimations[flightId];
-            newAnimationData[pilot] = flightAnim.updateAnimation(
-              offsetTime,
-              this._setting_lowLatencyMode,
-              this._setting_limitTracks,
-              this._setting_trackLength
-            );
+            newAnimationData[pilot] = flightAnim.updateAnimation(absTime);
           }
         }
       });
@@ -186,6 +160,7 @@ export default class XContestAnimation {
       }
       for (const flightId of toRemove) {
         console.log("Removing flightAnimation of '" + flightId + "' ...");
+        this._flightAnimations[flightId].destroy();
         delete this._flightAnimations[flightId];
       }
     }
