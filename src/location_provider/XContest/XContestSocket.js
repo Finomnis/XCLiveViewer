@@ -76,6 +76,7 @@ export default class XContestSocket {
         this.previousStartIsoDate !== null &&
         (startIsoDate === null || startIsoDate < this.previousStartIsoDate)
       ) {
+        this.previousStartIsoDate = startIsoDate;
         this.sock.send(
           JSON.stringify({
             tag: "WebFollow",
