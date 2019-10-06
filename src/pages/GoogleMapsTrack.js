@@ -11,6 +11,10 @@ export default class GoogleMapsTrack {
       path: []
     });
     this.currentTrackVersion = { startTime: null, endTime: null, length: null };
+    this.newestTrackSegment = new this.google.maps.Polyline({
+      map: map,
+      path: []
+    });
   }
 
   setMap = map => {
@@ -44,6 +48,12 @@ export default class GoogleMapsTrack {
 
   updateData = data => {
     this.marker.setPosition(data.pos);
+    if (data.track.length > 0) {
+      this.newestTrackSegment.setPath([
+        data.track[data.track.length - 1],
+        data.pos
+      ]);
+    }
     this._updateTrack(data.track);
   };
 }
