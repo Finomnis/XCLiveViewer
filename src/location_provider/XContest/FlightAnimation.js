@@ -2,14 +2,24 @@ import { lerp } from "../../util/Interpolation";
 import FlightAnimationData, { parseTime } from "./FlightAnimationData";
 
 class FlightAnimationDataCache {
+  // IMPORTANT ASSUMPTION IN THIS ENTIRE FILE:
+  // While the cache exists, new data gets only appended. Whenever existing data changes, the cache
+  // will be invalidated.
+  // I.E., chache invariants:
+  //    - existing data entries don't change, indices always point to the same data
+  //    - data timestamps are monotonic rising, meaning, to get newer data the data array only
+  //      needs to be traversed in forward direction, never backwards.
+  // This enables efficient caching and O(1) lookup times.
   constructor() {
     this.currentArrayPos = null;
     this.mapsPath = [];
+    this.mapsPathNewestPos = 0;
   }
 
   reset = () => {
     this.currentArrayPos = null;
     this.mapsPath = [];
+    this.mapsPathNewestPos = 0;
   };
 }
 
@@ -156,26 +166,52 @@ class FlightAnimation {
     ];
   };
 
-  computeTrack = (data, cache, timestamp, limitTrack, trackLength) => {
+  computeTrack = (data, cache, timestamp, limitTrack, trackLengthSeconds) => {
     if (data.length < 1) return null;
 
-    const result = [];
-    for (const elem of data.data) {
-      result.push({
+    const oldestTimestamp = timestamp - trackLengthSeconds;
+
+    let track = cache.mapsPath;
+
+    // Append new data
+    while (
+      cache.mapsPathNewestPos < data.length &&
+      data.at(cache.mapsPathNewestPos).t < timestamp
+    ) {
+      const elem = data.at(cache.mapsPathNewestPos);
+      track.push({
         lat: elem.pos.lat,
         lng: elem.pos.lng,
         timestamp: elem.t,
         elevation: elem.gpsAlt
       });
+      cache.mapsPathNewestPos += 1;
     }
-    return result;
+
+    // Delete old data
+    if (limitTrack) {
+      const removeChunkSize = 32;
+      let numRemove = 0;
+      while (
+        numRemove + removeChunkSize - 1 < track.length &&
+        track[numRemove + removeChunkSize - 1].timestamp < oldestTimestamp
+      ) {
+        numRemove += removeChunkSize;
+      }
+      if (numRemove > 0) {
+        track = track.slice(numRemove);
+        cache.mapsPath = track;
+      }
+    }
+
+    return track;
   };
 
   updateAnimation = (
     animationTimeMillis,
     lowLatencyMode,
     limitTrack,
-    trackLength
+    trackLengthMinutes
   ) => {
     const animationTimeSeconds = animationTimeMillis / 1000;
 
@@ -200,8 +236,17 @@ class FlightAnimation {
       this.liveDataCache,
       animationTimeSeconds,
       limitTrack,
-      trackLength
+      trackLengthMinutes * 60
     );
+    if (!track) {
+      track = this.computeTrack(
+        this.flightInfoData,
+        this.flightInfoDataCache,
+        animationTimeSeconds,
+        limitTrack,
+        trackLengthMinutes * 60
+      );
+    }
     if (!track) {
       track = [];
     }
