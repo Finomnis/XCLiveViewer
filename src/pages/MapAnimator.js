@@ -1,50 +1,50 @@
 import { getXContestInterface } from "../location_provider/XContest/XContestInterface";
+import GoogleMapsTrack from "./GoogleMapsTrack";
 
 export default class MapAnimator {
   constructor(map, google) {
     this.map = map;
     this.google = google;
-    this.markers = {};
+    this.tracks = {};
   }
 
-  cleanupOldMarkers = data => {
+  cleanupOldTracks = data => {
     const toRemove = [];
-    for (const pilot in this.markers) {
+    for (const pilot in this.tracks) {
       if (!(pilot in data)) {
         toRemove.push(pilot);
       }
     }
     for (const pilot of toRemove) {
-      this.markers[pilot].setMap(null);
-      delete this.markers[pilot];
+      this.tracks[pilot].setMap(null);
+      delete this.tracks[pilot];
     }
   };
 
   update = data => {
     const pilotInfos = getXContestInterface().getPilotInfos();
 
-    // Remove markers that we unsubscribed from
-    this.cleanupOldMarkers(data);
+    // Remove tracks that we unsubscribed from
+    this.cleanupOldTracks(data);
 
+    // Update all pilots
     Object.entries(data).forEach(([pilot, pilotData]) => {
       if (!(pilot in pilotInfos)) return;
       const info = pilotInfos[pilot];
 
-      const pos = { lat: pilotData.pos.lat, lng: pilotData.pos.lng };
-
-      // Add marker if it doesn't exist
-      if (!(pilot in this.markers)) {
-        this.markers[pilot] = new this.google.maps.Marker({
-          map: this.map,
-          position: pos,
-          title: info.info.user.fullname
-        });
+      // Add track if it doesn't exist
+      if (!(pilot in this.tracks)) {
+        this.tracks[pilot] = new GoogleMapsTrack(
+          this.google,
+          this.map,
+          info,
+          pilotData
+        );
       }
 
-      // Update all marker properties
-      const marker = this.markers[pilot];
-      marker.setPosition(pos);
+      // Update all tracks properties
+      const track = this.tracks[pilot];
+      track.updateData(pilotData);
     });
-    //console.log(data);
   };
 }
