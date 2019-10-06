@@ -90,16 +90,16 @@ export const LastFixArrow = props => {
     transform: "rotate(-90deg)",
 
     /* Safari */
-    webkitTransform: "rotate(-90deg)",
+    WebkitTransform: "rotate(-90deg)",
 
     /* Firefox */
-    "-moz-transform": "rotate(-90deg)",
+    MozTransform: "rotate(-90deg)",
 
     /* IE */
-    "-ms-transform": "rotate(-90deg)",
+    msTransform: "rotate(-90deg)",
 
     /* Opera */
-    "-o-transform": "rotate(-90deg)"
+    OTransform: "rotate(-90deg)"
   };
   return (
     <span>
