@@ -20,47 +20,71 @@ import {
 } from "@material-ui/core";
 
 import { useXContestPilots } from "../location_provider/XContest/XContestInterface";
+import LastFixState, { LastFixArrow } from "../util/LastFixState";
 
 const columns = [
   {
     id: "name",
     label: "Name",
-    minWidth: 0,
     render: row => {
       return (
-        <React.Fragment>
-          {row.user.fullname}
+        <Box paddingLeft={1} paddingTop={1} paddingBottom={1}>
+          <Typography variant="body2">{row.info.user.fullname}</Typography>
           <Typography
-            component="span"
             variant="caption"
             color="textSecondary"
-            style={{ paddingLeft: ".3em" }}
+            style={{ paddingLeft: ".5em" }}
           >
-            [{row.user.username}]
+            [{row.info.user.username}]
           </Typography>
-        </React.Fragment>
+        </Box>
+      );
+    }
+  },
+  {
+    id: "state",
+    label: "State",
+    align: "right",
+    render: row => {
+      return (
+        <Box>
+          <Box>
+            <Typography variant="caption">
+              <LastFixState
+                timestamp={row.lastFix.timestamp}
+                landed={row.landed}
+                relative
+              />
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="caption">
+              <LastFixArrow />
+            </Typography>
+          </Box>
+        </Box>
       );
     }
   },
   {
     id: "country",
     label: "Country",
-    minWidth: "4em",
     align: "right",
     render: row => {
       return (
-        <React.Fragment>
-          {row.user.nationality.iso}
+        <Box paddingRight={1} paddingLeft={1}>
+          {row.info.user.nationality.iso}
           <Box
             fontSize="large"
             marginLeft="4px"
             boxShadow={1}
             style={{ verticalAlign: "middle" }}
             className={
-              "flag-icon flag-icon-" + row.user.nationality.iso.toLowerCase()
+              "flag-icon flag-icon-" +
+              row.info.user.nationality.iso.toLowerCase()
             }
           ></Box>
-        </React.Fragment>
+        </Box>
       );
     }
   }
@@ -189,7 +213,7 @@ const PilotSelector = props => {
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  style={{ width: column.width }}
                   component="th"
                 >
                   {column.label}
@@ -210,8 +234,12 @@ const PilotSelector = props => {
 
               const columnContent = columns.map(column => {
                 return (
-                  <TableCell key={column.id} align={column.align}>
-                    <Box style={style}>{column.render(row.info)}</Box>
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    padding="none"
+                  >
+                    <Box style={style}>{column.render(row)}</Box>
                   </TableCell>
                 );
               });
