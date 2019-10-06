@@ -54,16 +54,18 @@ export default class XContestAnimation {
   }
 
   // Animation loop
-  _lastUpdate = Date.now();
+  _nextUpdate = Date.now();
   animationLoop = () => {
     // Can't use time of function parameter, because we need absolute time
     const absTime = Date.now();
 
-    if (
-      !this._setting_limitFps ||
-      absTime >= this._lastUpdate + 1000.0 / this._setting_fps
-    ) {
-      this._lastUpdate = absTime;
+    const frameTimeDelta = 1000.0 / this._setting_fps;
+
+    if (!this._setting_limitFps || absTime >= this._nextUpdate) {
+      this._nextUpdate = this._nextUpdate + frameTimeDelta;
+      if (this._nextUpdate < absTime) {
+        this._nextUpdate = absTime;
+      }
 
       const offsetTime = absTime - 1000 * this._setting_timeOffset;
       const newAnimationData = {};
