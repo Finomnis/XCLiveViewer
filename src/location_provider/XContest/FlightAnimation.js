@@ -157,7 +157,18 @@ class FlightAnimation {
   };
 
   computeTrack = (data, cache, timestamp, limitTrack, trackLength) => {
-    return [];
+    if (data.length < 1) return null;
+
+    const result = [];
+    for (const elem of data.data) {
+      result.push({
+        lat: elem.pos.lat,
+        lng: elem.pos.lng,
+        timestamp: elem.t,
+        elevation: elem.gpsAlt
+      });
+    }
+    return result;
   };
 
   updateAnimation = (
