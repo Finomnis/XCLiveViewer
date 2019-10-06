@@ -15,6 +15,7 @@ export default class XContestSocket {
     this.subscribedFlights = [];
     this.connect();
     this.connected = false;
+    this.previousStartIsoDate = null;
 
     // Register hooks, so we get notified when these settings change
     getSetting(Settings.PATH_LENGTH).registerCallback(
@@ -47,7 +48,11 @@ export default class XContestSocket {
 
     let startIsoDate = null;
     if (setting_limitPath) {
-      const startDate = new Date(Date.now() - 1000 * 60 * setting_pathLength);
+      const startDate = new Date(
+        Date.now() -
+          1000 * 60 * setting_pathLength -
+          120 /*maximum animation delay*/
+      );
       startDate.setMilliseconds(0);
       startIsoDate = startDate.toISOString();
     }
@@ -56,15 +61,33 @@ export default class XContestSocket {
       return { flightUuid: flight, start: startIsoDate };
     });
 
-    return formattedFlights;
+    return [formattedFlights, startIsoDate];
   };
 
   refreshSubscribedFlights = () => {
     if (this.sock.readyState === WebSocket.OPEN && this.connected) {
+      const [
+        formattedSubscribedFlights,
+        startIsoDate
+      ] = this.formatSubscribedFlights();
+
+      // If we request old data, unsubscribe first, to force the server to re-send us the data, with the older data included
+      if (
+        this.previousStartIsoDate !== null &&
+        startIsoDate < this.previousStartIsoDate
+      ) {
+        this.sock.send(
+          JSON.stringify({
+            tag: "WebFollow",
+            contents: []
+          })
+        );
+      }
+
       this.sock.send(
         JSON.stringify({
           tag: "WebFollow",
-          contents: this.formatSubscribedFlights()
+          contents: formattedSubscribedFlights
         })
       );
     }
@@ -96,10 +119,15 @@ export default class XContestSocket {
     );
 
     // Tell the webserver which flights we want in more detail. TODO.
+    const [
+      formattedSubscribedFlights,
+      startIsoDate
+    ] = this.formatSubscribedFlights();
+    this.previousStartIsoDate = startIsoDate;
     this.sock.send(
       JSON.stringify({
         tag: "WebFollow",
-        contents: this.formatSubscribedFlights()
+        contents: formattedSubscribedFlights
       })
     );
   };
