@@ -26,7 +26,8 @@
 - Sort suggested pilots by distance to self
 - Make ?add=xxx url that automatically adds given pilots (without removing existing ones. Replacing can be done by first deleting your own ones and then calling the url)
 
-
+- Implement HUD in Map
+- Implement Navigation (for drivers)
 
 Notes:
 - The tracks on the map should have a different color for every pilot
