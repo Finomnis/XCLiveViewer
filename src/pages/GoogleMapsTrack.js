@@ -20,6 +20,7 @@ export default class GoogleMapsTrack {
   setMap = map => {
     this.marker.setMap(map);
     this.track.setMap(map);
+    this.newestTrackSegment.setMap(map);
   };
 
   _updateTrack = track => {
