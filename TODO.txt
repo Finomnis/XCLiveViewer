@@ -1,7 +1,3 @@
-- Changing the path length setting might still cause problems with the XContestSocket.
-    - Problem: Socket stores oldest data timestamp, but doesnt take into account that tracks that were added later
-      are still missing information
-    - Solution: Write little helper class for each flight, that determines the data state per-track
 
 - Implement hardware back button in popups
 
@@ -62,3 +58,7 @@ Animation:
 - Throttle fps
 - Implement path
 - Implement low latency mode
+- Changing the path length setting might still cause problems with the XContestSocket.
+    - Problem: Socket stores oldest data timestamp, but doesnt take into account that tracks that were added later
+      are still missing information
+    - Solution: Write little helper class for each flight, that determines the data state per-track
