@@ -9,7 +9,7 @@ import {
 import { useState } from "react";
 
 import { lighten } from "@material-ui/core/styles";
-import { Button, Dialog, DialogActions, TextField } from "@material-ui/core";
+import { Button, DialogActions, TextField } from "@material-ui/core";
 
 import {
   Table,
@@ -21,6 +21,7 @@ import {
 
 import { useXContestPilots } from "../location_provider/XContest/XContestInterface";
 import LastFixState, { LastFixArrow } from "../util/LastFixState";
+import SubWindow from "../util/SubWindow";
 
 const columns = [
   {
@@ -166,7 +167,7 @@ const PilotSelector = props => {
   }
 
   return (
-    <Dialog
+    <SubWindow
       open={props.open}
       onClose={closeWindow}
       fullScreen={fullScreen}
@@ -282,7 +283,7 @@ const PilotSelector = props => {
           Add
         </Button>
       </DialogActions>
-    </Dialog>
+    </SubWindow>
   );
 };
 

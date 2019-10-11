@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import {
-  Dialog,
   AppBar,
   Toolbar,
   Typography,
@@ -28,6 +27,7 @@ import {
   resetAllSettings
 } from "../common/PersistentState/Settings";
 import NumberInput from "../util/NumberInput";
+import SubWindow from "../util/SubWindow";
 
 const SettingsPage = props => {
   const [resetAllSettingsDialogOpen, setResetAllSettingsDialogOpen] = useState(
@@ -59,7 +59,7 @@ const SettingsPage = props => {
   const flipFpsLimit = () => setSettingFpsLimit(!settingFpsLimit);
 
   return (
-    <Dialog fullScreen open={props.open} onClose={props.onClose}>
+    <SubWindow fullScreen open={props.open} onClose={props.onClose}>
       {/* THE TITLE BAR */}
       <AppBar style={{ position: "static" }}>
         <Toolbar>
@@ -82,7 +82,7 @@ const SettingsPage = props => {
       </AppBar>
 
       {/* RESET ALL SETTINGS DIALOG */}
-      <Dialog
+      <SubWindow
         open={resetAllSettingsDialogOpen}
         onClose={() => setResetAllSettingsDialogOpen(false)}
       >
@@ -110,7 +110,7 @@ const SettingsPage = props => {
             No
           </Button>
         </DialogActions>
-      </Dialog>
+      </SubWindow>
 
       {/* THE ACTUAL OPTIONS */}
       <List>
@@ -203,7 +203,7 @@ const SettingsPage = props => {
           </ListItemSecondaryAction>
         </ListItem>
       </List>
-    </Dialog>
+    </SubWindow>
   );
 };
 
