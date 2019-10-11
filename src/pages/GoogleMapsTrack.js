@@ -1,3 +1,5 @@
+import { getPilotIcon } from "../common/PilotIcon";
+
 export default class GoogleMapsTrack {
   constructor(google, map, pilotInfo, initialData) {
     this.google = google;
@@ -48,6 +50,15 @@ export default class GoogleMapsTrack {
 
   updateData = data => {
     this.marker.setPosition(data.pos);
+    this.marker.setIcon(
+      getPilotIcon(
+        this.google,
+        data.startOfTrack,
+        data.endOfTrack,
+        data.landed,
+        "green"
+      )
+    );
     if (data.track.length > 0) {
       this.newestTrackSegment.setPath([
         data.track[data.track.length - 1],
