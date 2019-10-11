@@ -1,8 +1,8 @@
-
 - Implement hardware back button in popups
 
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
 - Add nice icons to map
+    - rotate 'flying' icon
 - Colorize map paths + icons
 - Add button that enables automatic map scale and position
     - should include all selected pilots + some space
