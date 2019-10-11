@@ -166,7 +166,13 @@ const PilotSelector = props => {
   }
 
   return (
-    <Dialog open={props.open} onClose={closeWindow} fullScreen={fullScreen}>
+    <Dialog
+      open={props.open}
+      onClose={closeWindow}
+      fullScreen={fullScreen}
+      maxWidth="xs"
+      fullWidth={true}
+    >
       <Toolbar
         style={
           numSelected === 0
