@@ -36,7 +36,6 @@ export default class XContestAnimation {
     });
 
     this._setSubscribedFlightsCallback = flights => {
-      this._subscribedFlights = flights;
       setSubscribedFlights(Array.from(flights));
     };
     getChosenPilotsObject().registerCallback(this.setSubscribedPilots);
@@ -174,12 +173,25 @@ export default class XContestAnimation {
 
     // Send subscription change to socket
     if (!eqSet(importantFlightSet, this._subscribedFlights)) {
+      this._subscribedFlights = importantFlightSet;
+
+      // Get the timestamp of the newest track element, to prevent loading the same data multiple times
+      let flightsWithTimestamps = [];
+      console.log(this._flightAnimations);
+      importantFlightSet.forEach(flightId => {
+        console.log(flightId, this._flightAnimations[flightId]);
+        flightsWithTimestamps.push([
+          flightId,
+          this._flightAnimations[flightId].getNewestTimestamp()
+        ]);
+      });
+
       console.log(
         "Changing flight subscribtion: ",
         this._subscribedFlights,
         importantFlightSet
       );
-      this._setSubscribedFlightsCallback(importantFlightSet);
+      this._setSubscribedFlightsCallback(flightsWithTimestamps);
     }
   };
 }

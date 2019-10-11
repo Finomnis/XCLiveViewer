@@ -310,6 +310,8 @@ class FlightAnimation {
 
     return result;
   };
+
+  getNewestTimestamp = () => this.liveData.getNewestTimestamp();
 }
 
 export default FlightAnimation;

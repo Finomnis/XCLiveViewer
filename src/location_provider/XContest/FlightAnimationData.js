@@ -153,4 +153,9 @@ export default class FlightAnimationData {
     }
     return pos;
   };
+
+  getNewestTimestamp = () => {
+    if (this.data.length < 1) return null;
+    return this.data[this.data.length - 1].t;
+  };
 }

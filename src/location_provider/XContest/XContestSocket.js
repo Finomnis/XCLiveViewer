@@ -15,7 +15,6 @@ export default class XContestSocket {
     this.subscribedFlights = [];
     this.connect();
     this.connected = false;
-    this.previousStartIsoDate = null;
 
     // Register hooks, so we get notified when these settings change
     getSetting(Settings.PATH_LENGTH).registerCallback(
@@ -43,47 +42,22 @@ export default class XContestSocket {
   }
 
   formatSubscribedFlights = () => {
-    const setting_pathLength = getSetting(Settings.PATH_LENGTH).getValue();
-    const setting_limitPath = getSetting(Settings.LIMIT_PATHS).getValue();
+    const formattedFlights = this.subscribedFlights.map(
+      ([flightId, startTimestamp]) => {
+        const startIsoTime =
+          startTimestamp === null
+            ? null
+            : new Date(1000 * startTimestamp).toISOString();
+        return { flightUuid: flightId, start: startIsoTime };
+      }
+    );
 
-    let startIsoDate = null;
-    if (setting_limitPath) {
-      const startDate = new Date(
-        Date.now() -
-          1000 * 60 * setting_pathLength -
-          120 /*maximum animation delay*/
-      );
-      startDate.setMilliseconds(0);
-      startIsoDate = startDate.toISOString();
-    }
-
-    const formattedFlights = this.subscribedFlights.map(flight => {
-      return { flightUuid: flight, start: startIsoDate };
-    });
-
-    return [formattedFlights, startIsoDate];
+    return formattedFlights;
   };
 
   refreshSubscribedFlights = () => {
     if (this.sock.readyState === WebSocket.OPEN && this.connected) {
-      const [
-        formattedSubscribedFlights,
-        startIsoDate
-      ] = this.formatSubscribedFlights();
-
-      // If we request old data, unsubscribe first, to force the server to re-send us the data, with the older data included
-      if (
-        this.previousStartIsoDate !== null &&
-        (startIsoDate === null || startIsoDate < this.previousStartIsoDate)
-      ) {
-        this.previousStartIsoDate = startIsoDate;
-        this.sock.send(
-          JSON.stringify({
-            tag: "WebFollow",
-            contents: []
-          })
-        );
-      }
+      const formattedSubscribedFlights = this.formatSubscribedFlights();
 
       this.sock.send(
         JSON.stringify({
@@ -120,11 +94,7 @@ export default class XContestSocket {
     );
 
     // Tell the webserver which flights we want in more detail. TODO.
-    const [
-      formattedSubscribedFlights,
-      startIsoDate
-    ] = this.formatSubscribedFlights();
-    this.previousStartIsoDate = startIsoDate;
+    const formattedSubscribedFlights = this.formatSubscribedFlights();
     this.sock.send(
       JSON.stringify({
         tag: "WebFollow",
