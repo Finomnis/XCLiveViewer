@@ -17,7 +17,7 @@ const createSetting = (key, value) =>
 // Settings objects
 const settingsObjects = {
   PATH_LENGTH: createSetting(Settings.PATH_LENGTH, 15),
-  LIMIT_PATHS: createSetting(Settings.LIMIT_PATHS, true),
+  LIMIT_PATHS: createSetting(Settings.LIMIT_PATHS, false),
   LOW_LATENCY: createSetting(Settings.LOW_LATENCY, false),
   ANIMATION_DELAY: createSetting(Settings.ANIMATION_DELAY, 80),
   FPS_LIMIT: createSetting(Settings.FPS_LIMIT, true),

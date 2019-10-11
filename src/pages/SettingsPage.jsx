@@ -150,7 +150,7 @@ const SettingsPage = props => {
         <ListItem button onClick={flipLimitPaths}>
           <ListItemText
             primary="Limit Track Length"
-            secondary="reduces data consumption"
+            secondary="prevents map clutter"
           />
           <ListItemSecondaryAction>
             <Switch
