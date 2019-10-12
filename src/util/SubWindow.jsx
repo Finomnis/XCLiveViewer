@@ -36,7 +36,9 @@ const SubWindow = props => {
       // To further prevent the feedback loop, we now set the history open state.
       // Now, if props.onClose failed to set props.open to false, the window
       // will immediately re-open.
-      _setHistoryOpen(false);
+      // Currently commented out, because it proved unstable and caused state
+      // fluctuations.
+      //_setHistoryOpen(false);
     } else {
       openWindow();
     }
