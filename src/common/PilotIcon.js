@@ -1,3 +1,5 @@
+import { getRhumbLineBearing } from "geolib";
+
 //const path_questionmark =
 //  "m 12.747342,2.0001932 c -0.254753,-0.0015 -0.513283,0.0061 -0.773833,0.0228 C 8.104865,2.2564442 6.070752,4.4579604 5.904,8.4266554 h 3.901734 c 0.03335,-1.367366 0.834151,-2.401618 2.234867,-2.56837 1.400716,-0.133402 2.734861,0.200232 3.135066,1.134043 0.433555,1.033862 -0.533606,2.234215 -1.000512,2.734471 -0.86711,0.9338106 -2.267826,1.6342986 -3.001534,2.6348096 -0.700358,1.000512 -0.834151,2.301567 -0.900851,3.902386 h 3.43535 c 0.03335,-1.033862 0.09979,-2.001153 0.566695,-2.63481 0.767059,-1.033862 1.900972,-1.500768 2.834783,-2.334527 0.90046,-0.767059 1.867621,-1.7008696 2.001023,-3.1682856 0.531522,-4.033312 -2.54199,-6.1030962 -6.363279,-6.1261792 z M 12.073821,17.730891 A 2.1677748,2.1344245 0 0 0 9.906046,19.865445 2.1677748,2.1344245 0 0 0 12.073821,22 2.1677748,2.1344245 0 0 0 14.241595,19.865445 2.1677748,2.1344245 0 0 0 12.073821,17.730891 Z";
 const path_questionmark_min =
@@ -16,7 +18,8 @@ export const getPilotIcon = (
   waitingForStart,
   endOfTrack,
   hasLanded,
-  velocityVector,
+  pos,
+  velocityVec,
   color
 ) => {
   /*
@@ -63,6 +66,15 @@ export const getPilotIcon = (
     };
   }
 
+  // TODO Compute direction
+  const bearing =
+    velocityVec === null
+      ? 0
+      : getRhumbLineBearing(pos, {
+          lat: pos.lat + velocityVec.lat,
+          lng: pos.lng + velocityVec.lng
+        });
+
   // FLYING
   return {
     path: path_arrow,
@@ -70,6 +82,7 @@ export const getPilotIcon = (
     fillOpacity: 1,
     anchor: new google.maps.Point(12, 12),
     strokeWeight: 1,
-    scale: 1.2
+    scale: 1.2,
+    rotation: bearing
   };
 };

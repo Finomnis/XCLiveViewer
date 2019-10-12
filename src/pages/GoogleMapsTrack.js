@@ -56,7 +56,8 @@ export default class GoogleMapsTrack {
         data.startOfTrack,
         data.endOfTrack,
         data.landed,
-        null,
+        data.pos,
+        data.velocityVec,
         "#0f0"
       )
     );

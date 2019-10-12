@@ -1,7 +1,6 @@
-
+- Rotate 'flying' icon
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
-- Add nice icons to map
-    - rotate 'flying' icon
+
 - Colorize map paths + icons
 - Add button that enables automatic map scale and position
     - should include all selected pilots + some space
@@ -62,3 +61,4 @@ Animation:
       are still missing information
     - Solution: Write little helper class for each flight, that determines the data state per-track
 - Implement hardware back button in popups
+- Add nice icons to map
