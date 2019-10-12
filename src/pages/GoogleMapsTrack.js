@@ -56,7 +56,8 @@ export default class GoogleMapsTrack {
         data.startOfTrack,
         data.endOfTrack,
         data.landed,
-        "green"
+        null,
+        "#0f0"
       )
     );
     if (data.track.length > 0) {
