@@ -152,6 +152,21 @@ class FlightAnimation {
     this.landed = true;
   };
 
+  computeLinearVelocity = (data1, data2) => {
+    const t1 = data1.t;
+    const t2 = data2.t;
+    if (t1 === t2) return null;
+
+    const dT = t2 - t1;
+
+    const p1 = data1.pos;
+    const p2 = data2.pos;
+
+    const vLat = (p2.lat - p1.lat) / dT;
+    const vLng = (p2.lng - p1.lng) / dT;
+    return { lat: vLat, lng: vLng };
+  };
+
   getInterpolatedData = (data, cache, timeStamp) => {
     if (data.length < 1) return null;
 
@@ -169,13 +184,23 @@ class FlightAnimation {
     let blendedData = null;
     let endOfTrack = false;
     let startOfTrack = false;
+    let velocityVec = null;
     if (cache.currentArrayPos <= 0) {
       // If the timestamp is before our track, return first element
       blendedData = DataGens.takeData(data.at(0));
+      if (data.length >= 2) {
+        velocityVec = this.computeLinearVelocity(data.at(0), data.at(1));
+      }
       startOfTrack = true;
     } else if (cache.currentArrayPos >= data.length) {
       // If the timestamp is after our track, return last element
       blendedData = DataGens.takeData(data.at(data.length - 1));
+      if (data.length >= 2) {
+        velocityVec = this.computeLinearVelocity(
+          data.at(data.length - 2),
+          data.at(data.length - 1)
+        );
+      }
       endOfTrack = true;
     } else {
       // If it is in between, return interpolated value
@@ -183,11 +208,18 @@ class FlightAnimation {
       const data1 = data.at(cache.currentArrayPos);
       const blend = (timeStamp - data0.t) / (data1.t - data0.t);
       blendedData = DataGens.blendData(data0, data1, blend);
+      velocityVec = this.computeLinearVelocity(data0, data1);
     }
 
     const newestDataTimestamp = data.at(data.length - 1).t;
 
-    return [blendedData, startOfTrack, endOfTrack, newestDataTimestamp];
+    return [
+      blendedData,
+      startOfTrack,
+      endOfTrack,
+      newestDataTimestamp,
+      velocityVec
+    ];
   };
 
   getFallbackData = () => {
@@ -195,7 +227,8 @@ class FlightAnimation {
       DataGens.fallbackData(this.flightInfos),
       false,
       this.flightInfos.landed,
-      parseTime(this.flightInfos.lastFix.timestamp)
+      parseTime(this.flightInfos.lastFix.timestamp),
+      null
     ];
   };
 
@@ -281,7 +314,8 @@ class FlightAnimation {
       blendedData,
       startOfTrack,
       endOfTrack,
-      newestDataTimestamp
+      newestDataTimestamp,
+      velocityVec
     ] = animationResult;
 
     // Special case for endOfTrack for lowLatencyMode
@@ -305,7 +339,8 @@ class FlightAnimation {
       endOfTrack: endOfTrack,
       landed: this.landed,
       newestDataTimestamp: newestDataTimestamp,
-      track: track
+      track: track,
+      velocityVec: velocityVec
     };
 
     return result;
