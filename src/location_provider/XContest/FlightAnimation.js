@@ -55,7 +55,8 @@ class DataGens {
     };
   }
 
-  static blendData(data1, data2, pct) {
+  static blendData(data1, data2, timeStamp) {
+    const pct = (timeStamp - data1.t) / (data2.t - data1.t);
     return {
       baroAlt: lerp(data1.baroAlt, data2.baroAlt, pct),
       gpsAlt: lerp(data1.gpsAlt, data2.gpsAlt, pct),
@@ -206,8 +207,7 @@ class FlightAnimation {
       // If it is in between, return interpolated value
       const data0 = data.at(cache.currentArrayPos - 1);
       const data1 = data.at(cache.currentArrayPos);
-      const blend = (timeStamp - data0.t) / (data1.t - data0.t);
-      blendedData = DataGens.blendData(data0, data1, blend);
+      blendedData = DataGens.blendData(data0, data1, timeStamp);
       velocityVec = this.computeLinearVelocity(data0, data1);
     }
 
