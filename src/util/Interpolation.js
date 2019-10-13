@@ -10,7 +10,7 @@ export const lerp = (val1, val2, pct) => {
 
 // Important:
 // t0<t1<t2<t3 and t1<=t<=t2
-const spline = (p0, t0, p1, t1, p2, t2, p3, t3, t) => {
+export const spline = (p0, t0, p1, t1, p2, t2, p3, t3, t) => {
   const A1 = ((p1 - p0) * t + p0 * t1 - p1 * t0) / (t1 - t0);
   const A2 = ((p2 - p1) * t + p1 * t2 - p2 * t1) / (t2 - t1);
   const A3 = ((p3 - p2) * t + p2 * t3 - p3 * t2) / (t3 - t2);
@@ -23,7 +23,7 @@ const spline = (p0, t0, p1, t1, p2, t2, p3, t3, t) => {
   return C;
 };
 
-const splineDerivative = (p0, t0, p1, t1, p2, t2, p3, t3, t) => {
+export const splineDerivative = (p0, t0, p1, t1, p2, t2, p3, t3, t) => {
   const A1 = ((p1 - p0) * t + p0 * t1 - p1 * t0) / (t1 - t0);
   const A2 = ((p2 - p1) * t + p1 * t2 - p2 * t1) / (t2 - t1);
   const A3 = ((p3 - p2) * t + p2 * t3 - p3 * t2) / (t3 - t2);
@@ -44,7 +44,7 @@ const splineDerivative = (p0, t0, p1, t1, p2, t2, p3, t3, t) => {
 };
 
 // Interpolates between points p1 and p2
-const uniformspline = (p0, p1, p2, p3, pct) => {
+export const uniformspline = (p0, p1, p2, p3, pct) => {
   //return 0.5*pct*pct*pct*(p3-3*p2+3*p1-p0) + 0.5*pct*pct*(2*p0-5*p1+4*p2-p3) + 0.5*pct*(p2-p0) + p1;
   return (
     pct *
@@ -57,7 +57,7 @@ const uniformspline = (p0, p1, p2, p3, pct) => {
   );
 };
 
-const uniformsplineDerivative = (p0, p1, p2, p3, pct) => {
+export const uniformsplineDerivative = (p0, p1, p2, p3, pct) => {
   //return 1.5*pct*pct*(p3-3*p2+3*p1-p0) + pct*(2*p0-5*p1+4*p2-p3) + 0.5*(p2-p0);
   return (
     0.5 *
