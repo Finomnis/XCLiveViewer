@@ -1,5 +1,5 @@
-- Rotate 'flying' icon
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
+    - Implement HUD in Map
 
 - Colorize map paths + icons
 - Add button that enables automatic map scale and position
@@ -20,22 +20,14 @@
         - vario
         - (velocity)
 
-- Add distance+direction and live state to pilot selection (potentially second row)
+- Add distance+direction to pilot selection
 - Sort suggested pilots by distance to self
 - Make ?add=xxx url that automatically adds given pilots (without removing existing ones. Replacing can be done by first deleting your own ones and then calling the url)
 
-- Implement HUD in Map
 - Implement Navigation (for drivers)
 
 Notes:
 - The tracks on the map should have a different color for every pilot
-- The markers should be a some kind of arrow / google maps marker with a state symbol insight (double arrow for live, ? for no symbol, some symbol for landed)
-    - Normal flight: import NavigationIcon from '@material-ui/icons/Navigation';
-                     or import PlayCircleFilledRoundedIcon from '@material-ui/icons/PlayCircleFilledRounded';
-    - No response: import HelpIcon from '@material-ui/icons/Help';
-    - Landed: import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
-              or import ArrowDropDownCircleRoundedIcon from '@material-ui/icons/ArrowDropDownCircleRounded';
-              or import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
 
 DONE:
@@ -62,3 +54,13 @@ Animation:
     - Solution: Write little helper class for each flight, that determines the data state per-track
 - Implement hardware back button in popups
 - Add nice icons to map
+
+
+Old Notes:
+- The markers should be a some kind of arrow / google maps marker with a state symbol insight (double arrow for live, ? for no symbol, some symbol for landed)
+    - Normal flight: import NavigationIcon from '@material-ui/icons/Navigation';
+                     or import PlayCircleFilledRoundedIcon from '@material-ui/icons/PlayCircleFilledRounded';
+    - No response: import HelpIcon from '@material-ui/icons/Help';
+    - Landed: import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
+              or import ArrowDropDownCircleRoundedIcon from '@material-ui/icons/ArrowDropDownCircleRounded';
+              or import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
