@@ -16,14 +16,27 @@ const AnimatedPilotList = props => {
       const animatedPilotData = animatedData[pilotId];
 
       for (const key in animatedPilotData) {
-        pilotDebugOutput.push(
-          <tr key={key}>
-            <td>{key}</td>
-            <td>
-              {(Math.round(100 * animatedPilotData[key]) / 100).toString()}
-            </td>
-          </tr>
-        );
+        const dataElement = animatedPilotData[key];
+        if (isNaN(dataElement)) {
+          if (dataElement.length > 5) continue;
+          for (const subKey in dataElement) {
+            pilotDebugOutput.push(
+              <tr key={key + subKey}>
+                <td>{key + "." + subKey}</td>
+                <td>{dataElement[subKey].toString()}</td>
+              </tr>
+            );
+          }
+        } else {
+          pilotDebugOutput.push(
+            <tr key={key}>
+              <td>{key}</td>
+              <td>
+                {(Math.round(100 * animatedPilotData[key]) / 100).toString()}
+              </td>
+            </tr>
+          );
+        }
       }
     }
 
