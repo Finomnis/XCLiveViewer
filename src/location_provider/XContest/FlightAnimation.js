@@ -1,4 +1,4 @@
-import { lerp } from "../../util/Interpolation";
+import { lerp, splineDerivative, spline } from "../../util/Interpolation";
 import FlightAnimationData, { parseTime } from "./FlightAnimationData";
 import { getSetting, Settings } from "../../common/PersistentState/Settings";
 
@@ -71,9 +71,93 @@ class DataGens {
     };
   }
 
-  static blendDataSpline(data0, data1, data2, data3, pct) {
-    // TODO add catmull-rom spline interpolation
-    return null;
+  static blendDataSpline(data0, data1, data2, data3, timeStamp) {
+    const pct = (timeStamp - data1.t) / (data2.t - data1.t);
+    return {
+      baroAlt: lerp(data1.baroAlt, data2.baroAlt, pct),
+      gpsAlt: lerp(data1.gpsAlt, data2.gpsAlt, pct),
+      elevation: lerp(data1.elevation, data2.elevation, pct),
+      pos: {
+        lat: spline(
+          data0.pos.lat,
+          data0.t,
+          data1.pos.lat,
+          data1.t,
+          data2.pos.lat,
+          data2.t,
+          data3.pos.lat,
+          data3.t,
+          timeStamp
+        ),
+        lng: spline(
+          data0.pos.lng,
+          data0.t,
+          data1.pos.lng,
+          data1.t,
+          data2.pos.lng,
+          data2.t,
+          data3.pos.lng,
+          data3.t,
+          timeStamp
+        )
+      },
+      gpsVario: lerp(data1.gpsVario, data2.gpsVario, pct),
+      baroVario: lerp(data1.baroVario, data2.baroVario, pct),
+      velocity: lerp(data1.velocity, data2.velocity, pct)
+    };
+  }
+
+  static computeLinearVelocity(data1, data2) {
+    const t1 = data1.t;
+    const t2 = data2.t;
+    if (t1 === t2) return null;
+
+    const dT = t2 - t1;
+
+    const p1 = data1.pos;
+    const p2 = data2.pos;
+
+    const vLat = (p2.lat - p1.lat) / dT;
+    const vLng = (p2.lng - p1.lng) / dT;
+    return { lat: vLat, lng: vLng };
+  }
+
+  static computeSplineVelocity(d0, d1, d2, d3, t) {
+    const t0 = d0.t;
+    const t1 = d1.t;
+    const t2 = d2.t;
+    const t3 = d3.t;
+
+    const p0 = d0.pos;
+    const p1 = d1.pos;
+    const p2 = d2.pos;
+    const p3 = d3.pos;
+
+    const vLat = splineDerivative(
+      p0.lat,
+      t0,
+      p1.lat,
+      t1,
+      p2.lat,
+      t2,
+      p3.lat,
+      t3,
+      t
+    );
+
+    const vLng = splineDerivative(
+      p0.lng,
+      t0,
+      p1.lng,
+      t1,
+      p2.lng,
+      t2,
+      p3.lng,
+      t3,
+      t
+    );
+
+    return { lat: vLat, lng: vLng };
   }
 }
 
@@ -153,21 +237,6 @@ class FlightAnimation {
     this.landed = true;
   };
 
-  computeLinearVelocity = (data1, data2) => {
-    const t1 = data1.t;
-    const t2 = data2.t;
-    if (t1 === t2) return null;
-
-    const dT = t2 - t1;
-
-    const p1 = data1.pos;
-    const p2 = data2.pos;
-
-    const vLat = (p2.lat - p1.lat) / dT;
-    const vLng = (p2.lng - p1.lng) / dT;
-    return { lat: vLat, lng: vLng };
-  };
-
   getInterpolatedData = (data, cache, timeStamp) => {
     if (data.length < 1) return null;
 
@@ -190,25 +259,54 @@ class FlightAnimation {
       // If the timestamp is before our track, return first element
       blendedData = DataGens.takeData(data.at(0));
       if (data.length >= 2) {
-        velocityVec = this.computeLinearVelocity(data.at(0), data.at(1));
+        velocityVec = DataGens.computeLinearVelocity(data.at(0), data.at(1));
       }
       startOfTrack = true;
     } else if (cache.currentArrayPos >= data.length) {
       // If the timestamp is after our track, return last element
       blendedData = DataGens.takeData(data.at(data.length - 1));
       if (data.length >= 2) {
-        velocityVec = this.computeLinearVelocity(
+        velocityVec = DataGens.computeLinearVelocity(
           data.at(data.length - 2),
           data.at(data.length - 1)
         );
       }
       endOfTrack = true;
     } else {
-      // If it is in between, return interpolated value
-      const data0 = data.at(cache.currentArrayPos - 1);
-      const data1 = data.at(cache.currentArrayPos);
-      blendedData = DataGens.blendData(data0, data1, timeStamp);
-      velocityVec = this.computeLinearVelocity(data0, data1);
+      const data1 = data.at(cache.currentArrayPos - 1);
+      const data2 = data.at(cache.currentArrayPos);
+
+      const data0 =
+        cache.currentArrayPos - 2 >= 0
+          ? data.at(cache.currentArrayPos - 2)
+          : {
+              ...data1,
+              t: data1.t - 1
+            };
+
+      const data3 =
+        cache.currentArrayPos + 1 < data.length
+          ? data.at(cache.currentArrayPos + 1)
+          : {
+              ...data2,
+              t: data2.t + 1
+            };
+
+      // Blend via spline
+      blendedData = DataGens.blendDataSpline(
+        data0,
+        data1,
+        data2,
+        data3,
+        timeStamp
+      );
+      velocityVec = DataGens.computeSplineVelocity(
+        data0,
+        data1,
+        data2,
+        data3,
+        timeStamp
+      );
     }
 
     const newestDataTimestamp = data.at(data.length - 1).t;
