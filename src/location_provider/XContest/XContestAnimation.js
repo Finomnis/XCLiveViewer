@@ -51,9 +51,11 @@ export default class XContestAnimation {
     const frameTimeDelta = 1000.0 / this._setting_fps;
 
     if (!this._setting_limitFps || absTime >= this._nextUpdate) {
-      this._nextUpdate = this._nextUpdate + frameTimeDelta;
-      if (this._nextUpdate < absTime) {
-        this._nextUpdate = absTime;
+      if (this._setting_limitFps) {
+        this._nextUpdate += frameTimeDelta;
+        if (absTime > this._nextUpdate) {
+          this._nextUpdate = absTime;
+        }
       }
 
       const newAnimationData = {};
