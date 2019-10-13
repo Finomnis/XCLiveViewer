@@ -11,6 +11,14 @@ export const lerp = (val1, val2, pct) => {
 // Important:
 // t0<t1<t2<t3 and t1<=t<=t2
 export const spline = (p0, t0, p1, t1, p2, t2, p3, t3, t) => {
+  // Make timestamps relative.
+  // This enables us to handle unix timestamps (large numbers)
+  t1 -= t0;
+  t2 -= t0;
+  t3 -= t0;
+  t -= t0;
+  t0 = 0;
+
   const A1 = ((p1 - p0) * t + p0 * t1 - p1 * t0) / (t1 - t0);
   const A2 = ((p2 - p1) * t + p1 * t2 - p2 * t1) / (t2 - t1);
   const A3 = ((p3 - p2) * t + p2 * t3 - p3 * t2) / (t3 - t2);
@@ -24,6 +32,14 @@ export const spline = (p0, t0, p1, t1, p2, t2, p3, t3, t) => {
 };
 
 export const splineDerivative = (p0, t0, p1, t1, p2, t2, p3, t3, t) => {
+  // Make timestamps relative.
+  // This enables us to handle unix timestamps (large numbers)
+  t1 -= t0;
+  t2 -= t0;
+  t3 -= t0;
+  t -= t0;
+  t0 = 0;
+
   const A1 = ((p1 - p0) * t + p0 * t1 - p1 * t0) / (t1 - t0);
   const A2 = ((p2 - p1) * t + p1 * t2 - p2 * t1) / (t2 - t1);
   const A3 = ((p3 - p2) * t + p2 * t3 - p3 * t2) / (t3 - t2);
