@@ -19,9 +19,9 @@ import {
   TableCell
 } from "@material-ui/core";
 
-import { useXContestPilots } from "../location_provider/XContest/XContestInterface";
-import LastFixState, { LastFixArrow } from "../util/LastFixState";
-import SubWindow from "../util/SubWindow";
+import { useXContestPilots } from "../../location_provider/XContest/XContestInterface";
+import LastFixState, { LastFixArrow } from "../../util/LastFixState";
+import SubWindow from "../../util/SubWindow";
 
 const columns = [
   {
