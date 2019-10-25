@@ -15,7 +15,7 @@ import { IconButton } from "@material-ui/core";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import SettingsIcon from "@material-ui/icons/Settings";
 
-import SettingsPage from "./SettingsPage";
+import SettingsPage from "./SettingsPage/SettingsPage";
 
 const MainMenu = props => {
   const theme = useTheme();

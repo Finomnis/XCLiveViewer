@@ -7,7 +7,8 @@ export const Settings = {
   LOW_LATENCY: "LOW_LATENCY",
   ANIMATION_DELAY: "ANIMATION_DELAY",
   FPS_LIMIT: "FPS_LIMIT",
-  FPS_RATE: "FPS_RATE"
+  FPS_RATE: "FPS_RATE",
+  GPS_ENABLED: "GPS_ENABLED"
 };
 
 // Wrapper for simplification
@@ -21,7 +22,8 @@ const settingsObjects = {
   LOW_LATENCY: createSetting(Settings.LOW_LATENCY, false),
   ANIMATION_DELAY: createSetting(Settings.ANIMATION_DELAY, 80),
   FPS_LIMIT: createSetting(Settings.FPS_LIMIT, true),
-  FPS_RATE: createSetting(Settings.FPS_RATE, 10)
+  FPS_RATE: createSetting(Settings.FPS_RATE, 10),
+  GPS_ENABLED: createSetting(Settings.GPS_ENABLED, true)
 };
 
 export const getSetting = key => settingsObjects[key];
