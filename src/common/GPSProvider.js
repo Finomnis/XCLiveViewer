@@ -52,6 +52,7 @@ class GPSProvider {
   registerCallback = cb => {
     if (!this._callbacks.includes(cb)) this._callbacks.push(cb);
     this._updateGPSState();
+    cb(this._gpsData);
   };
 
   unregisterCallback = cb => {

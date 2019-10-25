@@ -113,6 +113,7 @@ export default class XContestAnimation {
   // callback gets called every frame with new data
   registerCallback = cb => {
     if (!this._callbacks.includes(cb)) this._callbacks.push(cb);
+    cb(this._currentAnimationData);
   };
 
   unregisterCallback = cb => {

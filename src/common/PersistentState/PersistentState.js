@@ -22,6 +22,7 @@ class PersistentState {
 
   registerCallback = cb => {
     if (!this.callbacks.includes(cb)) this.callbacks.push(cb);
+    cb(this.getValue());
   };
 
   unregisterCallback = cb => {

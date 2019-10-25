@@ -17,6 +17,7 @@ class EventfulState {
 
   registerCallback = cb => {
     if (!this._callbacks.includes(cb)) this._callbacks.push(cb);
+    cb(this._callbackData);
   };
 
   unregisterCallback = cb => {
