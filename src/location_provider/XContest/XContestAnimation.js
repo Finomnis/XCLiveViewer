@@ -2,7 +2,6 @@ import {
   getChosenPilots,
   getChosenPilotsObject
 } from "../../common/PersistentState/ChosenPilots";
-import { useState, useEffect } from "react";
 import FlightAnimation from "./FlightAnimation";
 import HighPrecisionTimeSync from "../../util/HighPrecisionTimeSync";
 import { Settings, getSetting } from "../../common/PersistentState/Settings";
@@ -121,22 +120,6 @@ export default class XContestAnimation {
     if (index >= 0) {
       this._callbacks.splice(index, 1);
     }
-  };
-
-  useAnimatedData = () => {
-    const [value, setValue] = useState(this._currentAnimationData);
-
-    useEffect(() => {
-      const cb = newValue => {
-        // trigger component update on change
-        setValue(newValue);
-      };
-
-      this.registerCallback(cb);
-      return () => this.unregisterCallback(cb);
-    }, []);
-
-    return value;
   };
 
   // Internal

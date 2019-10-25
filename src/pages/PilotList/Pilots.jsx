@@ -4,8 +4,8 @@ import { Fab } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import Box from "@material-ui/core/Box";
-import PilotSelector from "./PilotSelector";
-import { useChosenPilots } from "../common/PersistentState/ChosenPilots";
+import PilotSelector from "../PilotSelector";
+import { useChosenPilots } from "../../common/PersistentState/ChosenPilots";
 import AnimatedPilotList from "./AnimatedPilotList";
 
 const Pilots = () => {

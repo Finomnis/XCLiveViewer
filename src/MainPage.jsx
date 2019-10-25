@@ -12,7 +12,7 @@ import "./MainPage.css";
 // TODO import LazyLoading from "./util/LazyLoading";
 
 import LiveMap from "./pages/LiveMap";
-import Pilots from "./pages/Pilots";
+import Pilots from "./pages/PilotList/Pilots";
 import TitleBar from "./pages/TitleBar";
 
 const MainPage = () => {

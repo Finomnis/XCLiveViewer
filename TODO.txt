@@ -4,6 +4,12 @@
     - Let classes themselves decide when they need a full update
     - Same for position
 
+- Split google maps in 30 second chunks.
+    - Do the splitting inside XContestAnimation
+    - Provide user with {id: chunk} pairs, where id is a unique identifier for the chunk, monotously increasing
+
+- Write position callback provider
+
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
     - Implement HUD in Map
 
