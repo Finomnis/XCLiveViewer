@@ -72,7 +72,7 @@ const SettingsPage = props => {
         <BooleanSetting
           setting={Settings.GPS_ENABLED}
           primaryText="Enable GPS"
-          secondaryText="Required for advanced features"
+          secondaryText="required for advanced features"
         />
       </List>
     </SubWindow>
