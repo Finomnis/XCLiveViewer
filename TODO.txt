@@ -1,3 +1,9 @@
+- PERFORMANCE IMPROVEMENTS
+    - Switch Animated components to class-based, not functional
+    - Remove Animation getX, replace with callback registration
+    - Let classes themselves decide when they need a full update
+    - Same for position
+
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
     - Implement HUD in Map
 
