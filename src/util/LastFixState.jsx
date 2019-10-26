@@ -102,7 +102,7 @@ export class LastFixArrow extends Component {
     const hasGpsData = this.gpsData !== null;
 
     // If something major changed, update through render function
-    if (this.state.hasGpsData != hasGpsData) {
+    if (this.state.hasGpsData !== hasGpsData) {
       this.setState({ ...this.state, hasGpsData: hasGpsData });
       return;
     }

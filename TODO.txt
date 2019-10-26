@@ -1,8 +1,5 @@
 - PERFORMANCE IMPROVEMENTS
-    - Switch Animated components to class-based, not functional
-    - Remove Animation getX, replace with callback registration
-    - Let classes themselves decide when they need a full update
-    - Same for position
+    - Add virtual tables
 
 - Split google maps in 30 second chunks.
     - Do the splitting inside XContestAnimation
@@ -76,3 +73,9 @@ Old Notes:
     - Landed: import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
               or import ArrowDropDownCircleRoundedIcon from '@material-ui/icons/ArrowDropDownCircleRounded';
               or import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+
+- PERFORMANCE IMPROVEMENTS
+    - Switch Animated components to class-based, not functional
+    - Remove Animation getX, replace with callback registration
+    - Let classes themselves decide when they need a full update
+    - Same for position

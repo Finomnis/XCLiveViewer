@@ -26,7 +26,7 @@ class AnimatedPilotListEntry extends Component {
     const hasGps = this.gpsData !== null;
 
     // If something major has changed, don't run a microupdate, but a full one
-    if (this.state.gps != hasGps) {
+    if (this.state.gps !== hasGps) {
       this.setState({ ...this.state, gps: hasGps });
       return;
     }
