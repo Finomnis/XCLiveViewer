@@ -11,85 +11,14 @@ import { useState } from "react";
 import { lighten } from "@material-ui/core/styles";
 import { Button, DialogActions, TextField } from "@material-ui/core";
 
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableRow,
-  TableCell
-} from "@material-ui/core";
+import { Table, TableBody, TableHead } from "@material-ui/core";
 
 import { useXContestPilots } from "../../location_provider/XContest/XContestInterface";
-import LastFixState, { LastFixArrow } from "../../util/LastFixState";
 import SubWindow from "../../util/SubWindow";
-
-const columns = [
-  {
-    id: "name",
-    label: "Name",
-    render: row => {
-      return (
-        <Box paddingLeft={1} paddingTop={1} paddingBottom={1}>
-          <Typography variant="body2">{row.info.user.fullname}</Typography>
-          <Typography
-            variant="caption"
-            color="textSecondary"
-            style={{ paddingLeft: ".5em" }}
-          >
-            [{row.info.user.username}]
-          </Typography>
-        </Box>
-      );
-    }
-  },
-  {
-    id: "state",
-    label: "State",
-    align: "right",
-    render: row => {
-      return (
-        <Box>
-          <Box>
-            <Typography variant="caption">
-              <LastFixState
-                timestamp={row.lastFix.timestamp}
-                landed={row.landed}
-                relative
-              />
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant="caption">
-              <LastFixArrow />
-            </Typography>
-          </Box>
-        </Box>
-      );
-    }
-  },
-  {
-    id: "country",
-    label: "Country",
-    align: "right",
-    render: row => {
-      return (
-        <Box paddingRight={1} paddingLeft={1}>
-          {row.info.user.nationality.iso}
-          <Box
-            fontSize="large"
-            marginLeft="4px"
-            boxShadow={1}
-            style={{ verticalAlign: "middle" }}
-            className={
-              "flag-icon flag-icon-" +
-              row.info.user.nationality.iso.toLowerCase()
-            }
-          ></Box>
-        </Box>
-      );
-    }
-  }
-];
+import {
+  PilotSelectorListEntry,
+  PilotSelectorListHeader
+} from "./PilotSelectorListItems";
 
 function createPlaceholderPilot(name) {
   return {
@@ -102,6 +31,11 @@ function createPlaceholderPilot(name) {
         nationality: { iso: "--", name: "--" }
       },
       flightId: null
+    },
+    lastFix: {
+      timestamp: null,
+      lat: null,
+      lon: null
     }
   };
 }
@@ -215,54 +149,27 @@ const PilotSelector = props => {
       <Box flex="1 1 auto" marginY="8px" style={{ overflowY: "auto" }}>
         <Table stickyHeader size="small">
           <TableHead>
-            <TableRow>
-              {columns.map(column => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ width: column.width }}
-                  component="th"
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
+            <PilotSelectorListHeader />
           </TableHead>
           <TableBody>
             {filteredPilots.map(row => {
               const username = row.info.user.username;
-
               const isItemSelected = isSelected(username);
-
               const itemDisabled = wasAlreadyAdded(username);
-              const style = itemDisabled
-                ? { filter: "grayscale(100%) opacity(30%)" }
-                : {};
-
-              const columnContent = columns.map(column => {
-                return (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    padding="none"
-                  >
-                    <Box style={style}>{column.render(row)}</Box>
-                  </TableCell>
-                );
-              });
 
               if (itemDisabled) {
-                return <TableRow key={username}>{columnContent}</TableRow>;
+                return (
+                  <PilotSelectorListEntry key={username} data={row} disabled />
+                );
               }
 
               return (
-                <TableRow
+                <PilotSelectorListEntry
                   key={username}
+                  data={row}
                   selected={isItemSelected}
                   onClick={event => handleClick(event, username)}
-                >
-                  {columnContent}
-                </TableRow>
+                />
               );
             })}
           </TableBody>
