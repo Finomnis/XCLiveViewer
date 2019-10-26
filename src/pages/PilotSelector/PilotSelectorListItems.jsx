@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { TableRow, TableCell, Box, Typography } from "@material-ui/core";
 import LastFixState, { LastFixArrow } from "../../util/LastFixState";
 
