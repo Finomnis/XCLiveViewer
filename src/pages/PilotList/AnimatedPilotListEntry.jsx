@@ -6,29 +6,53 @@ import { getGPSProvider } from "../../common/GPSProvider";
 class AnimatedPilotListEntry extends Component {
   constructor(props) {
     super(props);
+
+    // Get initial data
+    const pilotData = getXContestInterface().animation.getData();
     this.pilotInfo = null;
-    this.gpsData = null;
+    if (props.pilotId in pilotData) {
+      this.pilotInfo = pilotData[props.pilotId];
+    }
+    this.gpsData = getGPSProvider().getData();
+
     this.state = {
-      online: false
+      online: this.pilotInfo !== null,
+      gps: this.gpsData !== null
     };
   }
 
   onNewGPSDataReceived = gpsData => {
     this.gpsData = gpsData;
+    const hasGps = this.gpsData !== null;
+
+    // If something major has changed, don't run a microupdate, but a full one
+    if (this.state.gps != hasGps) {
+      this.setState({ ...this.state, gps: hasGps });
+      return;
+    }
+
+    if (!hasGps) return;
 
     // TODO replace with a more efficient way
     this.forceUpdate();
   };
 
   onNewDataReceived = pilotData => {
-    if (!(this.props.pilotId in pilotData)) {
+    if (this.props.pilotId in pilotData) {
+      this.pilotInfo = pilotData[this.props.pilotId];
+    } else {
       this.pilotInfo = null;
-      if (this.state.online) this.setState({ ...this.state, online: false });
+    }
+
+    const hasPilotInfo = this.pilotInfo !== null;
+
+    // If something major has changed, don't run a microupdate, but a full one
+    if (this.state.online !== hasPilotInfo) {
+      this.setState({ ...this.state, online: true });
       return;
     }
 
-    this.pilotInfo = pilotData[this.props.pilotId];
-    if (!this.state.online) this.setState({ ...this.state, online: true });
+    if (!hasPilotInfo) return;
 
     // TODO update data in a more efficient way, by modifying object dom directly
     this.forceUpdate();

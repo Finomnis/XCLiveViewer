@@ -64,6 +64,10 @@ class GPSProvider {
     }
     this._updateGPSState();
   };
+
+  getData = () => {
+    return this._gpsData;
+  };
 }
 
 // Singleton stuff

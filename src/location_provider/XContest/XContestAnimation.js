@@ -123,6 +123,10 @@ export default class XContestAnimation {
     }
   };
 
+  getData = () => {
+    return this._currentAnimationData;
+  };
+
   // Internal
   _updateImportantFlights = () => {
     // Filter important flights

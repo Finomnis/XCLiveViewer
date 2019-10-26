@@ -90,26 +90,27 @@ const LastFixState = props => {
 export class LastFixArrow extends Component {
   constructor(props) {
     super(props);
-    this.state = { hasGpsData: false };
-    this.gpsData = null;
+    this.gpsData = getGPSProvider().getData();
+    this.state = { hasGpsData: this.gpsData !== null };
 
     this.distanceRef = React.createRef();
     this.arrowRef = React.createRef();
   }
 
   onNewGPSDataReceived = gpsData => {
-    const alreadyHadGpsData = this.gpsData !== null;
     this.gpsData = gpsData;
+    const hasGpsData = this.gpsData !== null;
 
     // If something major changed, update through render function
-    if (gpsData === null && alreadyHadGpsData) {
-      this.setState({ ...this.state, hasGpsData: false });
-    } else if (gpsData !== null && !alreadyHadGpsData) {
-      this.setState({ ...this.state, hasGpsData: true });
-    } else {
-      // Otherwise, directly update through the refs
-      this.updateThroughRef();
+    if (this.state.hasGpsData != hasGpsData) {
+      this.setState({ ...this.state, hasGpsData: hasGpsData });
+      return;
     }
+
+    if (!hasGpsData) return;
+
+    // Otherwise, directly update through the refs
+    this.updateThroughRef();
   };
 
   componentDidMount() {
