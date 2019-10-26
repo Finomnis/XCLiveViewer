@@ -23,15 +23,17 @@ class GPSProvider {
         this._onGPSError,
         { enableHighAccuracy: true }
       );
+      console.log("GPS: On");
     }
 
     if (this._watchId !== null && !enableGps) {
       navigator.geolocation.clearWatch(this._watchId);
       this._watchId = null;
       this._setGPSData(null);
+      console.log("GPS: Off");
     }
 
-    console.log("UPDATE_GPS_STATE", enableGps);
+    //console.log("UPDATE_GPS_STATE", enableGps, this._callbacks.length);
   };
 
   _setGPSData = data => {

@@ -32,11 +32,7 @@ function createPlaceholderPilot(name) {
       },
       flightId: null
     },
-    lastFix: {
-      timestamp: null,
-      lat: null,
-      lon: null
-    }
+    lastFix: null
   };
 }
 

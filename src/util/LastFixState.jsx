@@ -1,4 +1,6 @@
-import React from "react";
+import React, { Component } from "react";
+import { getGPSProvider } from "../common/GPSProvider";
+import { getDistance, getRhumbLineBearing } from "geolib";
 
 function formatTimeDiff(millis) {
   let negative = "";
@@ -85,27 +87,120 @@ const LastFixState = props => {
   else return <span style={{ color: "red" }}>! {timeStr}</span>;
 };
 
-export const LastFixArrow = props => {
-  const rotationStyle = {
-    transform: "rotate(-90deg)",
+export class LastFixArrow extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasGpsData: false };
+    this.gpsData = null;
 
-    /* Safari */
-    WebkitTransform: "rotate(-90deg)",
+    this.distanceRef = React.createRef();
+    this.arrowRef = React.createRef();
+  }
 
-    /* Firefox */
-    MozTransform: "rotate(-90deg)",
+  onNewGPSDataReceived = gpsData => {
+    const alreadyHadGpsData = this.gpsData !== null;
+    this.gpsData = gpsData;
 
-    /* IE */
-    msTransform: "rotate(-90deg)",
-
-    /* Opera */
-    OTransform: "rotate(-90deg)"
+    // If something major changed, update through render function
+    if (gpsData === null && alreadyHadGpsData) {
+      this.setState({ ...this.state, hasGpsData: false });
+    } else if (gpsData !== null && !alreadyHadGpsData) {
+      this.setState({ ...this.state, hasGpsData: true });
+    } else {
+      // Otherwise, directly update through the refs
+      this.updateThroughRef();
+    }
   };
-  return (
-    <span>
-      1.7km <div style={{ display: "inline-block", ...rotationStyle }}>↑</div>
-    </span>
-  );
-};
+
+  componentDidMount() {
+    getGPSProvider().registerCallback(this.onNewGPSDataReceived);
+  }
+  componentWillUnmount() {
+    getGPSProvider().unregisterCallback(this.onNewGPSDataReceived);
+  }
+
+  updateThroughRef = () => {
+    if (this.gpsData === null || this.props.lastFix === null) return;
+
+    if (this.arrowRef.current) {
+      const arrowStyle = LastFixArrow.getArrowRotationStyle(
+        this.gpsData,
+        this.props.lastFix
+      );
+      Object.assign(this.arrowRef.current.style, arrowStyle);
+    }
+    if (this.distanceRef.current) {
+      this.distanceRef.current.innerHTML = LastFixArrow.getDistance(
+        this.gpsData,
+        this.props.lastFix
+      );
+    }
+  };
+
+  static getDistance(myPosition, pilotFix) {
+    if (myPosition === null || pilotFix === null) return null;
+
+    const distance = getDistance(
+      { lat: myPosition.coords.latitude, lng: myPosition.coords.longitude },
+      pilotFix
+    );
+    return (Math.round(distance / 100) / 10).toString() + "km";
+  }
+
+  static getArrowRotationStyle(myPosition, pilotFix) {
+    if (myPosition === null || pilotFix === null) return {};
+    const bearing = getRhumbLineBearing(
+      { lat: myPosition.coords.latitude, lng: myPosition.coords.longitude },
+      pilotFix
+    );
+    const transform = "rotate(" + bearing.toString() + "deg)";
+
+    const rotationStyle = {
+      transform: transform,
+
+      /* Safari */
+      WebkitTransform: transform,
+
+      /* Firefox */
+      MozTransform: transform,
+
+      /* IE */
+      msTransform: transform,
+
+      /* Opera */
+      OTransform: transform
+    };
+    return rotationStyle;
+  }
+
+  render() {
+    //console.log("LASTFIX", this.props.lastFix !== null, this.gpsData !== null);
+    if (this.props.lastFix === null || this.gpsData === null) {
+      this.arrowRef.current = null;
+      this.distanceRef.current = null;
+      return null;
+    }
+
+    return (
+      <span>
+        <span ref={this.distanceRef}>
+          {LastFixArrow.getDistance(this.gpsData, this.props.lastFix)}
+        </span>{" "}
+        <div
+          ref={this.arrowRef}
+          style={{
+            display: "inline-block",
+            ...LastFixArrow.getArrowRotationStyle(
+              this.gpsData,
+              this.props.lastFix
+            )
+          }}
+        >
+          ↑
+        </div>
+      </span>
+    );
+  }
+}
 
 export default LastFixState;

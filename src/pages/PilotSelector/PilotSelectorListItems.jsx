@@ -31,7 +31,7 @@ const columns = [
           <Box>
             <Typography variant="caption">
               <LastFixState
-                timestamp={row.lastFix.timestamp}
+                timestamp={row.lastFix === null ? null : row.lastFix.timestamp}
                 landed={row.landed}
                 relative
               />
@@ -39,7 +39,7 @@ const columns = [
           </Box>
           <Box>
             <Typography variant="caption">
-              <LastFixArrow />
+              <LastFixArrow lastFix={row.lastFix} />
             </Typography>
           </Box>
         </Box>
