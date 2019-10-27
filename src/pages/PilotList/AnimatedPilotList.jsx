@@ -2,6 +2,7 @@ import React from "react";
 import { Box } from "@material-ui/core";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import AnimatedPilotListEntry from "./AnimatedPilotListEntry";
+import AnimatedPilotListVirtualTable from "./AnimatedPilotListVirtualTable";
 
 class AnimatedPilotList extends React.PureComponent {
   constructor(props) {
@@ -41,6 +42,22 @@ class AnimatedPilotList extends React.PureComponent {
   componentWillUnmount() {
     getXContestInterface().animation.unregisterCallback(this.onNewDataReceived);
   }
+
+  renderPilotRow = pilotId => {
+    return (
+      <AnimatedPilotListEntry
+        pilotId={pilotId}
+        removePilot={() => {
+          this.props.removePilots([pilotId]);
+        }}
+      ></AnimatedPilotListEntry>
+    );
+  };
+
+  getPilotRowHeight = pilotId => {
+    return 450;
+  };
+
   render() {
     let pilotIsOnline = new Set(this.state.onlinePilots);
 
@@ -57,19 +74,13 @@ class AnimatedPilotList extends React.PureComponent {
       )
     );
 
-    const content = pilots.map(pilotId => (
-      <AnimatedPilotListEntry
-        key={pilotId}
-        pilotId={pilotId}
-        removePilot={() => {
-          this.props.removePilots([pilotId]);
-        }}
-      ></AnimatedPilotListEntry>
-    ));
-
     return (
-      <Box height="100%" style={{ overflowY: "auto" }}>
-        {content}
+      <Box height="100%">
+        <AnimatedPilotListVirtualTable
+          rowIds={pilots}
+          rowRenderer={this.renderPilotRow}
+          rowHeightGetter={this.getPilotRowHeight}
+        />
       </Box>
     );
   }
