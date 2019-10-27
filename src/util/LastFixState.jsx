@@ -44,7 +44,7 @@ function timestampToTimeString(timestamp) {
   return time.toLocaleTimeString();
 }
 
-const LastFixState = props => {
+export const LastFixState = props => {
   const timestamp = props.timestamp;
   const landed = props.landed;
   const relative = props.relative;
@@ -91,7 +91,7 @@ export class LastFixArrow extends Component {
   constructor(props) {
     super(props);
     this.gpsData = getGPSProvider().getData();
-    this.state = { hasGpsData: this.gpsData !== null };
+    this.state = {};
 
     this.distanceRef = React.createRef();
     this.arrowRef = React.createRef();
@@ -99,15 +99,6 @@ export class LastFixArrow extends Component {
 
   onNewGPSDataReceived = gpsData => {
     this.gpsData = gpsData;
-    const hasGpsData = this.gpsData !== null;
-
-    // If something major changed, update through render function
-    if (this.state.hasGpsData !== hasGpsData) {
-      this.setState({ ...this.state, hasGpsData: hasGpsData });
-      return;
-    }
-
-    if (!hasGpsData) return;
 
     // Otherwise, directly update through the refs
     this.updateThroughRef();
@@ -121,8 +112,6 @@ export class LastFixArrow extends Component {
   }
 
   updateThroughRef = () => {
-    if (this.gpsData === null || this.props.lastFix === null) return;
-
     if (this.arrowRef.current) {
       const arrowStyle = LastFixArrow.getArrowRotationStyle(
         this.gpsData,
@@ -139,7 +128,7 @@ export class LastFixArrow extends Component {
   };
 
   static getDistance(myPosition, pilotFix) {
-    if (myPosition === null || pilotFix === null) return null;
+    if (myPosition === null || pilotFix === null) return "--km";
 
     const distance = getDistance(
       { lat: myPosition.coords.latitude, lng: myPosition.coords.longitude },
@@ -175,13 +164,6 @@ export class LastFixArrow extends Component {
   }
 
   render() {
-    //console.log("LASTFIX", this.props.lastFix !== null, this.gpsData !== null);
-    if (this.props.lastFix === null || this.gpsData === null) {
-      this.arrowRef.current = null;
-      this.distanceRef.current = null;
-      return null;
-    }
-
     return (
       <span>
         <span ref={this.distanceRef}>
@@ -203,5 +185,3 @@ export class LastFixArrow extends Component {
     );
   }
 }
-
-export default LastFixState;
