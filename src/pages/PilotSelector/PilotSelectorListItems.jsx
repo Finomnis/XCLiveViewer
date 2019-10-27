@@ -1,5 +1,11 @@
 import React from "react";
-import { TableRow, TableCell, Box, Typography } from "@material-ui/core";
+import {
+  TableRow,
+  TableCell,
+  Box,
+  Typography,
+  TableHead
+} from "@material-ui/core";
 import { LastFixState, LastFixArrow } from "../../util/LastFixState";
 
 const importantDataDifferent = (prevData, nextData) => {
@@ -82,20 +88,28 @@ const columns = [
   }
 ];
 
-export const PilotSelectorListHeader = () => (
-  <TableRow>
-    {columns.map(column => (
-      <TableCell
-        key={column.id}
-        align={column.align}
-        style={{ width: column.width }}
-        component="th"
-      >
-        {column.label}
-      </TableCell>
-    ))}
-  </TableRow>
-);
+export class PilotSelectorListHeader extends React.PureComponent {
+  state = {};
+
+  render() {
+    return (
+      <TableHead>
+        <TableRow>
+          {columns.map(column => (
+            <TableCell
+              key={column.id}
+              align={column.align}
+              style={{ width: column.width }}
+              component="th"
+            >
+              {column.label}
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+    );
+  }
+}
 
 export class PilotSelectorListEntry extends React.Component {
   state = {};

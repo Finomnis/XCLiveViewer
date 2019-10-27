@@ -130,9 +130,7 @@ class PilotSelectorContent extends React.PureComponent {
 
     return (
       <Table stickyHeader size="small">
-        <TableHead>
-          <PilotSelectorListHeader />
-        </TableHead>
+        <PilotSelectorListHeader />
         <TableBody>
           {displayedPilots.map(pilotId => {
             const isItemSelected = isSelected(pilotId);
