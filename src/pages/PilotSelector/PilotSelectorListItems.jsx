@@ -6,16 +6,18 @@ const columns = [
   {
     id: "name",
     label: "Name",
-    render: row => {
+    render: (name, data) => {
+      const fullname = data ? data.info.user.fullname : "Offline User";
+      const username = data ? data.info.user.username : name;
       return (
         <Box paddingLeft={1} paddingTop={1} paddingBottom={1}>
-          <Typography variant="body2">{row.info.user.fullname}</Typography>
+          <Typography variant="body2">{fullname}</Typography>
           <Typography
             variant="caption"
             color="textSecondary"
             style={{ paddingLeft: ".5em" }}
           >
-            [{row.info.user.username}]
+            [{username}]
           </Typography>
         </Box>
       );
@@ -25,21 +27,20 @@ const columns = [
     id: "state",
     label: "State",
     align: "right",
-    render: row => {
+    render: (name, data) => {
+      const lastFix = data ? data.lastFix : null;
+      const timestamp = data ? data.lastFix.timestamp : null;
+      const landed = data ? data.landed : null;
       return (
         <Box>
           <Box>
             <Typography variant="caption">
-              <LastFixState
-                timestamp={row.lastFix === null ? null : row.lastFix.timestamp}
-                landed={row.landed}
-                relative
-              />
+              <LastFixState timestamp={timestamp} landed={landed} relative />
             </Typography>
           </Box>
           <Box>
             <Typography variant="caption">
-              <LastFixArrow lastFix={row.lastFix} />
+              <LastFixArrow lastFix={lastFix} />
             </Typography>
           </Box>
         </Box>
@@ -50,19 +51,17 @@ const columns = [
     id: "country",
     label: "Country",
     align: "right",
-    render: row => {
+    render: (name, data) => {
+      const iso = data ? data.info.user.nationality.iso : "--";
       return (
         <Box paddingRight={1} paddingLeft={1}>
-          {row.info.user.nationality.iso}
+          {iso}
           <Box
             fontSize="large"
             marginLeft="4px"
             boxShadow={1}
             style={{ verticalAlign: "middle" }}
-            className={
-              "flag-icon flag-icon-" +
-              row.info.user.nationality.iso.toLowerCase()
-            }
+            className={"flag-icon flag-icon-" + iso.toLowerCase()}
           ></Box>
         </Box>
       );
@@ -93,7 +92,7 @@ export const PilotSelectorListEntry = props => {
   const columnContent = columns.map(column => {
     return (
       <TableCell key={column.id} align={column.align} padding="none">
-        <Box style={boxStyle}>{column.render(props.data)}</Box>
+        <Box style={boxStyle}>{column.render(props.name, props.data)}</Box>
       </TableCell>
     );
   });

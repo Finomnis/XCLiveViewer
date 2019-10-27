@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import {
   Box,
   useMediaQuery,
@@ -13,32 +13,160 @@ import { Button, DialogActions, TextField } from "@material-ui/core";
 
 import { Table, TableBody, TableHead } from "@material-ui/core";
 
-import { useXContestPilots } from "../../location_provider/XContest/XContestInterface";
+import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import SubWindow from "../../util/SubWindow";
 import {
   PilotSelectorListEntry,
   PilotSelectorListHeader
 } from "./PilotSelectorListItems";
+import { arraysEqual } from "../../util/CompareArrays";
+import { getGPSProvider } from "../../common/GPSProvider";
+import { getDistance } from "geolib";
 
-function createPlaceholderPilot(name) {
-  return {
-    info: {
-      user: {
-        login: null,
-        username: name,
-        fullname: "Offline User",
-        gender: "-",
-        nationality: { iso: "--", name: "--" }
-      },
-      flightId: null
-    },
-    lastFix: null
+const computeDisplayedPilots = (pilotList, pilotInfos, search) => {
+  const matchesSearch = name => {
+    if (search === "") {
+      return true;
+    }
+    return name.toLowerCase().includes(search.toLowerCase());
   };
+
+  // Create virtual pilot if nobody found
+  let filteredPilots = pilotList.filter(pilotId => {
+    return (
+      matchesSearch(pilotInfos[pilotId].info.user.username) ||
+      matchesSearch(pilotInfos[pilotId].info.user.fullname)
+    );
+  });
+
+  // Add dummy pilot if list is empty and search string is valid
+  if (filteredPilots.length === 0 && !/\s/.test(search) && search.length > 0) {
+    filteredPilots.push(search);
+  }
+
+  return filteredPilots;
+};
+
+const getSortedPilotList = (pilotInfos, gps) => {
+  if (gps) {
+    // If gps, sort by distance
+    const myPos = { lat: gps.coords.latitude, lng: gps.coords.longitude };
+    let distances = Object.entries(pilotInfos).map(([pilotId, data]) => {
+      const distance = getDistance(myPos, data.lastFix);
+      return [pilotId, distance];
+    });
+    distances.sort((el1, el2) => el1[1] - el2[1]);
+    const pilotIds = distances.map(el => el[0]);
+    return pilotIds;
+  } else {
+    // Else, sort by name
+    let pilotIds = Object.keys(pilotInfos);
+    pilotIds.sort();
+    return pilotIds;
+  }
+};
+
+// The table content
+class PilotSelectorContent extends Component {
+  constructor(props) {
+    super(props);
+    this.gpsData = getGPSProvider().getData();
+    const pilotInfos = getXContestInterface().pilotInfos.getValue();
+    this.state = {
+      pilotInfos: pilotInfos,
+      sortedPilotList: getSortedPilotList(pilotInfos, this.gpsData)
+    };
+  }
+
+  componentDidMount() {
+    getXContestInterface().pilotInfos.registerCallback(this.onNewPilotInfos);
+    getGPSProvider().registerCallback(this.onNewGpsData);
+  }
+
+  componentWillUnmount() {
+    getXContestInterface().pilotInfos.unregisterCallback(this.onNewPilotInfos);
+    getGPSProvider().unregisterCallback(this.onNewGpsData);
+  }
+
+  updatePilotListIfNecessary = () => {
+    const newPilotList = getSortedPilotList(
+      this.state.pilotInfos,
+      this.gpsData
+    );
+
+    if (!arraysEqual(this.state.sortedPilotList, newPilotList))
+      this.setState({ ...this.state, sortedPilotList: newPilotList });
+  };
+
+  onNewGpsData = gpsData => {
+    // update only if gps position changed pilot list
+    this.gpsData = gpsData;
+    this.updatePilotListIfNecessary();
+  };
+
+  onNewPilotInfos = pilotInfos => {
+    // Always update on new pilot infos
+    this.setState({
+      ...this.state,
+      pilotInfos: pilotInfos,
+      sortedPilotList: getSortedPilotList(pilotInfos, this.gpsData)
+    });
+  };
+
+  render() {
+    const isSelected = name => this.props.selected.indexOf(name) !== -1;
+    const wasAlreadyAdded = name =>
+      this.props.alreadyAdded.indexOf(name) !== -1;
+
+    const displayedPilots = computeDisplayedPilots(
+      this.state.sortedPilotList,
+      this.state.pilotInfos,
+      this.props.search
+    );
+
+    return (
+      <Table stickyHeader size="small">
+        <TableHead>
+          <PilotSelectorListHeader />
+        </TableHead>
+        <TableBody>
+          {displayedPilots.map(pilotId => {
+            const isItemSelected = isSelected(pilotId);
+            const itemDisabled = wasAlreadyAdded(pilotId);
+
+            const pilotData = this.state.pilotInfos[pilotId];
+
+            if (itemDisabled) {
+              return (
+                <PilotSelectorListEntry
+                  key={pilotId}
+                  name={pilotId}
+                  data={pilotData}
+                  disabled
+                />
+              );
+            }
+
+            return (
+              <PilotSelectorListEntry
+                key={pilotId}
+                name={pilotId}
+                data={pilotData}
+                selected={isItemSelected}
+                onClick={() => this.props.onPilotClicked(pilotId)}
+              />
+            );
+          })}
+        </TableBody>
+      </Table>
+    );
+  }
 }
 
+// Base window, without the table
 const PilotSelector = props => {
   const theme = useTheme();
-  const pilotList = useXContestPilots();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
   // State
   const [selected, setSelected] = useState([]);
@@ -52,7 +180,7 @@ const PilotSelector = props => {
     props.onClose();
   };
 
-  const handleClick = (_event, name) => {
+  const pilotClicked = name => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
 
@@ -71,30 +199,6 @@ const PilotSelector = props => {
 
     setSelected(newSelected);
   };
-
-  const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
-
-  const isSelected = name => selected.indexOf(name) !== -1;
-  const wasAlreadyAdded = name => props.alreadyAdded.indexOf(name) !== -1;
-  const matchesSearch = name => {
-    if (search === "") {
-      return true;
-    }
-    return name.toLowerCase().includes(search.toLowerCase());
-  };
-
-  // Create virtual pilot if nobody found
-  let filteredPilots = Object.values(pilotList).filter(userData => {
-    return (
-      matchesSearch(userData.info.user.username) ||
-      matchesSearch(userData.info.user.fullname)
-    );
-  });
-
-  // Add dummy pilot if list is empty and search string is valid
-  if (filteredPilots.length === 0 && !/\s/.test(search) && search.length > 0) {
-    filteredPilots.push(createPlaceholderPilot(search));
-  }
 
   return (
     <SubWindow
@@ -143,33 +247,12 @@ const PilotSelector = props => {
         />
       </Box>
       <Box flex="1 1 auto" marginY="8px" style={{ overflowY: "auto" }}>
-        <Table stickyHeader size="small">
-          <TableHead>
-            <PilotSelectorListHeader />
-          </TableHead>
-          <TableBody>
-            {filteredPilots.map(row => {
-              const username = row.info.user.username;
-              const isItemSelected = isSelected(username);
-              const itemDisabled = wasAlreadyAdded(username);
-
-              if (itemDisabled) {
-                return (
-                  <PilotSelectorListEntry key={username} data={row} disabled />
-                );
-              }
-
-              return (
-                <PilotSelectorListEntry
-                  key={username}
-                  data={row}
-                  selected={isItemSelected}
-                  onClick={event => handleClick(event, username)}
-                />
-              );
-            })}
-          </TableBody>
-        </Table>
+        <PilotSelectorContent
+          alreadyAdded={props.alreadyAdded}
+          selected={selected}
+          onPilotClicked={pilotClicked}
+          search={search}
+        />
       </Box>
       <DialogActions>
         <Button onClick={closeWindow} color="primary">
