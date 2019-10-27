@@ -2,6 +2,19 @@ import React from "react";
 import { TableRow, TableCell, Box, Typography } from "@material-ui/core";
 import { LastFixState, LastFixArrow } from "../../util/LastFixState";
 
+const importantDataDifferent = (prevData, nextData) => {
+  if (prevData === nextData) return false;
+  if (!prevData && !nextData) return false;
+  if (!prevData || !nextData) return true;
+
+  return (
+    prevData.info.user.fullname !== nextData.info.user.fullname ||
+    prevData.info.user.username !== nextData.info.user.username ||
+    prevData.landed !== nextData.landed ||
+    prevData.lastFix.timestamp !== nextData.lastFix.timestamp ||
+    prevData.info.user.nationality.iso !== prevData.info.user.nationality.iso
+  );
+};
 const columns = [
   {
     id: "name",
@@ -84,22 +97,42 @@ export const PilotSelectorListHeader = () => (
   </TableRow>
 );
 
-export const PilotSelectorListEntry = props => {
-  const boxStyle = props.disabled
-    ? { filter: "grayscale(100%) opacity(30%)" }
-    : {};
+export class PilotSelectorListEntry extends React.Component {
+  state = {};
 
-  const columnContent = columns.map(column => {
+  shouldComponentUpdate(nextProps, nextState) {
     return (
-      <TableCell key={column.id} align={column.align} padding="none">
-        <Box style={boxStyle}>{column.render(props.name, props.data)}</Box>
-      </TableCell>
+      this.props.disabled !== nextProps.disabled ||
+      this.props.name !== nextProps.name ||
+      this.props.selected !== nextProps.selected ||
+      this.props.onClick !== nextProps.onClick ||
+      importantDataDifferent(nextProps.data, this.props.data)
     );
-  });
+  }
 
-  return (
-    <TableRow selected={props.selected} onClick={props.onClick}>
-      {columnContent}
-    </TableRow>
-  );
-};
+  handleClick = () => {
+    this.props.onClick(this.props.name);
+  };
+
+  render() {
+    const boxStyle = this.props.disabled
+      ? { filter: "grayscale(100%) opacity(30%)" }
+      : {};
+
+    const columnContent = columns.map(column => {
+      return (
+        <TableCell key={column.id} align={column.align} padding="none">
+          <Box style={boxStyle}>
+            {column.render(this.props.name, this.props.data)}
+          </Box>
+        </TableCell>
+      );
+    });
+
+    return (
+      <TableRow selected={this.props.selected} onClick={this.handleClick}>
+        {columnContent}
+      </TableRow>
+    );
+  }
+}

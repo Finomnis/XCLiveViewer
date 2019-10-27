@@ -3,7 +3,7 @@ import { Box } from "@material-ui/core";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import AnimatedPilotListEntry from "./AnimatedPilotListEntry";
 
-class AnimatedPilotList extends Component {
+class AnimatedPilotList extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {

@@ -67,7 +67,7 @@ const getSortedPilotList = (pilotInfos, gps) => {
 };
 
 // The table content
-class PilotSelectorContent extends Component {
+class PilotSelectorContent extends React.PureComponent {
   constructor(props) {
     super(props);
     this.gpsData = getGPSProvider().getData();
@@ -113,6 +113,10 @@ class PilotSelectorContent extends Component {
     });
   };
 
+  onPilotClicked = pilotId => {
+    this.props.onPilotClicked(pilotId);
+  };
+
   render() {
     const isSelected = name => this.props.selected.indexOf(name) !== -1;
     const wasAlreadyAdded = name =>
@@ -153,7 +157,7 @@ class PilotSelectorContent extends Component {
                 name={pilotId}
                 data={pilotData}
                 selected={isItemSelected}
-                onClick={() => this.props.onPilotClicked(pilotId)}
+                onClick={this.onPilotClicked}
               />
             );
           })}

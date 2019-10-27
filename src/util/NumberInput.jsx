@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { TextField, InputAdornment } from "@material-ui/core";
 
-export default class NumberInput extends Component {
+export default class NumberInput extends React.PureComponent {
   state = {
     internalUpdate: false,
     value: null
