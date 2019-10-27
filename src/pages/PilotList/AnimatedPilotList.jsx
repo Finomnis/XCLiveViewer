@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { Box } from "@material-ui/core";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import AnimatedPilotListEntry from "./AnimatedPilotListEntry";

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { TextField, InputAdornment } from "@material-ui/core";
 
 export default class NumberInput extends React.PureComponent {

@@ -12,7 +12,7 @@ const importantDataDifferent = (prevData, nextData) => {
     prevData.info.user.username !== nextData.info.user.username ||
     prevData.landed !== nextData.landed ||
     prevData.lastFix.timestamp !== nextData.lastFix.timestamp ||
-    prevData.info.user.nationality.iso !== prevData.info.user.nationality.iso
+    prevData.info.user.nationality.iso !== nextData.info.user.nationality.iso
   );
 };
 const columns = [
