@@ -11,7 +11,7 @@ import { useState } from "react";
 import { lighten } from "@material-ui/core/styles";
 import { Button, DialogActions, TextField } from "@material-ui/core";
 
-import { Table, TableBody, TableHead } from "@material-ui/core";
+import { Table, TableBody } from "@material-ui/core";
 
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import SubWindow from "../../util/SubWindow";
