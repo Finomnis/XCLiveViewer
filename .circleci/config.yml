@@ -39,7 +39,7 @@ jobs:
       - setup_dependencies
       - run:
           name: Build
-          command: npm run build
+          command: npm run build --profile
       - persist_to_workspace:
           root: build
           paths:
