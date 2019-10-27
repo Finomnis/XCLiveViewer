@@ -125,7 +125,7 @@ export class PilotSelectorListEntry extends React.Component {
   }
 
   handleClick = () => {
-    this.props.onClick(this.props.name);
+    if (this.props.onEntryClicked) this.props.onEntryClicked(this.props.name);
   };
 
   render() {
@@ -136,7 +136,7 @@ export class PilotSelectorListEntry extends React.Component {
     const columnContent = columns.map(column => {
       return (
         <TableCell key={column.id} align={column.align} padding="none">
-          <Box style={boxStyle}>
+          <Box style={boxStyle} clone>
             {column.render(this.props.name, this.props.data)}
           </Box>
         </TableCell>

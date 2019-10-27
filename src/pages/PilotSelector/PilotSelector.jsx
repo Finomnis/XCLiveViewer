@@ -114,7 +114,7 @@ class PilotSelectorContent extends React.PureComponent {
   };
 
   onPilotClicked = pilotId => {
-    this.props.onPilotClicked(pilotId);
+    if (this.props.onPilotClicked) this.props.onPilotClicked(pilotId);
   };
 
   render() {
@@ -155,7 +155,7 @@ class PilotSelectorContent extends React.PureComponent {
                 name={pilotId}
                 data={pilotData}
                 selected={isItemSelected}
-                onClick={this.onPilotClicked}
+                onEntryClicked={this.onPilotClicked}
               />
             );
           })}
