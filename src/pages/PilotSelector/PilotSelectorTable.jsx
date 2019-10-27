@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Table, TableBody } from "@material-ui/core";
+import { Table, TableBody, CircularProgress } from "@material-ui/core";
 
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 
@@ -59,6 +59,7 @@ const getSortedPilotList = (pilotInfos, gps) => {
 export default class PilotSelectorTable extends React.PureComponent {
   constructor(props) {
     super(props);
+    this.state = { didMount: false };
     this.gpsData = getGPSProvider().getData();
     const pilotInfos = getXContestInterface().pilotInfos.getValue();
     this.state = {
@@ -67,9 +68,18 @@ export default class PilotSelectorTable extends React.PureComponent {
     };
   }
 
+  startRendering = () => {
+    this.setState({ ...this.state, didMount: true });
+  };
+
   componentDidMount() {
     getXContestInterface().pilotInfos.registerCallback(this.onNewPilotInfos);
     getGPSProvider().registerCallback(this.onNewGpsData);
+
+    // This starts the actual rendering, as it can take quite a while.
+    // setTimeout forces the browser to present before loading the table.
+    // without setTimeout, the waiting symbol would never be shown.
+    setTimeout(this.startRendering);
   }
 
   componentWillUnmount() {
@@ -107,6 +117,21 @@ export default class PilotSelectorTable extends React.PureComponent {
   };
 
   render() {
+    if (!this.state.didMount) {
+      return (
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            overflow: "hidden"
+          }}
+        >
+          <CircularProgress disableShrink style={{ margin: "2em" }} />
+        </div>
+      );
+    }
+
     const isSelected = name => this.props.selected.indexOf(name) !== -1;
     const wasAlreadyAdded = name =>
       this.props.alreadyAdded.indexOf(name) !== -1;
