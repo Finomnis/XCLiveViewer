@@ -12,7 +12,7 @@ import { arraysEqual } from "../../util/CompareArrays";
 import { getGPSProvider } from "../../common/GPSProvider";
 import { getDistance } from "geolib";
 
-const computeDisplayedPilots = (pilotList, pilotInfos, search) => {
+const filterPilotList = (pilotList, pilotInfos, search) => {
   const matchesSearch = name => {
     if (search === "") {
       return true;
@@ -36,7 +36,7 @@ const computeDisplayedPilots = (pilotList, pilotInfos, search) => {
   return filteredPilots;
 };
 
-const getSortedPilotList = (pilotInfos, gps) => {
+const sortPilotList = (pilotInfos, gps) => {
   if (gps) {
     // If gps, sort by distance
     const myPos = { lat: gps.coords.latitude, lng: gps.coords.longitude };
@@ -64,7 +64,7 @@ export default class PilotSelectorTable extends React.PureComponent {
     const pilotInfos = getXContestInterface().pilotInfos.getValue();
     this.state = {
       pilotInfos: pilotInfos,
-      sortedPilotList: getSortedPilotList(pilotInfos, this.gpsData)
+      sortedPilotList: sortPilotList(pilotInfos, this.gpsData)
     };
   }
 
@@ -88,10 +88,7 @@ export default class PilotSelectorTable extends React.PureComponent {
   }
 
   updatePilotListIfNecessary = () => {
-    const newPilotList = getSortedPilotList(
-      this.state.pilotInfos,
-      this.gpsData
-    );
+    const newPilotList = sortPilotList(this.state.pilotInfos, this.gpsData);
 
     if (!arraysEqual(this.state.sortedPilotList, newPilotList))
       this.setState({ ...this.state, sortedPilotList: newPilotList });
@@ -108,7 +105,7 @@ export default class PilotSelectorTable extends React.PureComponent {
     this.setState({
       ...this.state,
       pilotInfos: pilotInfos,
-      sortedPilotList: getSortedPilotList(pilotInfos, this.gpsData)
+      sortedPilotList: sortPilotList(pilotInfos, this.gpsData)
     });
   };
 
@@ -136,7 +133,7 @@ export default class PilotSelectorTable extends React.PureComponent {
     const wasAlreadyAdded = name =>
       this.props.alreadyAdded.indexOf(name) !== -1;
 
-    const displayedPilots = computeDisplayedPilots(
+    const displayedPilots = filterPilotList(
       this.state.sortedPilotList,
       this.state.pilotInfos,
       this.props.search
