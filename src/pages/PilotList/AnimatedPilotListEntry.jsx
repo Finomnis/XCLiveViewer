@@ -62,6 +62,7 @@ class AnimatedPilotListEntry extends Component {
     getXContestInterface().animation.registerCallback(this.onNewDataReceived);
     getGPSProvider().registerCallback(this.onNewGPSDataReceived);
   }
+
   componentWillUnmount() {
     getXContestInterface().animation.unregisterCallback(this.onNewDataReceived);
     getGPSProvider().unregisterCallback(this.onNewGPSDataReceived);

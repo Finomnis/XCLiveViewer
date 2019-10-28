@@ -26,6 +26,7 @@ class AnimatedPilotListVirtualTable extends React.Component {
             rowCount={this.props.rowIds.length}
             rowHeight={this.rowHeightGetter}
             rowGetter={this.rowGetter}
+            overscanRowCount={1}
           >
             <Column
               width={width}
