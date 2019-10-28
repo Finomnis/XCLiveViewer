@@ -66,6 +66,7 @@ const SubWindow = props => {
       fullScreen={props.fullScreen}
       maxWidth={props.maxWidth}
       fullWidth={props.fullWidth}
+      classes={props.classes}
     >
       {props.children}
     </Dialog>

@@ -8,14 +8,21 @@ import {
 } from "@material-ui/core";
 import { useState } from "react";
 
-import { lighten } from "@material-ui/core/styles";
+import { lighten, makeStyles } from "@material-ui/core/styles";
 import { Button, DialogActions, TextField } from "@material-ui/core";
 
 import SubWindow from "../../util/SubWindow";
 import PilotSelectorTable from "./PilotSelectorTable";
 
+const useStyles = makeStyles({
+  fullHeightWindow: {
+    height: "100%"
+  }
+});
+
 // Base window, without the table
 const PilotSelector = props => {
+  const classes = useStyles();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
@@ -58,6 +65,7 @@ const PilotSelector = props => {
       fullScreen={fullScreen}
       maxWidth="xs"
       fullWidth={true}
+      classes={{ paper: classes.fullHeightWindow }}
     >
       <Toolbar
         style={
