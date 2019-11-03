@@ -4,7 +4,7 @@ import string2color from "../util/string2color";
 export default class GoogleMapsTrack {
   constructor(google, map, pilotInfo, initialData) {
     this.google = google;
-    this.pilotColor = string2color(pilotInfo.info.user.username, 60);
+    this.pilotColor = string2color(pilotInfo.info.user.username, 70);
     this.trackColor = string2color(pilotInfo.info.user.username, 40);
     this.marker = new this.google.maps.Marker({
       map: map,
