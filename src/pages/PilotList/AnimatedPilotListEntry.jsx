@@ -21,6 +21,9 @@ class AnimatedPilotListEntry extends Component {
     };
   }
 
+  //////////////////////////////////////////////////////////////
+  /// BOILERPLATE CODE FOR UPDATING THE COMPONENT
+  ///
   onNewGPSDataReceived = gpsData => {
     this.gpsData = gpsData;
     const hasGps = this.gpsData !== null;
@@ -67,7 +70,12 @@ class AnimatedPilotListEntry extends Component {
     getXContestInterface().animation.unregisterCallback(this.onNewDataReceived);
     getGPSProvider().unregisterCallback(this.onNewGPSDataReceived);
   }
+  ///
+  /////////////////////////////////////////////////////////////////
 
+  /////////////////////////////////////////////////////////////////
+  /// LAYOUT
+  ///
   render() {
     const animatedPilotData = this.pilotInfo;
     let pilotDebugOutput = [];
