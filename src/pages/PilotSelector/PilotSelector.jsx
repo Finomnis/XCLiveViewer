@@ -105,7 +105,13 @@ const PilotSelector = props => {
           onChange={event => setSearch(event.target.value)}
         />
       </Box>
-      <Box flex="1 1 auto" marginY="8px" style={{ overflowY: "auto" }}>
+      <Box
+        flex="1 1 auto"
+        marginY="8px"
+        display="flex"
+        flexDirection="column"
+        alignItems="stretch"
+      >
         <PilotSelectorTable
           alreadyAdded={props.alreadyAdded}
           selected={selected}

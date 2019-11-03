@@ -1,16 +1,15 @@
 import React from "react";
 
-import { Table, TableBody, CircularProgress } from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
 
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 
-import {
-  PilotSelectorListEntry,
-  PilotSelectorListHeader
-} from "./PilotSelectorListItems";
 import { arraysEqual } from "../../util/CompareArrays";
 import { getGPSProvider } from "../../common/GPSProvider";
 import { getDistance } from "geolib";
+import { renderRow, TableHeader, rowHeight } from "./PilotSelectorListRenderer";
+import { FixedSizeList } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
 
 const filterPilotList = (pilotList, pilotInfos, search) => {
   const matchesSearch = name => {
@@ -129,10 +128,6 @@ export default class PilotSelectorTable extends React.PureComponent {
       );
     }
 
-    const isSelected = name => this.props.selected.indexOf(name) !== -1;
-    const wasAlreadyAdded = name =>
-      this.props.alreadyAdded.indexOf(name) !== -1;
-
     const displayedPilots = filterPilotList(
       this.state.sortedPilotList,
       this.state.pilotInfos,
@@ -140,38 +135,31 @@ export default class PilotSelectorTable extends React.PureComponent {
     );
 
     return (
-      <Table stickyHeader size="small">
-        <PilotSelectorListHeader />
-        <TableBody>
-          {displayedPilots.map(pilotId => {
-            const isItemSelected = isSelected(pilotId);
-            const itemDisabled = wasAlreadyAdded(pilotId);
-
-            const pilotData = this.state.pilotInfos[pilotId];
-
-            if (itemDisabled) {
-              return (
-                <PilotSelectorListEntry
-                  key={pilotId}
-                  name={pilotId}
-                  data={pilotData}
-                  disabled
-                />
-              );
-            }
-
-            return (
-              <PilotSelectorListEntry
-                key={pilotId}
-                name={pilotId}
-                data={pilotData}
-                selected={isItemSelected}
-                onEntryClicked={this.onPilotClicked}
-              />
-            );
-          })}
-        </TableBody>
-      </Table>
+      <React.Fragment>
+        <TableHeader />
+        <div style={{ flex: "1" }}>
+          <AutoSizer>
+            {({ height, width }) => (
+              <FixedSizeList
+                width={width}
+                height={height}
+                itemCount={displayedPilots.length}
+                itemSize={rowHeight}
+                itemData={{
+                  keys: displayedPilots,
+                  data: this.state.pilotInfos,
+                  selected: this.props.selected,
+                  alreadyAdded: this.props.alreadyAdded,
+                  onPilotClicked: this.onPilotClicked
+                }}
+                itemKey={(index, { keys }) => keys[index]}
+              >
+                {renderRow}
+              </FixedSizeList>
+            )}
+          </AutoSizer>
+        </div>
+      </React.Fragment>
     );
   }
 }
