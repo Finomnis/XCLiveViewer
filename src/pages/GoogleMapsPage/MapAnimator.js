@@ -1,4 +1,4 @@
-import { getXContestInterface } from "../location_provider/XContest/XContestInterface";
+import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import GoogleMapsTrack from "./GoogleMapsTrack";
 
 export default class MapAnimator {

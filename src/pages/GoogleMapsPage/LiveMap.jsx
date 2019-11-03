@@ -1,9 +1,9 @@
 import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
 import Box from "@material-ui/core/Box";
-import useGoogleMapsApi from "../common/GoogleMapsApiLoader";
-import { LoadingPage, ErrorPage } from "./StatusPages";
+import useGoogleMapsApi from "../../common/GoogleMapsApiLoader";
+import { LoadingPage, ErrorPage } from "../StatusPages";
 import mapStyle from "./MapStyle.json";
-import { getXContestInterface } from "../location_provider/XContest/XContestInterface";
+import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import MapAnimator from "./MapAnimator";
 
 const LiveMap = () => {

@@ -12,7 +12,7 @@ import { lighten, makeStyles } from "@material-ui/core/styles";
 import { Button, DialogActions, TextField } from "@material-ui/core";
 
 import SubWindow from "../../util/SubWindow";
-import PilotSelectorTable from "./PilotSelectorTable";
+import PilotSelectorList from "./PilotSelectorList";
 
 const useStyles = makeStyles({
   fullHeightWindow: {
@@ -112,7 +112,7 @@ const PilotSelector = props => {
         flexDirection="column"
         alignItems="stretch"
       >
-        <PilotSelectorTable
+        <PilotSelectorList
           alreadyAdded={props.alreadyAdded}
           selected={selected}
           onPilotClicked={pilotClicked}

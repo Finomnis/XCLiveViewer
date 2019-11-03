@@ -25,7 +25,7 @@ export const TableHeader = () => {
   );
 };
 
-class PilotSelectorTableRow extends React.PureComponent {
+class PilotSelectorListRow extends React.PureComponent {
   render() {
     const {
       fullname,
@@ -114,7 +114,7 @@ export const renderRow = ({ data, index, style }) => {
         if (!disabled) data.onPilotClicked(pilotId);
       }}
     >
-      <PilotSelectorTableRow
+      <PilotSelectorListRow
         fullname={fullname}
         username={username}
         lastFix={lastFix}

@@ -1,5 +1,5 @@
-import { getPilotIcon } from "../common/PilotIcon";
-import string2color from "../util/string2color";
+import { getPilotIcon } from "../../common/PilotIcon";
+import string2color from "../../util/string2color";
 
 export default class GoogleMapsTrack {
   constructor(google, map, pilotInfo, initialData) {
