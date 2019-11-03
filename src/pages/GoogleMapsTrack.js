@@ -1,8 +1,11 @@
 import { getPilotIcon } from "../common/PilotIcon";
+import string2color from "../util/string2color";
 
 export default class GoogleMapsTrack {
   constructor(google, map, pilotInfo, initialData) {
     this.google = google;
+    this.pilotColor = string2color(pilotInfo.info.user.username, 60);
+    this.trackColor = string2color(pilotInfo.info.user.username, 40);
     this.marker = new this.google.maps.Marker({
       map: map,
       position: initialData.pos,
@@ -10,12 +13,14 @@ export default class GoogleMapsTrack {
     });
     this.track = new this.google.maps.Polyline({
       map: map,
-      path: []
+      path: [],
+      strokeColor: this.trackColor
     });
     this.currentTrackVersion = { startTime: null, endTime: null, length: null };
     this.newestTrackSegment = new this.google.maps.Polyline({
       map: map,
-      path: []
+      path: [],
+      strokeColor: this.trackColor
     });
   }
 
@@ -58,7 +63,7 @@ export default class GoogleMapsTrack {
         data.landed,
         data.pos,
         data.velocityVec,
-        "#0f0"
+        this.pilotColor
       )
     );
     if (data.track.length > 0) {

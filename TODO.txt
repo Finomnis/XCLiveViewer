@@ -1,4 +1,4 @@
-
+- Add color via string-to-color
 
 - Split google maps in 30 second chunks.
     - Do the splitting inside XContestAnimation
