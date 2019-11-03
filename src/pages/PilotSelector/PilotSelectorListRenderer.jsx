@@ -34,32 +34,19 @@ class PilotSelectorTableRow extends React.PureComponent {
       timestamp,
       landed,
       iso,
-      selected,
-      disabled,
-      onClick
+      disabled
     } = this.props;
 
-    const backgroundColor = selected ? "rgba(0, 0, 0, 0.04)" : null;
-    console.log(selected, backgroundColor);
-
     return (
-      <TableCell
-        component="div"
-        variant="body"
-        padding="none"
+      <div
         style={{
           width: "100%",
           height: "100%",
           display: "flex",
           alignItems: "center",
           boxSizing: "border-box",
-          backgroundColor: selected ? "rgba(0, 0, 0, 0.04)" : null
+          filter: disabled ? "grayscale(100%) opacity(30%)" : undefined
         }}
-        onClick={() => {
-          onClick(username);
-        }}
-        className="Mui-selected"
-        selected="1"
       >
         <Box flex="1" paddingLeft={1} paddingTop={1} paddingBottom={1}>
           <Typography variant="body2">{fullname}</Typography>
@@ -95,7 +82,7 @@ class PilotSelectorTableRow extends React.PureComponent {
             ></Box>
           </Box>
         </div>
-      </TableCell>
+      </div>
     );
   }
 }
@@ -111,12 +98,23 @@ export const renderRow = ({ data, index, style }) => {
   const landed = pilotData ? pilotData.landed : null;
   const iso = pilotData ? pilotData.info.user.nationality.iso : "--";
   const selected = data.selected.indexOf(pilotId) !== -1;
-  const alreadyAdded = data.alreadyAdded.indexOf(pilotId) !== -1;
+  const disabled = data.alreadyAdded.indexOf(pilotId) !== -1;
 
   console.log(selected);
 
   return (
-    <div style={style}>
+    <TableCell
+      component="div"
+      variant="body"
+      padding="none"
+      style={{
+        ...style,
+        backgroundColor: selected && !disabled ? "rgba(0, 0, 0, 0.04)" : null
+      }}
+      onClick={() => {
+        if (!disabled) data.onPilotClicked(pilotId);
+      }}
+    >
       <PilotSelectorTableRow
         fullname={fullname}
         username={username}
@@ -124,10 +122,8 @@ export const renderRow = ({ data, index, style }) => {
         timestamp={timestamp}
         landed={landed}
         iso={iso}
-        selected={selected}
-        disabled={alreadyAdded}
-        onClick={data.onPilotClicked}
+        disabled={disabled}
       />
-    </div>
+    </TableCell>
   );
 };
