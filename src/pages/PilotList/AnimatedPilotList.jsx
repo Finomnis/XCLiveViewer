@@ -2,7 +2,8 @@ import React from "react";
 import { Box } from "@material-ui/core";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import AnimatedPilotListEntry from "./AnimatedPilotListEntry";
-import AnimatedPilotListVirtualTable from "./AnimatedPilotListVirtualTable";
+import AutoSizer from "react-virtualized-auto-sizer";
+import { VariableSizeList } from "react-window";
 
 class AnimatedPilotList extends React.PureComponent {
   constructor(props) {
@@ -43,18 +44,21 @@ class AnimatedPilotList extends React.PureComponent {
     getXContestInterface().animation.unregisterCallback(this.onNewDataReceived);
   }
 
-  renderPilotRow = pilotId => {
+  renderPilotRow = ({ style, index, data }) => {
+    const pilotId = data.pilotIds[index];
     return (
-      <AnimatedPilotListEntry
-        pilotId={pilotId}
-        removePilot={() => {
-          this.props.removePilots([pilotId]);
-        }}
-      ></AnimatedPilotListEntry>
+      <div style={style}>
+        <AnimatedPilotListEntry
+          pilotId={pilotId}
+          removePilot={() => {
+            this.props.removePilots([pilotId]);
+          }}
+        ></AnimatedPilotListEntry>
+      </div>
     );
   };
 
-  getPilotRowHeight = pilotId => {
+  getPilotRowHeight = data => {
     return 450;
   };
 
@@ -76,11 +80,20 @@ class AnimatedPilotList extends React.PureComponent {
 
     return (
       <Box height="100%">
-        <AnimatedPilotListVirtualTable
-          rowIds={pilots}
-          rowRenderer={this.renderPilotRow}
-          rowHeightGetter={this.getPilotRowHeight}
-        />
+        <AutoSizer>
+          {({ height, width }) => (
+            <VariableSizeList
+              width={width}
+              height={height}
+              itemCount={pilots.length}
+              itemData={{ pilotIds: pilots }}
+              itemKey={(index, { pilotIds }) => pilotIds[index]}
+              itemSize={this.getPilotRowHeight}
+            >
+              {this.renderPilotRow}
+            </VariableSizeList>
+          )}
+        </AutoSizer>
       </Box>
     );
   }
