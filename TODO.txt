@@ -1,5 +1,4 @@
-- PERFORMANCE IMPROVEMENTS
-    - Add virtual tables
+
 
 - Split google maps in 30 second chunks.
     - Do the splitting inside XContestAnimation
@@ -79,3 +78,5 @@ Old Notes:
     - Remove Animation getX, replace with callback registration
     - Let classes themselves decide when they need a full update
     - Same for position
+- PERFORMANCE IMPROVEMENTS
+    - Add virtual tables
