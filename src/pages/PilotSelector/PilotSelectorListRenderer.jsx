@@ -100,8 +100,6 @@ export const renderRow = ({ data, index, style }) => {
   const selected = data.selected.indexOf(pilotId) !== -1;
   const disabled = data.alreadyAdded.indexOf(pilotId) !== -1;
 
-  console.log(selected);
-
   return (
     <TableCell
       component="div"
