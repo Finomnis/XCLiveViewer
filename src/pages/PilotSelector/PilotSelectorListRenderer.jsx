@@ -109,7 +109,8 @@ export const renderRow = ({ data, index, style }) => {
       padding="none"
       style={{
         ...style,
-        backgroundColor: selected && !disabled ? "rgba(0, 0, 0, 0.04)" : null
+        backgroundColor:
+          selected && !disabled ? "rgba(0, 0, 0, 0.04)" : undefined
       }}
       onClick={() => {
         if (!disabled) data.onPilotClicked(pilotId);
