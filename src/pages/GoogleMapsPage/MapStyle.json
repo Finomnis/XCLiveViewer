@@ -4,6 +4,9 @@
     "stylers": [
       {
         "visibility": "simplified"
+      },
+      {
+        "saturation": -50
       }
     ]
   },
