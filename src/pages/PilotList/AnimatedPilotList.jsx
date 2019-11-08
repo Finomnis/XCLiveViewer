@@ -47,7 +47,7 @@ class AnimatedPilotList extends React.PureComponent {
   renderPilotRow = ({ style, index, data }) => {
     const pilotId = data.pilotIds[index];
     return (
-      <div style={style}>
+      <div style={{ ...style, width: "100%", overflow: "hidden" }}>
         <AnimatedPilotListEntry
           pilotId={pilotId}
           removePilot={() => {

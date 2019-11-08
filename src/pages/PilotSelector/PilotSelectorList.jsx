@@ -54,8 +54,8 @@ const sortPilotList = (pilotInfos, gps) => {
   }
 };
 
-// The table content
-export default class PilotSelectorTable extends React.PureComponent {
+// The list content
+export default class PilotSelectorList extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = { didMount: false };

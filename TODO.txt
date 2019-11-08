@@ -19,13 +19,15 @@
     - Sort: online/offline, distance
     - Multiline or extendable, run some tests
     - UI elements:
-        - name
         - icon
+        - name
+        - status
+        - altitude/altitude gnd/vario
+        - distance, direction
         - airtime
+        - xc kilometer
         - (takeoff, country flag)
-        - altitude/altitude histogram
-        - altitude gnd
-        - vario
+        - altitude histogram
         - (velocity)
 
 - Add distance+direction to pilot selection
