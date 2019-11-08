@@ -42,42 +42,42 @@ export function setChosenPilotsAndUpdateNames(chosenPilots = null) {
   }
 }
 
+// Add new pilots
+export const addPilots = pilotIds => {
+  const newPilotState = { ...getChosenPilots() };
+
+  let changed = false;
+  for (const pilotId of pilotIds) {
+    if (!(pilotId in newPilotState)) {
+      newPilotState[pilotId] = null;
+      changed = true;
+    }
+  }
+
+  if (changed) {
+    setChosenPilotsAndUpdateNames(newPilotState);
+  }
+};
+
+// Remove pilots
+export const removePilots = pilotIds => {
+  const newPilotState = { ...getChosenPilots() };
+
+  let changed = false;
+  for (const pilotId of pilotIds) {
+    if (pilotId in newPilotState) {
+      delete newPilotState[pilotId];
+      changed = true;
+    }
+  }
+
+  if (changed) {
+    setChosenPilots(newPilotState);
+  }
+};
+
 export function useChosenPilots() {
   const [chosenPilots] = persistentChosenPilots.use();
-
-  // Add new pilots
-  const addPilots = pilotIds => {
-    const newPilotState = { ...chosenPilots };
-
-    let changed = false;
-    for (const pilotId of pilotIds) {
-      if (!(pilotId in newPilotState)) {
-        newPilotState[pilotId] = null;
-        changed = true;
-      }
-    }
-
-    if (changed) {
-      setChosenPilotsAndUpdateNames(newPilotState);
-    }
-  };
-
-  // Remove pilots
-  const removePilots = pilotIds => {
-    const newPilotState = { ...chosenPilots };
-
-    let changed = false;
-    for (const pilotId of pilotIds) {
-      if (pilotId in newPilotState) {
-        delete newPilotState[pilotId];
-        changed = true;
-      }
-    }
-
-    if (changed) {
-      setChosenPilots(newPilotState);
-    }
-  };
 
   return [chosenPilots, addPilots, removePilots];
 }
