@@ -4,17 +4,17 @@
   "homepage": "https://finomnis.github.io/XCLiveViewer/",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.5.1",
+    "@material-ui/core": "^4.6.0",
     "@material-ui/icons": "^4.5.1",
     "color-convert": "^2.0.1",
     "dotenv": "^8.2.0",
     "flag-icon-css": "^3.4.5",
-    "geolib": "^3.0.4",
+    "geolib": "^3.1.0",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-scripts": "3.1.2",
     "react-swipeable-views": "^0.13.3",
-    "react-virtualized-auto-sizer": "^1.0.2",
+    "react-virtualized": "^9.21.1",
     "react-window": "^1.8.5"
   },
   "scripts": {

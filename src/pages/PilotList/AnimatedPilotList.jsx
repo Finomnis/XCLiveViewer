@@ -2,8 +2,8 @@ import React from "react";
 import { Box } from "@material-ui/core";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import AnimatedPilotListEntry from "./AnimatedPilotListEntry";
-import AutoSizer from "react-virtualized-auto-sizer";
 import { VariableSizeList } from "react-window";
+import { List, AutoSizer } from "react-virtualized";
 
 class AnimatedPilotList extends React.PureComponent {
   constructor(props) {
