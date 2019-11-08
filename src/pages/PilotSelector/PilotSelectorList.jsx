@@ -9,7 +9,7 @@ import { getGPSProvider } from "../../common/GPSProvider";
 import { getDistance } from "geolib";
 import { renderRow, TableHeader, rowHeight } from "./PilotSelectorListRenderer";
 import { FixedSizeList } from "react-window";
-import { AutoSizer } from "react-virtualized";
+import AutoSizer from "react-virtualized-auto-sizer";
 
 const filterPilotList = (pilotList, pilotInfos, search) => {
   const matchesSearch = name => {

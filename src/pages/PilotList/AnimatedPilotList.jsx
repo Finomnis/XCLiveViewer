@@ -2,8 +2,7 @@ import React from "react";
 import { Box } from "@material-ui/core";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import AnimatedPilotListEntry from "./AnimatedPilotListEntry";
-import { VariableSizeList } from "react-window";
-import { List, AutoSizer } from "react-virtualized";
+import { getGPSProvider } from "../../common/GPSProvider";
 
 class AnimatedPilotList extends React.PureComponent {
   constructor(props) {
@@ -12,6 +11,7 @@ class AnimatedPilotList extends React.PureComponent {
       onlinePilots: []
     };
     this.pilotData = null;
+    this.gpsData = getGPSProvider().getData();
   }
 
   onNewDataReceived = pilotData => {
@@ -37,30 +37,18 @@ class AnimatedPilotList extends React.PureComponent {
     }
   };
 
+  onNewGPSDataReceived = gpsData => {
+    this.gpsData = gpsData;
+  };
+
   componentDidMount() {
     getXContestInterface().animation.registerCallback(this.onNewDataReceived);
+    getGPSProvider().registerCallback(this.onNewGPSDataReceived);
   }
   componentWillUnmount() {
     getXContestInterface().animation.unregisterCallback(this.onNewDataReceived);
+    getGPSProvider().unregisterCallback(this.onNewGPSDataReceived);
   }
-
-  renderPilotRow = ({ style, index, data }) => {
-    const pilotId = data.pilotIds[index];
-    return (
-      <div style={{ ...style, width: "100%", overflow: "hidden" }}>
-        <AnimatedPilotListEntry
-          pilotId={pilotId}
-          removePilot={() => {
-            this.props.removePilots([pilotId]);
-          }}
-        ></AnimatedPilotListEntry>
-      </div>
-    );
-  };
-
-  getPilotRowHeight = data => {
-    return 450;
-  };
 
   render() {
     let pilotIsOnline = new Set(this.state.onlinePilots);
@@ -79,21 +67,18 @@ class AnimatedPilotList extends React.PureComponent {
     );
 
     return (
-      <Box height="100%">
-        <AutoSizer>
-          {({ height, width }) => (
-            <VariableSizeList
-              width={width}
-              height={height}
-              itemCount={pilots.length}
-              itemData={{ pilotIds: pilots }}
-              itemKey={(index, { pilotIds }) => pilotIds[index]}
-              itemSize={this.getPilotRowHeight}
-            >
-              {this.renderPilotRow}
-            </VariableSizeList>
-          )}
-        </AutoSizer>
+      <Box height="100%" bgcolor="#f5f5f5" overflow="auto">
+        <Box margin={1}>
+          {pilots.map(pilotId => (
+            <AnimatedPilotListEntry
+              key={pilotId}
+              pilotId={pilotId}
+              removePilot={() => {
+                this.props.removePilots([pilotId]);
+              }}
+            />
+          ))}
+        </Box>
       </Box>
     );
   }

@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { Box } from "@material-ui/core";
+import {
+  Box,
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  Typography,
+  ExpansionPanelDetails
+} from "@material-ui/core";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import { getGPSProvider } from "../../common/GPSProvider";
 
@@ -78,51 +85,28 @@ class AnimatedPilotListEntry extends Component {
   ///
   render() {
     const animatedPilotData = this.pilotInfo;
-    let pilotDebugOutput = [];
-
-    for (const key in animatedPilotData) {
-      const dataElement = animatedPilotData[key];
-      if (isNaN(dataElement)) {
-        if (dataElement.length > 5) continue;
-        for (const subKey in dataElement) {
-          pilotDebugOutput.push(
-            <tr key={key + subKey}>
-              <td>{key + "." + subKey}</td>
-              <td>{dataElement[subKey].toString()}</td>
-            </tr>
-          );
-        }
-      } else {
-        pilotDebugOutput.push(
-          <tr key={key}>
-            <td>{key}</td>
-            <td>
-              {(Math.round(100 * animatedPilotData[key]) / 100).toString()}
-            </td>
-          </tr>
-        );
-      }
-    }
 
     return (
-      <Box margin="10px" onClick={this.props.removePilot}>
-        {this.props.pilotId}
-        <Box>
-          GPS:{" "}
-          {this.gpsData === null
-            ? "NULL"
-            : this.gpsData.coords.accuracy.toString()}
-        </Box>
-        <Box>
-          GPS time:{" "}
-          {this.gpsData === null
-            ? "NULL"
-            : Math.round(this.gpsData.timestamp / 1000).toString()}
-        </Box>
-        <table>
-          <tbody>{pilotDebugOutput}</tbody>
-        </table>
-      </Box>
+      <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
+        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+          <Box>
+            <Typography variant="body2">{"fullname"}</Typography>
+            <Typography
+              variant="caption"
+              color="textSecondary"
+              style={{ paddingLeft: ".5em" }}
+            >
+              {"Username"}
+            </Typography>
+          </Box>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+          <Typography>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+            malesuada lacus ex, sit amet blandit leo lobortis eget.
+          </Typography>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
     );
   }
 }
