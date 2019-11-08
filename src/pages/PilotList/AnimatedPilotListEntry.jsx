@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   Box,
   ExpansionPanel,
@@ -10,7 +10,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import { getGPSProvider } from "../../common/GPSProvider";
 
-class AnimatedPilotListEntry extends Component {
+class AnimatedPilotListEntry extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -90,13 +90,13 @@ class AnimatedPilotListEntry extends Component {
       <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <Box>
-            <Typography variant="body2">{"fullname"}</Typography>
+            <Typography variant="body2">{this.props.pilotName}</Typography>
             <Typography
               variant="caption"
               color="textSecondary"
               style={{ paddingLeft: ".5em" }}
             >
-              {"Username"}
+              {"--"}
             </Typography>
           </Box>
         </ExpansionPanelSummary>

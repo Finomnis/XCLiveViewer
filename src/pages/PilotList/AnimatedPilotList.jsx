@@ -66,6 +66,12 @@ class AnimatedPilotList extends React.PureComponent {
       )
     );
 
+    const getPilotName = pilotId => {
+      const name = this.props.pilots[pilotId];
+      if (name === undefined || name === null) return pilotId;
+      return name;
+    };
+
     return (
       <Box height="100%" bgcolor="#f5f5f5" overflow="auto">
         <Box margin={1}>
@@ -73,6 +79,7 @@ class AnimatedPilotList extends React.PureComponent {
             <AnimatedPilotListEntry
               key={pilotId}
               pilotId={pilotId}
+              pilotName={getPilotName(pilotId)}
               removePilot={() => {
                 this.props.removePilots([pilotId]);
               }}
