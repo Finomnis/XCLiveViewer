@@ -10,7 +10,7 @@ class AnimatedPilotList extends React.PureComponent {
     this.state = {
       onlinePilots: []
     };
-    this.pilotData = null;
+    this.pilotData = getXContestInterface().animation.getData();
     this.gpsData = getGPSProvider().getData();
   }
 
@@ -50,6 +50,10 @@ class AnimatedPilotList extends React.PureComponent {
     getGPSProvider().unregisterCallback(this.onNewGPSDataReceived);
   }
 
+  removePilot = pilotId => {
+    this.props.removePilots([pilotId]);
+  };
+
   render() {
     let pilotIsOnline = new Set(this.state.onlinePilots);
 
@@ -80,9 +84,7 @@ class AnimatedPilotList extends React.PureComponent {
               key={pilotId}
               pilotId={pilotId}
               pilotName={getPilotName(pilotId)}
-              removePilot={() => {
-                this.props.removePilots([pilotId]);
-              }}
+              removePilot={this.removePilot}
             />
           ))}
         </Box>
