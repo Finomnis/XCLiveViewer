@@ -1,4 +1,5 @@
 import { registerPersistentState } from "./PersistentState";
+import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 
 const persistentChosenPilots = registerPersistentState("chosen-pilots", {});
 
@@ -8,8 +9,41 @@ export function getChosenPilots() {
   return persistentChosenPilots.getValue();
 }
 
+export function setChosenPilots(newValue) {
+  console.log("Selected pilots updated: ", newValue);
+  return persistentChosenPilots.setValue(newValue);
+}
+
+// Sets new chosen pilots and also looks up their names.
+// When used without argument, just updates the names of the existing pilots.
+export function setChosenPilotsAndUpdateNames(chosenPilots = null) {
+  if (chosenPilots === null) chosenPilots = { ...getChosenPilots() };
+
+  const pilotList = getXContestInterface().getPilotInfos();
+  let chosenPilotsUpdated = false;
+  for (const pilotId in chosenPilots) {
+    if (pilotId in pilotList) {
+      // Get new name
+      const currentName = pilotList[pilotId].info.user.fullname;
+      // Get stored name
+      const previousName = chosenPilots[pilotId];
+
+      // If new name is different, update
+      if (currentName !== previousName) {
+        chosenPilots[pilotId] = currentName;
+        chosenPilotsUpdated = true;
+      }
+    }
+  }
+
+  // If anything updated, set new list. This will trigger events.
+  if (chosenPilotsUpdated) {
+    setChosenPilots(chosenPilots);
+  }
+}
+
 export function useChosenPilots() {
-  const [chosenPilots, setChosenPilots] = persistentChosenPilots.use();
+  const [chosenPilots] = persistentChosenPilots.use();
 
   // Add new pilots
   const addPilots = pilotIds => {
@@ -24,7 +58,7 @@ export function useChosenPilots() {
     }
 
     if (changed) {
-      setChosenPilots(newPilotState);
+      setChosenPilotsAndUpdateNames(newPilotState);
     }
   };
 

@@ -1,6 +1,7 @@
 import XContestSocket from "./XContestSocket";
 import XContestAnimation from "./XContestAnimation";
 import EventfulState from "../../util/EventfulState";
+import { setChosenPilotsAndUpdateNames } from "../../common/PersistentState/ChosenPilots";
 
 export const ConnectionState = {
   CONNECTING: "connecting", //orange
@@ -48,6 +49,9 @@ class XContestInterface {
     }
     this.animation.pushNewInfo(this.pilots);
     this.pilotInfos.set(this.pilots);
+
+    // Set pilot names if available
+    setChosenPilotsAndUpdateNames();
   };
 
   onTracklogMessageReceived = msg => {
