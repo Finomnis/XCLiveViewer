@@ -17,7 +17,7 @@ class GPSProvider {
 
     let enableGps = gpssettingEnabled && callbackRegistered;
 
-    if (this._watchId === null && enableGps) {
+    if (this._watchId === null && enableGps && navigator.geolocation) {
       this._watchId = navigator.geolocation.watchPosition(
         this._onNewGPSData,
         this._onGPSError,
