@@ -84,7 +84,7 @@ class AnimatedPilotListEntry extends Component {
   /// LAYOUT
   ///
   render() {
-    const animatedPilotData = this.pilotInfo;
+    //const animatedPilotData = this.pilotInfo;
 
     return (
       <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
