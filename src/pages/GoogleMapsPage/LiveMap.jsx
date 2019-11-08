@@ -5,6 +5,7 @@ import { LoadingPage, ErrorPage } from "../StatusPages";
 import mapStyle from "./MapStyle.json";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import MapAnimator from "./MapAnimator";
+import { pure } from "recompose";
 
 const LiveMap = () => {
   const [mapReady, mapError, google] = useGoogleMapsApi();
@@ -63,4 +64,4 @@ const LiveMap = () => {
   );
 };
 
-export default LiveMap;
+export default pure(LiveMap);
