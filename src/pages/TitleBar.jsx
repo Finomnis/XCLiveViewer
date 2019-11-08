@@ -20,6 +20,7 @@ import { useXContestConnectionState } from "../location_provider/XContest/XConte
 import { ConnectionState } from "../location_provider/XContest/XContestInterface";
 import { CircularProgress } from "@material-ui/core";
 import MainMenu from "./MainMenu";
+import { pure } from "recompose";
 
 const useStyles = makeStyles(theme => ({
   popover: {
@@ -143,4 +144,4 @@ const TitleBar = () => {
   );
 };
 
-export default TitleBar;
+export default pure(TitleBar);

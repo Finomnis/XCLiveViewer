@@ -16,8 +16,9 @@ import UndoIcon from "@material-ui/icons/Undo";
 
 import SubWindow from "../../util/SubWindow";
 import { resetAllSettings } from "../../common/PersistentState/Settings";
+import { pure } from "recompose";
 
-const SettingsPageTitleBar = props => {
+const SettingsPageTitleBar = pure(props => {
   const [resetAllSettingsDialogOpen, setResetAllSettingsDialogOpen] = useState(
     false
   );
@@ -76,6 +77,6 @@ const SettingsPageTitleBar = props => {
       </SubWindow>
     </React.Fragment>
   );
-};
+});
 
 export default SettingsPageTitleBar;

@@ -13,6 +13,7 @@ import { Button, DialogActions, TextField } from "@material-ui/core";
 
 import SubWindow from "../../util/SubWindow";
 import PilotSelectorList from "./PilotSelectorList";
+import { pure } from "recompose";
 
 const useStyles = makeStyles({
   fullHeightWindow: {
@@ -138,4 +139,4 @@ const PilotSelector = props => {
   );
 };
 
-export default PilotSelector;
+export default pure(PilotSelector);

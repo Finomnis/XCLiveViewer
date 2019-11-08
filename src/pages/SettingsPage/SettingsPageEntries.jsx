@@ -7,8 +7,9 @@ import {
   Switch
 } from "@material-ui/core";
 import NumberInput from "../../util/NumberInput";
+import { pure } from "recompose";
 
-export const BooleanSetting = props => {
+export const BooleanSetting = pure(props => {
   const [settingValue, setSettingValue] = getSetting(props.setting).use();
   const flipSetting = () => setSettingValue(!settingValue);
 
@@ -23,9 +24,9 @@ export const BooleanSetting = props => {
       </ListItemSecondaryAction>
     </ListItem>
   );
-};
+});
 
-export const NumberSetting = props => {
+export const NumberSetting = pure(props => {
   const [settingValue, setSettingValue] = getSetting(props.setting).use();
 
   return (
@@ -46,4 +47,4 @@ export const NumberSetting = props => {
       </ListItemSecondaryAction>
     </ListItem>
   );
-};
+});
