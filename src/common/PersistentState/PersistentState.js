@@ -5,10 +5,22 @@ class PersistentState {
     this.key = key;
     this.initialValue = initialValue;
     this.callbacks = [];
+
+    this.locallyCachedJson = null;
+    this.locallyCachedValue = null;
   }
 
   getValue = () => {
-    const value = JSON.parse(localStorage.getItem(this.key));
+    const jsonValue = localStorage.getItem(this.key);
+
+    // Caching, to reduce the amount of times the value !== itself.
+    // This is a performance optimization for PureComponents.
+    if (this.locallyCachedJson !== jsonValue) {
+      this.locallyCachedJson = jsonValue;
+      this.locallyCachedValue = JSON.parse(jsonValue);
+    }
+
+    const value = this.locallyCachedValue;
     if (value === null) return this.initialValue;
     return value;
   };
