@@ -65,6 +65,7 @@ class AnimatedPilotList extends React.PureComponent {
     const offlinePilots = Object.keys(this.props.pilots).filter(
       pilotId => !pilotIsOnline.has(pilotId)
     );
+
     const getPilotName = pilotId => {
       const name = this.props.pilots[pilotId];
       if (name === undefined || name === null) return pilotId;
@@ -72,13 +73,14 @@ class AnimatedPilotList extends React.PureComponent {
     };
 
     return (
-      <Box height="100%" bgcolor="#f5f5f5" overflow="auto">
+      <Box height="100%" bgcolor="#ddd" overflow="auto">
         <Box margin={1}>
           {onlinePilots.map(pilotId => (
             <AnimatedPilotListEntry
               key={pilotId}
               pilotId={pilotId}
               pilotName={getPilotName(pilotId)}
+              online={true}
               removePilot={this.removePilot}
             />
           ))}
@@ -89,6 +91,7 @@ class AnimatedPilotList extends React.PureComponent {
               key={pilotId}
               pilotId={pilotId}
               pilotName={getPilotName(pilotId)}
+              online={false}
               removePilot={this.removePilot}
             />
           ))}

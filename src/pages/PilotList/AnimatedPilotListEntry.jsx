@@ -15,17 +15,8 @@ class AnimatedPilotListEntry extends React.PureComponent {
     super(props);
 
     // Get initial data
-    const pilotData = getXContestInterface().animation.getData();
-    this.pilotInfo = null;
-    if (props.pilotId in pilotData) {
-      this.pilotInfo = pilotData[props.pilotId];
-    }
     this.gpsData = getGPSProvider().getData();
 
-    this.state = {
-      online: this.pilotInfo !== null,
-      gps: this.gpsData !== null
-    };
   }
 
   //////////////////////////////////////////////////////////////
@@ -33,39 +24,15 @@ class AnimatedPilotListEntry extends React.PureComponent {
   ///
   onNewGPSDataReceived = gpsData => {
     this.gpsData = gpsData;
-    const hasGps = this.gpsData !== null;
-
-    // If something major has changed, don't run a microupdate, but a full one
-    if (this.state.gps !== hasGps) {
-      this.setState({ ...this.state, gps: hasGps });
-      return;
-    }
-
-    if (!hasGps) return;
-
-    // TODO replace with a more efficient way
-    this.forceUpdate();
   };
 
   onNewDataReceived = pilotData => {
-    if (this.props.pilotId in pilotData) {
-      this.pilotInfo = pilotData[this.props.pilotId];
-    } else {
-      this.pilotInfo = null;
-    }
+    if (!this.props.pilotId in pilotData) return;
 
-    const hasPilotInfo = this.pilotInfo !== null;
-
-    // If something major has changed, don't run a microupdate, but a full one
-    if (this.state.online !== hasPilotInfo) {
-      this.setState({ ...this.state, online: true });
-      return;
-    }
-
-    if (!hasPilotInfo) return;
+    //const pilotInfo = pilotData[this.props.pilotId];
 
     // TODO update data in a more efficient way, by modifying object dom directly
-    this.forceUpdate();
+    //this.forceUpdate();
   };
 
   componentDidMount() {
@@ -84,7 +51,31 @@ class AnimatedPilotListEntry extends React.PureComponent {
   /// LAYOUT
   ///
   render() {
+    //const pilotData = getXContestInterface().animation.getData();
+    //const pilotInfo =
+    //  this.props.pilotId in pilotData ? pilotData[this.props.pilotId] : null;
+
+    console.log("RENDER ", this.props.pilotId, this.state, this.props);
     //const animatedPilotData = this.pilotInfo;
+    //console.log(this.props);
+    if (!this.props.online) {
+      return (
+        <ExpansionPanel disabled>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Box display="flex">
+              <Typography variant="body2">{this.props.pilotName}</Typography>
+              <Typography
+                variant="caption"
+                color="textSecondary"
+                style={{ paddingLeft: ".5em" }}
+              >
+                {"offline"}
+              </Typography>
+            </Box>
+          </ExpansionPanelSummary>
+        </ExpansionPanel>
+      );
+    }
 
     return (
       <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
