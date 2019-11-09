@@ -6,30 +6,47 @@ import PilotSelector from "../PilotSelector/PilotSelector";
 import {
   getChosenPilots,
   addPilots,
-  removePilots
+  removePilots,
+  getChosenPilotsObject
 } from "../../common/PersistentState/ChosenPilots";
 import AnimatedPilotList from "./AnimatedPilotList";
 
-class Pilots extends React.PureComponent {
-  state = { pilotSelectorOpen: false };
+class Pilots extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { pilotSelectorOpen: false, chosenPilots: getChosenPilots() };
+  }
 
   openPilotSelector = () => {
     if (this.state.pilotSelectorOpen === false)
-      this.setState({ pilotSelectorOpen: true });
+      this.setState(state => ({ ...state, pilotSelectorOpen: true }));
   };
 
   closePilotSelector = () => {
     if (this.state.pilotSelectorOpen === true)
-      this.setState({ pilotSelectorOpen: false });
+      this.setState(state => ({ ...state, pilotSelectorOpen: false }));
   };
 
-  render() {
-    const pilots = getChosenPilots();
+  chosenPilotsChanged = newChosenPilots => {
+    this.setState(state => ({
+      ...state,
+      chosenPilots: newChosenPilots
+    }));
+  };
 
+  componentDidMount() {
+    getChosenPilotsObject().registerCallback(this.chosenPilotsChanged);
+  }
+  componentWillUnmount() {
+    getChosenPilotsObject().unRegisterCallback(this.chosenPilotsChanged);
+  }
+
+  render() {
     return (
       <React.Fragment>
         <AnimatedPilotList
-          pilots={pilots}
+          pilots={this.state.chosenPilots}
           removePilots={removePilots}
         ></AnimatedPilotList>
 
@@ -42,7 +59,7 @@ class Pilots extends React.PureComponent {
           open={this.state.pilotSelectorOpen}
           onClose={this.closePilotSelector}
           onAddPilots={addPilots}
-          alreadyAdded={Object.keys(pilots)}
+          alreadyAdded={Object.keys(this.state.chosenPilots)}
         />
       </React.Fragment>
     );

@@ -33,7 +33,7 @@ class AnimatedPilotList extends React.PureComponent {
     }
 
     if (pilotListChanged) {
-      this.setState({ ...this.state, onlinePilots: pilotList });
+      this.setState(state => ({ ...state, onlinePilots: pilotList }));
     }
   };
 

@@ -26,7 +26,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
   };
 
   onNewDataReceived = pilotData => {
-    if (!this.props.pilotId in pilotData) return;
+    if (!(this.props.pilotId in pilotData)) return;
 
     //const pilotInfo = pilotData[this.props.pilotId];
 

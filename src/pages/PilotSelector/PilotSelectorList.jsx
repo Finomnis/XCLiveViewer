@@ -68,7 +68,7 @@ export default class PilotSelectorList extends React.PureComponent {
   }
 
   startRendering = () => {
-    this.setState({ ...this.state, didMount: true });
+    this.setState(state => ({ ...state, didMount: true }));
   };
 
   componentDidMount() {
@@ -90,7 +90,7 @@ export default class PilotSelectorList extends React.PureComponent {
     const newPilotList = sortPilotList(this.state.pilotInfos, this.gpsData);
 
     if (!arraysEqual(this.state.sortedPilotList, newPilotList))
-      this.setState({ ...this.state, sortedPilotList: newPilotList });
+      this.setState(state => ({ ...state, sortedPilotList: newPilotList }));
   };
 
   onNewGpsData = gpsData => {
@@ -101,11 +101,11 @@ export default class PilotSelectorList extends React.PureComponent {
 
   onNewPilotInfos = pilotInfos => {
     // Always update on new pilot infos
-    this.setState({
-      ...this.state,
+    this.setState(state => ({
+      ...state,
       pilotInfos: pilotInfos,
       sortedPilotList: sortPilotList(pilotInfos, this.gpsData)
-    });
+    }));
   };
 
   onPilotClicked = pilotId => {

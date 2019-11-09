@@ -33,11 +33,11 @@ export default class NumberInput extends React.PureComponent {
             // If those two messages get delivered out of order, this entire trick will stop working.
             // But I think setting states will never be done in an incorrect order, that would really break things.
             this.props.onChange(this.props.min);
-            this.setState({
-              ...this.state,
+            this.setState(state => ({
+              ...state,
               internalUpdate: true,
               value: value
-            });
+            }));
           } else if (value > this.props.max) {
             this.props.onChange(this.props.max);
           } else {
