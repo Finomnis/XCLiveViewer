@@ -16,7 +16,6 @@ class AnimatedPilotListEntry extends React.PureComponent {
 
     // Get initial data
     this.gpsData = getGPSProvider().getData();
-
   }
 
   //////////////////////////////////////////////////////////////
