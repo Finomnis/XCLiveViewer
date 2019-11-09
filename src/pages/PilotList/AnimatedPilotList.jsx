@@ -10,12 +10,10 @@ class AnimatedPilotList extends React.PureComponent {
     this.state = {
       onlinePilots: []
     };
-    this.pilotData = getXContestInterface().animation.getData();
     this.gpsData = getGPSProvider().getData();
   }
 
-  onNewDataReceived = pilotData => {
-    this.pilotData = pilotData;
+  onAnimationFrame = pilotData => {
     let pilotList = Object.keys(pilotData);
 
     // TODO sort
@@ -42,11 +40,11 @@ class AnimatedPilotList extends React.PureComponent {
   };
 
   componentDidMount() {
-    getXContestInterface().animation.registerCallback(this.onNewDataReceived);
+    getXContestInterface().animation.registerCallback(this.onAnimationFrame);
     getGPSProvider().registerCallback(this.onNewGPSDataReceived);
   }
   componentWillUnmount() {
-    getXContestInterface().animation.unregisterCallback(this.onNewDataReceived);
+    getXContestInterface().animation.unregisterCallback(this.onAnimationFrame);
     getGPSProvider().unregisterCallback(this.onNewGPSDataReceived);
   }
 
