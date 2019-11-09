@@ -56,25 +56,6 @@ class AnimatedPilotListEntry extends React.PureComponent {
 
     console.log("RENDER ", this.props.pilotId, this.state, this.props);
     //const animatedPilotData = this.pilotInfo;
-    //console.log(this.props);
-    if (!this.props.online) {
-      return (
-        <ExpansionPanel disabled>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Box display="flex">
-              <Typography variant="body2">{this.props.pilotName}</Typography>
-              <Typography
-                variant="caption"
-                color="textSecondary"
-                style={{ paddingLeft: ".5em" }}
-              >
-                {"offline"}
-              </Typography>
-            </Box>
-          </ExpansionPanelSummary>
-        </ExpansionPanel>
-      );
-    }
 
     return (
       <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>

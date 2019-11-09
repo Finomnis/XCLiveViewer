@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import AnimatedPilotListEntry from "./AnimatedPilotListEntry";
 import { getGPSProvider } from "../../common/GPSProvider";
@@ -81,20 +81,28 @@ class AnimatedPilotList extends React.PureComponent {
               key={pilotId}
               pilotId={pilotId}
               pilotName={getPilotName(pilotId)}
-              online={true}
               removePilot={this.removePilot}
             />
           ))}
         </Box>
         <Box margin={1}>
           {offlinePilots.map(pilotId => (
-            <AnimatedPilotListEntry
+            <Box
               key={pilotId}
-              pilotId={pilotId}
-              pilotName={getPilotName(pilotId)}
-              online={false}
-              removePilot={this.removePilot}
-            />
+              onClick={() => {
+                this.removePilot(pilotId);
+              }}
+              display="flex"
+            >
+              <Typography variant="body2">{getPilotName(pilotId)}</Typography>
+              <Typography
+                variant="caption"
+                color="textSecondary"
+                style={{ paddingLeft: ".5em" }}
+              >
+                {"offline"}
+              </Typography>
+            </Box>
           ))}
         </Box>
       </Box>
