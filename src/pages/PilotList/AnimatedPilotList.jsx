@@ -100,7 +100,7 @@ class AnimatedPilotList extends React.PureComponent {
                 color="textSecondary"
                 style={{ paddingLeft: ".5em" }}
               >
-                {"offline"}
+                [{pilotId}]
               </Typography>
             </Box>
           ))}
