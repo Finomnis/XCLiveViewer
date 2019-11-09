@@ -17,10 +17,16 @@ export function setChosenPilots(newValue) {
 // Sets new chosen pilots and also looks up their names.
 // When used without argument, just updates the names of the existing pilots.
 export function setChosenPilotsAndUpdateNames(chosenPilots = null) {
-  if (chosenPilots === null) chosenPilots = { ...getChosenPilots() };
+  let chosenPilotsUpdated = true;
+
+  // if no new chosenPilots list was defined, take over previous one and disable updating unless a name changed
+  if (chosenPilots === null) {
+    chosenPilots = { ...getChosenPilots() };
+    chosenPilotsUpdated = false;
+  }
 
   const pilotList = getXContestInterface().getPilotInfos();
-  let chosenPilotsUpdated = false;
+
   for (const pilotId in chosenPilots) {
     if (pilotId in pilotList) {
       // Get new name
@@ -45,7 +51,6 @@ export function setChosenPilotsAndUpdateNames(chosenPilots = null) {
 // Add new pilots
 export const addPilots = pilotIds => {
   const newPilotState = { ...getChosenPilots() };
-
   let changed = false;
   for (const pilotId of pilotIds) {
     if (!(pilotId in newPilotState)) {
