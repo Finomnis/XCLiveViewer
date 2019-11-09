@@ -11,7 +11,7 @@ export function getChosenPilots() {
 
 export function setChosenPilots(newValue) {
   console.log("Selected pilots updated: ", newValue);
-  return persistentChosenPilots.setValue(newValue);
+  persistentChosenPilots.setValue(newValue);
 }
 
 // Sets new chosen pilots and also looks up their names.
@@ -54,7 +54,7 @@ export const addPilots = pilotIds => {
   let changed = false;
   for (const pilotId of pilotIds) {
     if (!(pilotId in newPilotState)) {
-      newPilotState[pilotId] = null;
+      newPilotState[pilotId] = pilotId;
       changed = true;
     }
   }
