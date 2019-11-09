@@ -39,7 +39,7 @@ class Pilots extends React.Component {
     getChosenPilotsObject().registerCallback(this.chosenPilotsChanged);
   }
   componentWillUnmount() {
-    getChosenPilotsObject().unRegisterCallback(this.chosenPilotsChanged);
+    getChosenPilotsObject().unregisterCallback(this.chosenPilotsChanged);
   }
 
   render() {
