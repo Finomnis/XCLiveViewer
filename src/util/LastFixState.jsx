@@ -45,9 +45,7 @@ function timestampToTimeString(timestamp) {
 }
 
 export const LastFixState = props => {
-  const timestamp = props.timestamp;
-  const landed = props.landed;
-  const relative = props.relative;
+  const { timestamp, landed, relative, showLastFix } = props;
 
   if (timestamp == null) {
     return <span>never</span>;
@@ -69,7 +67,7 @@ export const LastFixState = props => {
           <span role="img" aria-hidden>
             &#9899;
           </span>{" "}
-          LIVE
+          {showLastFix ? timeStr : "LIVE"}
         </span>
       );
     else
