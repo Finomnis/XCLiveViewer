@@ -1,11 +1,14 @@
-import { getPilotIcon } from "../../common/PilotIcon";
-import string2color from "../../util/string2color";
+import {
+  getPilotIcon,
+  getPilotIconColor,
+  getPilotTrackColor
+} from "../../common/PilotIcon";
 
 export default class GoogleMapsTrack {
   constructor(google, map, pilotInfo, initialData) {
     this.google = google;
-    this.pilotColor = string2color(pilotInfo.info.user.username, 70);
-    this.trackColor = string2color(pilotInfo.info.user.username, 40);
+    this.pilotColor = getPilotIconColor(pilotInfo.info.user.username);
+    this.trackColor = getPilotTrackColor(pilotInfo.info.user.username);
     this.marker = new this.google.maps.Marker({
       map: map,
       position: initialData.pos,
