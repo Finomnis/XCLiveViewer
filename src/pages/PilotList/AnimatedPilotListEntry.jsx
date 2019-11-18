@@ -4,11 +4,27 @@ import {
   ExpansionPanel,
   ExpansionPanelSummary,
   Typography,
-  ExpansionPanelDetails
+  ExpansionPanelDetails,
+  IconButton
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import { getGPSProvider } from "../../common/GPSProvider";
+import { LastFixState, LastFixArrow } from "../../util/LastFixState";
+import { getPilotIcon, getPilotIconColor } from "../../common/PilotIcon";
+import { styled } from "@material-ui/styles";
+
+const PilotLeftIcon = styled(Box)({ marginLeft: "-12px", marginRight: "10px" });
+const PilotEntryBox = styled(Box)({
+  display: "flex",
+  alignItems: "center",
+  width: "100%"
+});
+const SecondRow = styled(Typography)({
+  display: "flex",
+  justifyContent: "space-between",
+  paddingLeft: ".5em"
+});
 
 class AnimatedPilotListEntry extends React.PureComponent {
   constructor(props) {
@@ -16,6 +32,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
 
     // Get initial data
     this.gpsData = getGPSProvider().getData();
+    this.pilotColor = getPilotIconColor(this.props.pilotId);
   }
 
   //////////////////////////////////////////////////////////////
@@ -49,33 +66,81 @@ class AnimatedPilotListEntry extends React.PureComponent {
   /////////////////////////////////////////////////////////////////
   /// LAYOUT
   ///
-  render() {
-    //const pilotData = getXContestInterface().animation.getData();
-    //const pilotInfo =
-    //  this.props.pilotId in pilotData ? pilotData[this.props.pilotId] : null;
 
-    console.log("RENDER ", this.props.pilotId, this.state, this.props);
-    //const animatedPilotData = this.pilotInfo;
+  static renderHeight(pilotInfo) {
+    const height =
+      pilotInfo.gpsAlt !== null ? pilotInfo.gpsAlt : pilotInfo.baroAlt;
+
+    return height + "m (" + Math.max(0, height - pilotInfo.elevation) + "m)";
+  }
+
+  static renderLastFixState(pilotInfo) {
+    return LastFixState({
+      timestamp: pilotInfo.newestDataTimestamp * 1000,
+      landed: pilotInfo.landed,
+      relative: true,
+      showLastFix: false
+    });
+  }
+
+  render() {
+    const pilotData = getXContestInterface().animation.getData();
+    const pilotInfo =
+      this.props.pilotId in pilotData ? pilotData[this.props.pilotId] : null;
+
+    console.log(
+      "RENDER ",
+      this.props.pilotId,
+      this.state,
+      this.props,
+      pilotInfo
+    );
+
+    const pilotIcon = getPilotIcon(
+      null,
+      pilotInfo.startOfTrack,
+      pilotInfo.endOfTrack,
+      pilotInfo.landed,
+      pilotInfo.pos,
+      pilotInfo.velocityVec
+    );
 
     return (
       <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          <Box>
-            <Typography variant="body2">{this.props.pilotName}</Typography>
-            <Typography
-              variant="caption"
-              color="textSecondary"
-              style={{ paddingLeft: ".5em" }}
-            >
-              {"--"}
-            </Typography>
-          </Box>
+          <PilotEntryBox>
+            <PilotLeftIcon clone>
+              <svg
+                width="30px"
+                height="30px"
+                viewBox="0 0 24 24"
+                display="block"
+              >
+                <path
+                  d={pilotIcon.path}
+                  fill={this.pilotColor}
+                  stroke="black"
+                />
+              </svg>
+            </PilotLeftIcon>
+            <div style={{ width: "100%" }}>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="body2">{this.props.pilotName}</Typography>
+                <Typography variant="caption" style={{ marginRight: ".2em" }}>
+                  <LastFixArrow lastFix={pilotInfo.pos} />
+                </Typography>
+              </div>
+              <SecondRow variant="caption">
+                <span>
+                  {AnimatedPilotListEntry.renderLastFixState(pilotInfo)}
+                </span>
+                <div>{AnimatedPilotListEntry.renderHeight(pilotInfo)}</div>
+              </SecondRow>
+            </div>
+          </PilotEntryBox>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
-          </Typography>
+          <Typography>TODO: Details</Typography>
         </ExpansionPanelDetails>
       </ExpansionPanel>
     );
