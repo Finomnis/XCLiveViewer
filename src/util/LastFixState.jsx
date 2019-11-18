@@ -52,7 +52,7 @@ export const LastFixState = props => {
   if (timestamp == null) {
     return <span>never</span>;
   }
-  let time_diff = Date.parse(timestamp) - Date.now();
+  let time_diff = new Date(timestamp).getTime() - Date.now();
 
   let timeStr = "";
   if (relative) timeStr = formatTimeDiff(time_diff);
