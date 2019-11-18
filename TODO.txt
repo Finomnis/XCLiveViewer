@@ -67,7 +67,7 @@ Animation:
 
 
 Old Notes:
-- The markers should be a some kind of arrow / google maps marker with a state symbol insight (double arrow for live, ? for no symbol, some symbol for landed)
+- The markers should be a some kind of arrow / google maps marker with a state symbol inside (double arrow for live, ? for no symbol, some symbol for landed)
     - Normal flight: import NavigationIcon from '@material-ui/icons/Navigation';
                      or import PlayCircleFilledRoundedIcon from '@material-ui/icons/PlayCircleFilledRounded';
     - No response: import HelpIcon from '@material-ui/icons/Help';
