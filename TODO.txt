@@ -1,5 +1,3 @@
-- Add color via string-to-color
-
 - Split google maps in 30 second chunks.
     - Do the splitting inside XContestAnimation
     - Provide user with {id: chunk} pairs, where id is a unique identifier for the chunk, monotously increasing
@@ -9,7 +7,6 @@
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
     - Implement HUD in Map
 
-- Colorize map paths + icons
 - Add button that enables automatic map scale and position
     - should include all selected pilots + some space
 - Add button that enables/disables GPS (own position)
@@ -29,15 +26,11 @@
         - (takeoff, country flag)
         - altitude histogram
         - (velocity)
+    - Make animated
 
-- Add distance+direction to pilot selection
-- Sort suggested pilots by distance to self
 - Make ?add=xxx url that automatically adds given pilots (without removing existing ones. Replacing can be done by first deleting your own ones and then calling the url)
 
 - Implement Navigation (for drivers)
-
-Notes:
-- The tracks on the map should have a different color for every pilot
 
 
 DONE:
@@ -82,3 +75,8 @@ Old Notes:
     - Same for position
 - PERFORMANCE IMPROVEMENTS
     - Add virtual tables
+- Add color via string-to-color
+- Colorize map paths + icons
+- Add distance+direction to pilot selection
+- The tracks on the map should have a different color for every pilot
+- Sort suggested pilots by distance to self
