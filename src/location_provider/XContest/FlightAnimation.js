@@ -324,7 +324,7 @@ class FlightAnimation {
     return [
       DataGens.fallbackData(this.flightInfos),
       false,
-      this.flightInfos.landed,
+      true,
       parseTime(this.flightInfos.lastFix.timestamp),
       null
     ];
