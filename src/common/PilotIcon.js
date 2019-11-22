@@ -14,16 +14,30 @@ const path_idle =
 const path_landed_min =
   "m 12.66,19.78 6.46,-4.61 C 19.67,14.78 20,14.15 20,13.48 20,11.77 18.08,10.79 16.7,11.77 L 12,15.12 7.3,11.77 c -1.38,-0.99 -3.3,0 -3.3,1.71 0,0.67 0.33,1.31 0.88,1.7 l 6.46,4.62 c 0.4,0.27 0.93,0.27 1.33,-0.01 z m 0,-8 6.46,-4.6 C 19.67,6.78 20,6.15 20,5.48 20,3.77 18.08,2.78 16.7,3.77 L 12,7.12 7.3,3.77 C 5.92,2.78 4,3.77 4,5.48 4,6.15 4.33,6.79 4.88,7.18 l 6.46,4.62 c 0.4,0.27 0.93,0.27 1.33,-0.01 z";
 
-function createAnchor(google, x, y) {
-  if (google) return new google.maps.Point(x, y);
-  else return [x, y];
-}
-
 export const getPilotIconColor = name => string2color(name, 70);
 export const getPilotTrackColor = name => string2color(name, 40);
 
+export const pilotIconChanged = (oldPilotIcon, newPilotIcon) => {
+  for (let p in oldPilotIcon) {
+    if (!(p in newPilotIcon)) return true;
+  }
+  for (let p in newPilotIcon) {
+    if (!(p in oldPilotIcon)) return true;
+    // Special cases
+    if (p === "anchor") {
+      if (
+        oldPilotIcon[p].x !== newPilotIcon[p].x ||
+        oldPilotIcon[p].y !== newPilotIcon[p].y
+      )
+        return true;
+    } else if (oldPilotIcon[p] !== newPilotIcon[p]) {
+      return true;
+    }
+  }
+  return false;
+};
+
 export const getPilotIcon = (
-  google,
   waitingForStart,
   endOfTrack,
   hasLanded,
@@ -46,7 +60,7 @@ export const getPilotIcon = (
         path: path_landed_min,
         fillColor: color,
         fillOpacity: 1,
-        anchor: createAnchor(google, 12, 20),
+        anchor: { x: 12, y: 20 },
         strokeWeight: 1,
         scale: 1.2
       };
@@ -56,7 +70,7 @@ export const getPilotIcon = (
         path: path_questionmark_min,
         fillColor: color,
         fillOpacity: 1,
-        anchor: createAnchor(google, 12, 12),
+        anchor: { x: 12, y: 12 },
         strokeWeight: 1,
         scale: 1.2
       };
@@ -69,7 +83,7 @@ export const getPilotIcon = (
       path: path_idle,
       fillColor: color,
       fillOpacity: 1,
-      anchor: createAnchor(google, 12, 22),
+      anchor: { x: 12, y: 22 },
       strokeWeight: 1,
       scale: 1.2
     };
@@ -89,7 +103,7 @@ export const getPilotIcon = (
     path: path_arrow,
     fillColor: color,
     fillOpacity: 1,
-    anchor: createAnchor(google, 12, 12),
+    anchor: { x: 12, y: 12 },
     strokeWeight: 1,
     scale: 1.2,
     rotation: bearing

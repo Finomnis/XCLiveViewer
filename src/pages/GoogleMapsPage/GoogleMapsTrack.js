@@ -1,7 +1,8 @@
 import {
   getPilotIcon,
   getPilotIconColor,
-  getPilotTrackColor
+  getPilotTrackColor,
+  pilotIconChanged
 } from "../../common/PilotIcon";
 
 export default class GoogleMapsTrack {
@@ -9,10 +10,21 @@ export default class GoogleMapsTrack {
     this.google = google;
     this.pilotColor = getPilotIconColor(pilotInfo.info.user.username);
     this.trackColor = getPilotTrackColor(pilotInfo.info.user.username);
+
+    this.pilotIcon = getPilotIcon(
+      initialData.startOfTrack,
+      initialData.endOfTrack,
+      initialData.landed,
+      initialData.pos,
+      initialData.velocityVec,
+      this.pilotColor
+    );
+
     this.marker = new this.google.maps.Marker({
       map: map,
       position: initialData.pos,
-      title: pilotInfo.info.user.fullname
+      title: pilotInfo.info.user.fullname,
+      icon: this.pilotIcon
     });
     this.track = new this.google.maps.Polyline({
       map: map,
@@ -58,17 +70,19 @@ export default class GoogleMapsTrack {
 
   updateData = data => {
     this.marker.setPosition(data.pos);
-    this.marker.setIcon(
-      getPilotIcon(
-        this.google,
-        data.startOfTrack,
-        data.endOfTrack,
-        data.landed,
-        data.pos,
-        data.velocityVec,
-        this.pilotColor
-      )
+
+    let pilotIcon = this.marker.getIcon();
+    const newPilotIcon = getPilotIcon(
+      data.startOfTrack,
+      data.endOfTrack,
+      data.landed,
+      data.pos,
+      data.velocityVec,
+      this.pilotColor
     );
+    if (pilotIconChanged(pilotIcon, newPilotIcon))
+      this.marker.setIcon(newPilotIcon);
+
     if (data.track.length > 0) {
       this.newestTrackSegment.setPath([
         data.track[data.track.length - 1],

@@ -171,7 +171,6 @@ class AnimatedPilotListEntry extends React.PureComponent {
     );
 
     const pilotIcon = getPilotIcon(
-      null,
       this.pilotProps.startOfTrack,
       this.pilotProps.endOfTrack,
       this.pilotProps.landed,
