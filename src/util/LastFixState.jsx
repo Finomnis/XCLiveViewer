@@ -163,7 +163,7 @@ export class LastFixArrow extends Component {
 
   render() {
     return (
-      <span>
+      <React.Fragment>
         <span ref={this.distanceRef}>
           {LastFixArrow.getDistance(this.gpsData, this.props.lastFix)}
         </span>{" "}
@@ -179,7 +179,7 @@ export class LastFixArrow extends Component {
         >
           ↑
         </div>
-      </span>
+      </React.Fragment>
     );
   }
 }

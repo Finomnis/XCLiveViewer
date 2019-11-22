@@ -148,10 +148,8 @@ class AnimatedPilotListEntry extends React.PureComponent {
               </FirstRowRight>
             </div>
             <SecondRow variant="caption">
-              <span>
-                {AnimatedPilotListEntry.renderLastFixState(pilotInfo)}
-              </span>
-              <div>{AnimatedPilotListEntry.renderHeight(pilotInfo)}</div>
+              {AnimatedPilotListEntry.renderLastFixState(pilotInfo)}
+              <span>{AnimatedPilotListEntry.renderHeight(pilotInfo)}</span>
             </SecondRow>
           </div>
         </PilotExpansionPanelSummary>
