@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { getGPSProvider } from "../common/GPSProvider";
 import { getDistance, getRhumbLineBearing } from "geolib";
+import { getRotationStyle } from "./Rotation";
 
 function formatTimeDiff(millis) {
   let negative = "";
@@ -147,24 +148,7 @@ export class LastFixArrow extends Component {
       { lat: myPosition.coords.latitude, lng: myPosition.coords.longitude },
       pilotFix
     );
-    const transform = "rotate(" + bearing.toString() + "deg)";
-
-    const rotationStyle = {
-      transform: transform,
-
-      /* Safari */
-      WebkitTransform: transform,
-
-      /* Firefox */
-      MozTransform: transform,
-
-      /* IE */
-      msTransform: transform,
-
-      /* Opera */
-      OTransform: transform
-    };
-    return rotationStyle;
+    return getRotationStyle(bearing);
   }
 
   render() {

@@ -71,6 +71,7 @@ export default class GoogleMapsTrack {
   updateData = data => {
     this.marker.setPosition(data.pos);
 
+    // Update Pilot Icon if necessary
     let pilotIcon = this.marker.getIcon();
     const newPilotIcon = getPilotIcon(
       data.startOfTrack,

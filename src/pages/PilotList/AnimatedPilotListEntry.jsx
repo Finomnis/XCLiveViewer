@@ -11,6 +11,7 @@ import { getGPSProvider } from "../../common/GPSProvider";
 import { LastFixState, LastFixArrow } from "../../util/LastFixState";
 import { getPilotIcon, getPilotIconColor } from "../../common/PilotIcon";
 import { styled, withStyles } from "@material-ui/styles";
+import { getRotationStyle } from "../../util/Rotation";
 
 const FirstRowLeft = styled(Typography)({ overflow: "hidden", flex: "1" });
 
@@ -48,6 +49,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
     this.lastFixRef = React.createRef();
     this.heightRef = React.createRef();
     this.liveStateRef = React.createRef();
+    this.iconRef = React.createRef();
   }
 
   //////////////////////////////////////////////////////////////
@@ -102,16 +104,46 @@ class AnimatedPilotListEntry extends React.PureComponent {
   };
 
   shallowRerender = () => {
+    // Update height
     if (this.heightRef.current !== null) {
       const newHeight = AnimatedPilotListEntry.renderHeight(this.pilotProps);
       if (newHeight !== this.heightRef.current.innerHTML)
         this.heightRef.current.innerHTML = newHeight;
     }
+
+    // Update distance and direction
     if (this.lastFixRef.current !== null) {
       this.lastFixRef.current.setFix({
         lat: this.pilotProps.lat,
         lng: this.pilotProps.lng
       });
+    }
+
+    // Update Pilot Icon
+    if (this.iconRef.current !== null) {
+      let icon = this.iconRef.current;
+
+      const newPilotIcon = getPilotIcon(
+        this.pilotProps.startOfTrack,
+        this.pilotProps.endOfTrack,
+        this.pilotProps.landed,
+        { lat: this.pilotProps.lat, lng: this.pilotProps.lng },
+        { lat: this.pilotProps.velocityLat, lng: this.pilotProps.velocityLng }
+      );
+
+      // Update svg path if necessary
+      if (icon.childNodes.length > 0) {
+        const path = icon.childNodes[0];
+        const oldPath = path.getAttribute("d");
+        if (oldPath !== newPilotIcon.path) {
+          path.setAttribute("d", newPilotIcon.path);
+        }
+      }
+
+      // Update rotation if necessary
+      const rotation =
+        newPilotIcon.rotation === undefined ? 0 : newPilotIcon.rotation;
+      Object.assign(icon.style, getRotationStyle(rotation));
     }
   };
 
@@ -175,6 +207,8 @@ class AnimatedPilotListEntry extends React.PureComponent {
       { lat: this.pilotProps.lat, lng: this.pilotProps.lng },
       { lat: this.pilotProps.velocityLat, lng: this.pilotProps.velocityLng }
     );
+    const pilotIconRotation =
+      pilotIcon.rotation === undefined ? 0 : pilotIcon.rotation;
 
     return (
       <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
@@ -184,11 +218,21 @@ class AnimatedPilotListEntry extends React.PureComponent {
             height="30px"
             viewBox="0 0 24 24"
             display="block"
-            style={{ marginRight: "10px", flex: "0 0 auto" }}
+            style={{
+              flex: "0 0 auto",
+              ...getRotationStyle(pilotIconRotation)
+            }}
+            ref={this.iconRef}
           >
             <path d={pilotIcon.path} fill={this.pilotColor} stroke="black" />
           </svg>
-          <div style={{ flex: "1 1 auto", overflow: "hidden" }}>
+          <div
+            style={{
+              flex: "1 1 auto",
+              overflow: "hidden",
+              marginLeft: "10px"
+            }}
+          >
             <div
               style={{
                 width: "100%",
