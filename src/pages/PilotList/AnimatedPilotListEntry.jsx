@@ -96,23 +96,26 @@ class AnimatedPilotListEntry extends React.PureComponent {
     const pilotInfo = pilotData[this.props.pilotId];
     const newPilotProps = this.extractImportantProps(pilotInfo);
 
-    if (!this.propsChanged(newPilotProps)) return;
-
     // Run shallow update without touching React
-    this.pilotProps = newPilotProps;
-    this.shallowRerender();
+    if (this.propsChanged(newPilotProps)) {
+      this.pilotProps = newPilotProps;
+      this.shallowRerender(true);
+    } else {
+      // If props didn't change, rerender anyways to update time stamps and time-dependent data
+      this.shallowRerender(false);
+    }
   };
 
-  shallowRerender = () => {
+  shallowRerender = propsChanged => {
     // Update height
-    if (this.heightRef.current !== null) {
+    if (this.heightRef.current !== null && propsChanged) {
       const newHeight = AnimatedPilotListEntry.renderHeight(this.pilotProps);
       if (newHeight !== this.heightRef.current.innerHTML)
         this.heightRef.current.innerHTML = newHeight;
     }
 
     // Update distance and direction
-    if (this.lastFixRef.current !== null) {
+    if (this.lastFixRef.current !== null && propsChanged) {
       this.lastFixRef.current.setFix({
         lat: this.pilotProps.lat,
         lng: this.pilotProps.lng
@@ -120,7 +123,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
     }
 
     // Update Pilot Icon
-    if (this.iconRef.current !== null) {
+    if (this.iconRef.current !== null && propsChanged) {
       let icon = this.iconRef.current;
 
       const newPilotIcon = getPilotIcon(
@@ -145,6 +148,9 @@ class AnimatedPilotListEntry extends React.PureComponent {
         newPilotIcon.rotation === undefined ? 0 : newPilotIcon.rotation;
       Object.assign(icon.style, getRotationStyle(rotation));
     }
+
+    // TODO update Live State
+    //console.log(this.liveStateRef);
   };
 
   componentDidMount() {
@@ -172,16 +178,6 @@ class AnimatedPilotListEntry extends React.PureComponent {
       Math.round(Math.max(0, height - pilotProps.elevation)) +
       "m)"
     );
-  }
-
-  static renderLiveState(pilotProps) {
-    // TODO fix somehow to make it animatable
-    return LastFixState({
-      timestamp: pilotProps.newestDataTimestamp * 1000,
-      landed: pilotProps.landed,
-      relative: true,
-      showLastFix: false
-    });
   }
 
   render() {
@@ -254,9 +250,12 @@ class AnimatedPilotListEntry extends React.PureComponent {
               </FirstRowRight>
             </div>
             <SecondRow variant="caption">
-              <span ref={this.liveStateRef}>
-                {AnimatedPilotListEntry.renderLiveState(this.pilotProps)}
-              </span>
+              <LastFixState
+                timestamp={this.pilotProps.newestDataTimestamp * 1000}
+                landed={this.pilotProps.landed}
+                relative
+                ref={this.liveStateRef}
+              />
               <span ref={this.heightRef}>
                 {AnimatedPilotListEntry.renderHeight(this.pilotProps)}
               </span>

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { getGPSProvider } from "../common/GPSProvider";
 import { getDistance, getRhumbLineBearing } from "geolib";
 import { getRotationStyle } from "./Rotation";
@@ -45,48 +45,56 @@ function timestampToTimeString(timestamp) {
   return time.toLocaleTimeString();
 }
 
-export const LastFixState = props => {
-  const { timestamp, landed, relative, showLastFix } = props;
-
-  if (timestamp == null) {
-    return <span>never</span>;
-  }
-  let time_diff = new Date(timestamp).getTime() - Date.now();
-
-  let timeStr = "";
-  if (relative) timeStr = formatTimeDiff(time_diff);
-  else timeStr = timestampToTimeString(timestamp);
-
-  if (landed) {
-    return <span style={{ color: "#346B8F" }}>&#10004; {timeStr}</span>;
+export class LastFixState extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = { ...props };
   }
 
-  if (-time_diff < 120000) {
+  render(props) {
+    const { timestamp, landed, relative, showLastFix } = this.state;
+
+    if (timestamp == null) {
+      return <span>never</span>;
+    }
+    let time_diff = new Date(timestamp).getTime() - Date.now();
+
+    let timeStr = "";
+    if (relative) timeStr = formatTimeDiff(time_diff);
+    else timeStr = timestampToTimeString(timestamp);
+
+    if (landed) {
+      return <span style={{ color: "#346B8F" }}>&#10004; {timeStr}</span>;
+    }
+
+    if (-time_diff < 120000) {
+      if (relative)
+        return (
+          <span style={{ color: "green" }}>
+            <span role="img" aria-hidden>
+              &#9899;
+            </span>{" "}
+            {showLastFix ? timeStr : "LIVE"}
+          </span>
+        );
+      else
+        return (
+          <span style={{ color: "green" }}>
+            <span role="img" aria-hidden>
+              &#9899;
+            </span>{" "}
+            {timeStr}
+          </span>
+        );
+    }
+
     if (relative)
-      return (
-        <span style={{ color: "green" }}>
-          <span role="img" aria-hidden>
-            &#9899;
-          </span>{" "}
-          {showLastFix ? timeStr : "LIVE"}
-        </span>
-      );
-    else
-      return (
-        <span style={{ color: "green" }}>
-          <span role="img" aria-hidden>
-            &#9899;
-          </span>{" "}
-          {timeStr}
-        </span>
-      );
+      return <span style={{ color: "red" }}>! LIVE ({timeStr})</span>;
+    else return <span style={{ color: "red" }}>! {timeStr}</span>;
   }
+}
 
-  if (relative) return <span style={{ color: "red" }}>! LIVE ({timeStr})</span>;
-  else return <span style={{ color: "red" }}>! {timeStr}</span>;
-};
-
-export class LastFixArrow extends Component {
+export class LastFixArrow extends React.PureComponent {
   constructor(props) {
     super(props);
     this.gpsData = getGPSProvider().getData();
