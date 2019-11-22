@@ -59,16 +59,16 @@ class PilotSelectorListRow extends React.PureComponent {
           </Typography>
         </Box>
         <div style={{ width: "25%", textAlign: "right" }}>
-          <Box>
+          <div>
             <Typography variant="caption">
               <LastFixState timestamp={timestamp} landed={landed} relative />
             </Typography>
-          </Box>
-          <Box>
+          </div>
+          <div>
             <Typography variant="caption">
               <LastFixArrow lastFix={lastFix} />
             </Typography>
-          </Box>
+          </div>
         </div>
         <div style={{ width: "27%", textAlign: "right" }}>
           <Box paddingRight={1} paddingLeft={1}>
