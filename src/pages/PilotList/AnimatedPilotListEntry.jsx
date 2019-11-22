@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Box,
   ExpansionPanel,
   ExpansionPanelSummary,
   Typography,
@@ -11,19 +10,31 @@ import { getXContestInterface } from "../../location_provider/XContest/XContestI
 import { getGPSProvider } from "../../common/GPSProvider";
 import { LastFixState, LastFixArrow } from "../../util/LastFixState";
 import { getPilotIcon, getPilotIconColor } from "../../common/PilotIcon";
-import { styled } from "@material-ui/styles";
+import { styled, withStyles } from "@material-ui/styles";
 
-const PilotLeftIcon = styled(Box)({ marginLeft: "-12px", marginRight: "10px" });
-const PilotEntryBox = styled(Box)({
-  display: "flex",
-  alignItems: "center",
-  width: "100%"
+const FirstRowLeft = styled(Typography)({ overflow: "hidden", flex: "1" });
+
+const FirstRowRight = styled(Typography)({
+  marginRight: ".2em",
+  marginLeft: ".5em"
 });
+
 const SecondRow = styled(Typography)({
   display: "flex",
   justifyContent: "space-between",
   paddingLeft: ".5em"
 });
+
+const PilotExpansionPanelSummary = withStyles({
+  root: {
+    paddingLeft: "12px"
+  },
+  content: {
+    overflow: "hidden",
+    alignItems: "center",
+    whiteSpace: "nowrap"
+  }
+})(ExpansionPanelSummary);
 
 class AnimatedPilotListEntry extends React.PureComponent {
   constructor(props) {
@@ -106,38 +117,39 @@ class AnimatedPilotListEntry extends React.PureComponent {
 
     return (
       <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          <PilotEntryBox>
-            <PilotLeftIcon clone>
-              <svg
-                width="30px"
-                height="30px"
-                viewBox="0 0 24 24"
-                display="block"
-              >
-                <path
-                  d={pilotIcon.path}
-                  fill={this.pilotColor}
-                  stroke="black"
-                />
-              </svg>
-            </PilotLeftIcon>
-            <div style={{ width: "100%" }}>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="body2">{this.props.pilotName}</Typography>
-                <Typography variant="caption" style={{ marginRight: ".2em" }}>
-                  <LastFixArrow lastFix={pilotInfo.pos} />
-                </Typography>
-              </div>
-              <SecondRow variant="caption">
-                <span>
-                  {AnimatedPilotListEntry.renderLastFixState(pilotInfo)}
-                </span>
-                <div>{AnimatedPilotListEntry.renderHeight(pilotInfo)}</div>
-              </SecondRow>
+        <PilotExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+          <svg
+            width="30px"
+            height="30px"
+            viewBox="0 0 24 24"
+            display="block"
+            style={{ marginRight: "10px", flex: "0 0 auto" }}
+          >
+            <path d={pilotIcon.path} fill={this.pilotColor} stroke="black" />
+          </svg>
+          <div style={{ flex: "1 1 auto", overflow: "hidden" }}>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                overflow: "hidden"
+              }}
+            >
+              <FirstRowLeft variant="body2">
+                {this.props.pilotName}
+              </FirstRowLeft>
+              <FirstRowRight variant="caption">
+                <LastFixArrow lastFix={pilotInfo.pos} />
+              </FirstRowRight>
             </div>
-          </PilotEntryBox>
-        </ExpansionPanelSummary>
+            <SecondRow variant="caption">
+              <span>
+                {AnimatedPilotListEntry.renderLastFixState(pilotInfo)}
+              </span>
+              <div>{AnimatedPilotListEntry.renderHeight(pilotInfo)}</div>
+            </SecondRow>
+          </div>
+        </PilotExpansionPanelSummary>
         <ExpansionPanelDetails>
           <Typography>TODO: Details</Typography>
         </ExpansionPanelDetails>
