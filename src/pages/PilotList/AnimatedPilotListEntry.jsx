@@ -81,7 +81,12 @@ class AnimatedPilotListEntry extends React.PureComponent {
     const height =
       pilotInfo.gpsAlt !== null ? pilotInfo.gpsAlt : pilotInfo.baroAlt;
 
-    return height + "m (" + Math.max(0, height - pilotInfo.elevation) + "m)";
+    return (
+      Math.round(height) +
+      "m (" +
+      Math.round(Math.max(0, height - pilotInfo.elevation)) +
+      "m)"
+    );
   }
 
   static renderLastFixState(pilotInfo) {
