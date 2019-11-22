@@ -3,6 +3,7 @@ import { Box, Typography } from "@material-ui/core";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import AnimatedPilotListEntry from "./AnimatedPilotListEntry";
 import { getGPSProvider } from "../../common/GPSProvider";
+import { getDistance } from "geolib";
 
 class AnimatedPilotList extends React.PureComponent {
   constructor(props) {
@@ -16,11 +17,45 @@ class AnimatedPilotList extends React.PureComponent {
     this.onAnimationFrame(getXContestInterface().animation.getData());
   }
 
+  getSortedPilotList = pilotData => {
+    // If we have GPS, return pilot list in whatever order
+    if (this.gpsData === null) return Object.keys(pilotData);
+
+    // Get own position
+    const myPos = {
+      lat: this.gpsData.coords.latitude,
+      lng: this.gpsData.coords.longitude
+    };
+
+    // Get distances to pilots
+    let pilotsAndDistances = Object.entries(pilotData).map(([name, data]) => [
+      name,
+      getDistance(myPos, data.pos)
+    ]);
+
+    // Sort
+    pilotsAndDistances.sort((el1, el2) => el1[1] - el2[1]);
+
+    // Return the sorted pilot names
+    return pilotsAndDistances.map(el => el[0]);
+  };
+
   onAnimationFrame = pilotData => {
-    let pilotList = Object.keys(pilotData);
+    // Sort
+    const sortedPilotList = this.getSortedPilotList(pilotData);
 
-    // TODO sort
+    // Split pilots by landed and not landed
+    const landedPilotList = sortedPilotList.filter(
+      name => pilotData[name].landed
+    );
+    const notLandedPilotList = sortedPilotList.filter(
+      name => !pilotData[name].landed
+    );
 
+    // Show landed pilots at the end of the list
+    const pilotList = notLandedPilotList.concat(landedPilotList);
+
+    // Check if the pilot list changed
     let pilotListChanged = false;
     if (pilotList.length === this.state.onlinePilots.length) {
       for (let i = 0; i < pilotList.length; i++) {
@@ -33,6 +68,7 @@ class AnimatedPilotList extends React.PureComponent {
       pilotListChanged = true;
     }
 
+    // If it changed, run a component update
     if (pilotListChanged) {
       this.setState(state => ({ ...state, onlinePilots: pilotList }));
     }

@@ -96,10 +96,8 @@ class AnimatedPilotListEntry extends React.PureComponent {
 
     if (!this.propsChanged(newPilotProps)) return;
 
+    // Run shallow update without touching React
     this.pilotProps = newPilotProps;
-    // TODO update data in a more efficient way, by modifying object dom directly
-
-    //this.forceUpdate();
     this.shallowRerender();
   };
 
