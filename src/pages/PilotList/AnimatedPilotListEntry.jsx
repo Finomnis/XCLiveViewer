@@ -43,11 +43,47 @@ class AnimatedPilotListEntry extends React.PureComponent {
     // Get initial data
     this.gpsData = getGPSProvider().getData();
     this.pilotColor = getPilotIconColor(this.props.pilotId);
+
+    // References
+    this.lastFixRef = React.createRef();
+    this.heightRef = React.createRef();
+    this.liveStateRef = React.createRef();
   }
 
   //////////////////////////////////////////////////////////////
   /// BOILERPLATE CODE FOR UPDATING THE COMPONENT
   ///
+  extractImportantProps = pilotInfo => {
+    return {
+      height: pilotInfo.gpsAlt !== null ? pilotInfo.gpsAlt : pilotInfo.baroAlt,
+      elevation: pilotInfo.elevation,
+      vario: pilotInfo.baroVario,
+      startOfTrack: pilotInfo.startOfTrack,
+      endOfTrack: pilotInfo.endOfTrack,
+      landed: pilotInfo.landed,
+      newestDataTimestamp: pilotInfo.newestDataTimestamp,
+      lat: pilotInfo.pos.lat,
+      lng: pilotInfo.pos.lng,
+      velocityLat:
+        pilotInfo.velocityVec === null ? null : pilotInfo.velocityVec.lat,
+      velocityLng:
+        pilotInfo.velocityVec === null ? null : pilotInfo.velocityVec.lng,
+      velocity: pilotInfo.velocity
+    };
+  };
+
+  propsChanged = newProps => {
+    const oldProps = this.pilotProps;
+    for (let p in oldProps) {
+      if (!(p in newProps)) return true;
+    }
+    for (let p in newProps) {
+      if (!(p in oldProps)) return true;
+      if (oldProps[p] !== newProps[p]) return true;
+    }
+    return false;
+  };
+
   onNewGPSDataReceived = gpsData => {
     this.gpsData = gpsData;
   };
@@ -55,10 +91,30 @@ class AnimatedPilotListEntry extends React.PureComponent {
   onNewDataReceived = pilotData => {
     if (!(this.props.pilotId in pilotData)) return;
 
-    //const pilotInfo = pilotData[this.props.pilotId];
+    const pilotInfo = pilotData[this.props.pilotId];
+    const newPilotProps = this.extractImportantProps(pilotInfo);
 
+    if (!this.propsChanged(newPilotProps)) return;
+
+    this.pilotProps = newPilotProps;
     // TODO update data in a more efficient way, by modifying object dom directly
+
     //this.forceUpdate();
+    this.shallowRerender();
+  };
+
+  shallowRerender = () => {
+    if (this.heightRef.current !== null) {
+      const newHeight = AnimatedPilotListEntry.renderHeight(this.pilotProps);
+      if (newHeight !== this.heightRef.current.innerHTML)
+        this.heightRef.current.innerHTML = newHeight;
+    }
+    if (this.lastFixRef.current !== null) {
+      this.lastFixRef.current.setFix({
+        lat: this.pilotProps.lat,
+        lng: this.pilotProps.lng
+      });
+    }
   };
 
   componentDidMount() {
@@ -77,47 +133,50 @@ class AnimatedPilotListEntry extends React.PureComponent {
   /// LAYOUT
   ///
 
-  static renderHeight(pilotInfo) {
-    const height =
-      pilotInfo.gpsAlt !== null ? pilotInfo.gpsAlt : pilotInfo.baroAlt;
+  static renderHeight(pilotProps) {
+    const height = pilotProps.height;
 
     return (
       Math.round(height) +
       "m (" +
-      Math.round(Math.max(0, height - pilotInfo.elevation)) +
+      Math.round(Math.max(0, height - pilotProps.elevation)) +
       "m)"
     );
   }
 
-  static renderLastFixState(pilotInfo) {
+  static renderLiveState(pilotProps) {
+    // TODO fix somehow to make it animatable
     return LastFixState({
-      timestamp: pilotInfo.newestDataTimestamp * 1000,
-      landed: pilotInfo.landed,
+      timestamp: pilotProps.newestDataTimestamp * 1000,
+      landed: pilotProps.landed,
       relative: true,
       showLastFix: false
     });
   }
 
   render() {
-    const pilotData = getXContestInterface().animation.getData();
-    const pilotInfo =
-      this.props.pilotId in pilotData ? pilotData[this.props.pilotId] : null;
+    {
+      const pilotData = getXContestInterface().animation.getData();
+      const pilotInfo =
+        this.props.pilotId in pilotData ? pilotData[this.props.pilotId] : null;
+      this.pilotProps = this.extractImportantProps(pilotInfo);
+    }
 
     console.log(
       "RENDER ",
       this.props.pilotId,
       this.state,
       this.props,
-      pilotInfo
+      this.pilotProps
     );
 
     const pilotIcon = getPilotIcon(
       null,
-      pilotInfo.startOfTrack,
-      pilotInfo.endOfTrack,
-      pilotInfo.landed,
-      pilotInfo.pos,
-      pilotInfo.velocityVec
+      this.pilotProps.startOfTrack,
+      this.pilotProps.endOfTrack,
+      this.pilotProps.landed,
+      { lat: this.pilotProps.lat, lng: this.pilotProps.lng },
+      { lat: this.pilotProps.velocityLat, lng: this.pilotProps.velocityLng }
     );
 
     return (
@@ -144,12 +203,22 @@ class AnimatedPilotListEntry extends React.PureComponent {
                 {this.props.pilotName}
               </FirstRowLeft>
               <FirstRowRight variant="caption">
-                <LastFixArrow lastFix={pilotInfo.pos} />
+                <LastFixArrow
+                  ref={this.lastFixRef}
+                  lastFix={{
+                    lat: this.pilotProps.lat,
+                    lng: this.pilotProps.lng
+                  }}
+                />
               </FirstRowRight>
             </div>
             <SecondRow variant="caption">
-              {AnimatedPilotListEntry.renderLastFixState(pilotInfo)}
-              <span>{AnimatedPilotListEntry.renderHeight(pilotInfo)}</span>
+              <span ref={this.liveStateRef}>
+                {AnimatedPilotListEntry.renderLiveState(this.pilotProps)}
+              </span>
+              <span ref={this.heightRef}>
+                {AnimatedPilotListEntry.renderHeight(this.pilotProps)}
+              </span>
             </SecondRow>
           </div>
         </PilotExpansionPanelSummary>

@@ -89,16 +89,16 @@ export class LastFixArrow extends Component {
   constructor(props) {
     super(props);
     this.gpsData = getGPSProvider().getData();
-    this.state = {};
 
     this.distanceRef = React.createRef();
     this.arrowRef = React.createRef();
+    this.lastFix = this.props.lastFix;
   }
 
   onNewGPSDataReceived = gpsData => {
     this.gpsData = gpsData;
 
-    // Otherwise, directly update through the refs
+    // Directly update through the refs
     this.updateThroughRef();
   };
 
@@ -109,19 +109,25 @@ export class LastFixArrow extends Component {
     getGPSProvider().unregisterCallback(this.onNewGPSDataReceived);
   }
 
+  setFix = newFix => {
+    this.lastFix = newFix;
+
+    // Directly update through the refs
+    this.updateThroughRef();
+  };
+
   updateThroughRef = () => {
     if (this.arrowRef.current) {
       const arrowStyle = LastFixArrow.getArrowRotationStyle(
         this.gpsData,
-        this.props.lastFix
+        this.lastFix
       );
       Object.assign(this.arrowRef.current.style, arrowStyle);
     }
     if (this.distanceRef.current) {
-      this.distanceRef.current.innerHTML = LastFixArrow.getDistance(
-        this.gpsData,
-        this.props.lastFix
-      );
+      const newDistance = LastFixArrow.getDistance(this.gpsData, this.lastFix);
+      if (newDistance !== this.distanceRef.current.innerHTML)
+        this.distanceRef.current.innerHTML = newDistance;
     }
   };
 
@@ -162,19 +168,17 @@ export class LastFixArrow extends Component {
   }
 
   render() {
+    this.lastFix = this.props.lastFix;
     return (
       <React.Fragment>
         <span ref={this.distanceRef}>
-          {LastFixArrow.getDistance(this.gpsData, this.props.lastFix)}
+          {LastFixArrow.getDistance(this.gpsData, this.lastFix)}
         </span>{" "}
         <div
           ref={this.arrowRef}
           style={{
             display: "inline-block",
-            ...LastFixArrow.getArrowRotationStyle(
-              this.gpsData,
-              this.props.lastFix
-            )
+            ...LastFixArrow.getArrowRotationStyle(this.gpsData, this.lastFix)
           }}
         >
           ↑
