@@ -12,7 +12,7 @@ function formatTimeDiff(millis) {
   }
 
   let secs = Math.floor(millis / 1000);
-  if (secs < 60) {
+  if (secs < 90) {
     return negative + secs + " sec";
   }
 
@@ -155,7 +155,7 @@ export class LastFixArrow extends React.PureComponent {
   }
 
   static getArrowRotationStyle(myPosition, pilotFix) {
-    if (myPosition === null || pilotFix === null) return {};
+    if (myPosition === null || pilotFix === null) return getRotationStyle(0);
     const bearing = getRhumbLineBearing(
       { lat: myPosition.coords.latitude, lng: myPosition.coords.longitude },
       pilotFix
