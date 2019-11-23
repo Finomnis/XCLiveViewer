@@ -35,7 +35,16 @@
 
 - Implement Navigation (for drivers)
 
-- Combine screens 1+2 for desktops
+
+
+
+
+
+
+
+
+
+
 
 DONE:
 - Implement title bar
@@ -87,3 +96,5 @@ Old Notes:
 
 - Write position callback provider
 - Add button that enables/disables GPS (own position)
+
+- Combine screens 1+2 for desktops
