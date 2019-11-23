@@ -65,7 +65,7 @@ export class LastFixState extends React.PureComponent {
       return ["#346B8F", "\u2714 " + timeStr];
     }
 
-    if (-time_diff < 120000 || endOfTrack) {
+    if (-time_diff < 120000 && !endOfTrack) {
       if (relative)
         if (showLastFix) return ["green", "\u26ab LIVE (" + timeStr + ")"];
         else return ["green", "\u26ab LIVE"];
