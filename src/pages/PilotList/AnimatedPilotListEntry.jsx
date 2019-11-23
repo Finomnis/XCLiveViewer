@@ -149,8 +149,15 @@ class AnimatedPilotListEntry extends React.PureComponent {
       Object.assign(icon.style, getRotationStyle(rotation));
     }
 
-    // TODO update Live State
-    //console.log(this.liveStateRef);
+    // Update Live State
+    if (this.liveStateRef.current !== null) {
+      this.liveStateRef.current.shallowRerender({
+        timestamp: this.pilotProps.newestDataTimestamp * 1000,
+        landed: this.pilotProps.landed,
+        endOfTrack: this.pilotProps.endOfTrack,
+        relative: true
+      });
+    }
   };
 
   componentDidMount() {
@@ -253,6 +260,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
               <LastFixState
                 timestamp={this.pilotProps.newestDataTimestamp * 1000}
                 landed={this.pilotProps.landed}
+                endOfTrack={this.pilotProps.endOfTrack}
                 relative
                 ref={this.liveStateRef}
               />

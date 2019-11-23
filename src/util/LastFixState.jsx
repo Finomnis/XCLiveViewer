@@ -48,14 +48,12 @@ function timestampToTimeString(timestamp) {
 export class LastFixState extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { ...props };
+    this.msgRef = React.createRef();
   }
 
-  render(props) {
-    const { timestamp, landed, relative, showLastFix } = this.state;
-
+  getMessage = ({ timestamp, endOfTrack, landed, relative, showLastFix }) => {
     if (timestamp == null) {
-      return <span>never</span>;
+      return ["", "never"];
     }
     let time_diff = new Date(timestamp).getTime() - Date.now();
 
@@ -64,33 +62,39 @@ export class LastFixState extends React.PureComponent {
     else timeStr = timestampToTimeString(timestamp);
 
     if (landed) {
-      return <span style={{ color: "#346B8F" }}>&#10004; {timeStr}</span>;
+      return ["#346B8F", "\u2714 " + timeStr];
     }
 
-    if (-time_diff < 120000) {
+    if (-time_diff < 120000 || endOfTrack) {
       if (relative)
-        return (
-          <span style={{ color: "green" }}>
-            <span role="img" aria-hidden>
-              &#9899;
-            </span>{" "}
-            {showLastFix ? timeStr : "LIVE"}
-          </span>
-        );
-      else
-        return (
-          <span style={{ color: "green" }}>
-            <span role="img" aria-hidden>
-              &#9899;
-            </span>{" "}
-            {timeStr}
-          </span>
-        );
+        if (showLastFix) return ["green", "\u26ab LIVE (" + timeStr + ")"];
+        else return ["green", "\u26ab LIVE"];
+      else return ["green", "\u26ab " + timeStr];
     }
 
-    if (relative)
-      return <span style={{ color: "red" }}>! LIVE ({timeStr})</span>;
-    else return <span style={{ color: "red" }}>! {timeStr}</span>;
+    if (relative) return ["red", "! LIVE (" + timeStr + ")"];
+    else return ["red", "! " + timeStr];
+  };
+
+  shallowRerender = props => {
+    if (this.msgRef.current !== null) {
+      const msgSpan = this.msgRef.current;
+      const [color, message] = this.getMessage(props);
+      Object.assign(msgSpan.style, { color: color });
+
+      if (msgSpan.innerHTML !== message) {
+        msgSpan.innerHTML = message;
+      }
+    }
+  };
+
+  render() {
+    const [color, message] = this.getMessage(this.props);
+    return (
+      <span style={{ color: color }} ref={this.msgRef}>
+        {message}
+      </span>
+    );
   }
 }
 
