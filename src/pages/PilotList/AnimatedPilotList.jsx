@@ -110,7 +110,7 @@ class AnimatedPilotList extends React.PureComponent {
     };
 
     return (
-      <Box height="100%" bgcolor="#ddd" overflow="auto">
+      <Box height="100%" bgcolor="#eeeef5" overflow="auto">
         <Box margin={1}>
           {onlinePilots.map(pilotId => (
             <AnimatedPilotListEntry
