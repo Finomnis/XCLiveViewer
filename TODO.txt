@@ -2,6 +2,8 @@
     - Do the splitting inside XContestAnimation
     - Provide user with {id: chunk} pairs, where id is a unique identifier for the chunk, monotously increasing
 
+- Long click on pilot to delete
+
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
     - Implement HUD in Map
 
