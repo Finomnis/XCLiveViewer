@@ -33,6 +33,7 @@
 
 - Implement Navigation (for drivers)
 
+- Combine screens 1+2 for desktops
 
 DONE:
 - Implement title bar
