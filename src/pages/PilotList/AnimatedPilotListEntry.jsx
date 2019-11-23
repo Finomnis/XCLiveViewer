@@ -12,6 +12,7 @@ import { LastFixState, LastFixArrow } from "../../util/LastFixState";
 import { getPilotIcon, getPilotIconColor } from "../../common/PilotIcon";
 import { styled, withStyles } from "@material-ui/styles";
 import { getRotationStyle } from "../../util/Rotation";
+import { getSetting, Settings } from "../../common/PersistentState/Settings";
 
 const FirstRowLeft = styled(Typography)({ overflow: "hidden", flex: "1" });
 
@@ -155,7 +156,8 @@ class AnimatedPilotListEntry extends React.PureComponent {
         timestamp: this.pilotProps.newestDataTimestamp * 1000,
         landed: this.pilotProps.landed,
         endOfTrack: this.pilotProps.endOfTrack,
-        relative: true
+        relative: true,
+        showLastFix: getSetting(Settings.LOW_LATENCY).getValue()
       });
     }
   };
@@ -263,6 +265,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
                 endOfTrack={this.pilotProps.endOfTrack}
                 relative
                 ref={this.liveStateRef}
+                showLastFix={getSetting(Settings.LOW_LATENCY).getValue()}
               />
               <span ref={this.heightRef}>
                 {AnimatedPilotListEntry.renderHeight(this.pilotProps)}
