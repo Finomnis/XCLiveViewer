@@ -2,31 +2,32 @@
     - Do the splitting inside XContestAnimation
     - Provide user with {id: chunk} pairs, where id is a unique identifier for the chunk, monotously increasing
 
-- Write position callback provider
-
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
     - Implement HUD in Map
 
+- Add own position (GPS) button to map
+
 - Add button that enables automatic map scale and position
     - should include all selected pilots + some space
-- Add button that enables/disables GPS (own position)
+
 - Add optional nosleep.js (and add setting)
 
 - Implement Pilots List
-    - Sort: online/offline, distance
-    - Multiline or extendable, run some tests
+    + Sort: online/offline, distance
+    + Multiline or extendable, run some tests
     - UI elements:
-        - icon
-        - name
-        - status
-        - altitude/altitude gnd/vario
-        - distance, direction
+        + icon
+        + name
+        + status
+        + altitude/altitude gnd
+        + distance, direction
+        - vario
+        - (velocity)
         - airtime
         - xc kilometer
         - (takeoff, country flag)
         - altitude histogram
-        - (velocity)
-    - Make animated
+    + Make animated
 
 - Make ?add=xxx url that automatically adds given pilots (without removing existing ones. Replacing can be done by first deleting your own ones and then calling the url)
 
@@ -80,3 +81,6 @@ Old Notes:
 - Add distance+direction to pilot selection
 - The tracks on the map should have a different color for every pilot
 - Sort suggested pilots by distance to self
+
+- Write position callback provider
+- Add button that enables/disables GPS (own position)
