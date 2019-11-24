@@ -29,7 +29,9 @@ function useGoogleMapsApi() {
         });
       }
 
+      let promiseParameters = { gotCanceled: false };
       googleMapsApiPromise.then(success => {
+        if (promiseParameters.gotCanceled) return;
         if (success) {
           console.log("Google Maps API loaded.");
           setState({
@@ -44,6 +46,10 @@ function useGoogleMapsApi() {
           });
         }
       });
+
+      return () => {
+        promiseParameters.gotCanceled = true;
+      };
     },
     [] // Don't re-run
   );
