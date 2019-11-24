@@ -436,6 +436,7 @@ class FlightAnimation {
       startOfTrack: startOfTrack,
       endOfTrack: endOfTrack,
       landed: this.landed,
+      name: this.flightInfos.info.user.fullname,
       newestDataTimestamp: newestDataTimestamp,
       track: track,
       velocityVec: velocityVec
