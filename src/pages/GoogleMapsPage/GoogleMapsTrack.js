@@ -6,8 +6,9 @@ import {
 } from "../../common/PilotIcon";
 
 export default class GoogleMapsTrack {
-  constructor(google, map, pilotInfo, initialData) {
+  constructor(google, map, pilotInfo, initialData, pilotInfoWindow) {
     this.google = google;
+    this.pilotInfoWindow = pilotInfoWindow;
     this.pilotColor = getPilotIconColor(pilotInfo.info.user.username);
     this.trackColor = getPilotTrackColor(pilotInfo.info.user.username);
 
@@ -26,6 +27,15 @@ export default class GoogleMapsTrack {
       title: pilotInfo.info.user.fullname,
       icon: this.pilotIcon
     });
+
+    this.marker.addListener("click", () => {
+      this.pilotInfoWindow.open(
+        this.map,
+        this.marker,
+        pilotInfo.info.user.username
+      );
+    });
+
     this.track = new this.google.maps.Polyline({
       map: map,
       path: [],

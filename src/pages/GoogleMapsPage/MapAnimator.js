@@ -1,11 +1,13 @@
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import GoogleMapsTrack from "./GoogleMapsTrack";
+import MapPilotInfoWindow from "./MapPilotInfoWindow";
 
 export default class MapAnimator {
   constructor(map, google) {
     this.map = map;
     this.google = google;
     this.tracks = {};
+    this.infoWindow = new MapPilotInfoWindow(google);
   }
 
   cleanupOldTracks = data => {
@@ -38,7 +40,8 @@ export default class MapAnimator {
           this.google,
           this.map,
           info,
-          pilotData
+          pilotData,
+          this.infoWindow
         );
       }
 
@@ -46,5 +49,7 @@ export default class MapAnimator {
       const track = this.tracks[pilot];
       track.updateData(pilotData);
     });
+
+    this.infoWindow.update(data);
   };
 }
