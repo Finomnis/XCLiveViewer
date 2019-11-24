@@ -1,6 +1,5 @@
-- Split google maps in 30 second chunks.
-    - Do the splitting inside XContestAnimation
-    - Provide user with {id: chunk} pairs, where id is a unique identifier for the chunk, monotously increasing
+- Fix InfoBox wiggling around, make distance to anchor fixed
+- Fix bug where LastFixState changes to 'landed' too early
 
 - Long click on pilot to delete
 
@@ -32,6 +31,10 @@
     + Make animated
 
 - Make ?add=xxx url that automatically adds given pilots (without removing existing ones. Replacing can be done by first deleting your own ones and then calling the url)
+
+- Split google maps in 30 second chunks.
+    - Do the splitting inside XContestAnimation
+    - Provide user with {id: chunk} pairs, where id is a unique identifier for the chunk, monotously increasing
 
 - Implement Navigation (for drivers)
 
