@@ -56,7 +56,7 @@ export default class MapPilotInfoWindow {
       newContent += "<span>" + varioStr + "</span>&nbsp;&nbsp;";
     }
 
-    if (pilotInfo.velocity !== null) {
+    if (pilotInfo.velocity !== null && !pilotInfo.landed) {
       newContent += Math.round(pilotInfo.velocity * 3.6) + "km/h";
     }
 
