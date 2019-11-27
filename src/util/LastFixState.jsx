@@ -61,7 +61,7 @@ export class LastFixState extends React.PureComponent {
     if (relative) timeStr = formatTimeDiff(time_diff);
     else timeStr = timestampToTimeString(timestamp);
 
-    if (landed) {
+    if (endOfTrack && landed) {
       return ["#346B8F", "\u2714 " + timeStr];
     }
 

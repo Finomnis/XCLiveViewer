@@ -1,5 +1,4 @@
 - Fix InfoBox wiggling around, make distance to anchor fixed
-- Fix bug where LastFixState changes to 'landed' too early
 
 - Long click on pilot to delete
 
@@ -101,3 +100,4 @@ Old Notes:
 - Add button that enables/disables GPS (own position)
 
 - Combine screens 1+2 for desktops
+- Fix bug where LastFixState changes to 'landed' too early

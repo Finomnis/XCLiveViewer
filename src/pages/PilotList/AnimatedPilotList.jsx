@@ -46,10 +46,10 @@ class AnimatedPilotList extends React.PureComponent {
 
     // Split pilots by landed and not landed
     const landedPilotList = sortedPilotList.filter(
-      name => pilotData[name].landed
+      name => pilotData[name].endOfTrack && pilotData[name].landed
     );
     const notLandedPilotList = sortedPilotList.filter(
-      name => !pilotData[name].landed
+      name => !(pilotData[name].endOfTrack && pilotData[name].landed)
     );
 
     // Show landed pilots at the end of the list
