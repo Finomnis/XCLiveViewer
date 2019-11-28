@@ -12,9 +12,6 @@ class AnimatedPilotList extends React.PureComponent {
       onlinePilots: []
     };
     this.gpsData = getGPSProvider().getData();
-
-    // initial call to update the animation data
-    this.onAnimationFrame(getXContestInterface().animation.getData());
   }
 
   getSortedPilotList = pilotData => {
