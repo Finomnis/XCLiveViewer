@@ -29,6 +29,7 @@ export default class MapPilotInfoWindow {
     if (!(this.currentPilot in this.data)) {
       this.currentPilot = null;
       this.infoWindow.close();
+      return;
     }
 
     const pilotInfo = this.data[this.currentPilot];
