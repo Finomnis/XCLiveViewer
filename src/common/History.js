@@ -1,14 +1,18 @@
 const ourHistory = [];
 
-window.addEventListener("popstate", () => {
-  if (ourHistory.length === 0) {
-    console.warn("History was already 0!");
-  }
-  const callback = ourHistory.pop();
-  console.debug("- History size:", ourHistory.length);
-  if (ourHistory.length > 0) window.history.pushState({}, "");
-  if (callback) callback();
-});
+window.addEventListener(
+  "popstate",
+  () => {
+    if (ourHistory.length === 0) {
+      console.warn("History was already 0!");
+    }
+    const callback = ourHistory.pop();
+    console.debug("- History size:", ourHistory.length);
+    if (ourHistory.length > 0) window.history.pushState({}, "");
+    if (callback) callback();
+  },
+  { passive: true }
+);
 
 export const useHistory = () => {
   const pushFunction = cb => {
