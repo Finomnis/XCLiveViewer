@@ -1,6 +1,11 @@
 - Fix InfoBox wiggling around, make distance to anchor fixed
 
-- Long click on pilot to delete
+- Make Pilot InfoWindow Semi-Transparent
+
+- Long click / Right click on pilot to open menu with
+    - delete
+    - follow
+    - hide
 
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
     - Implement HUD in Map
@@ -9,6 +14,11 @@
 
 - Add button that enables automatic map scale and position
     - should include all selected pilots + some space
+    - Implement MapAutoPositioner
+        - Implement PositionType SubClasses:
+            - Free
+            - Group
+            - SinglePilot
 
 - Add optional nosleep.js (and add setting)
 
