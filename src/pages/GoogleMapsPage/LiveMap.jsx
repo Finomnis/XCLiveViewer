@@ -6,6 +6,7 @@ import mapStyle from "./MapStyle.json";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import MapAnimator from "./MapAnimator";
 import { pure } from "recompose";
+import "./gm-style-overrides.css";
 
 const LiveMap = () => {
   const [mapReady, mapError, google] = useGoogleMapsApi();

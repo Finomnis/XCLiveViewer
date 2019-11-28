@@ -1,7 +1,11 @@
 export default class MapPilotInfoWindow {
   constructor(google) {
     this.google = google;
-    this.infoWindow = new google.maps.InfoWindow({ content: "- ERROR -" });
+    this.infoWindow = new google.maps.InfoWindow({
+      content: "- ERROR -",
+      pixelOffset: new google.maps.Size(0, -5),
+      disableAutoPan: true
+    });
     this.data = {};
     this.currentPilot = null;
   }
