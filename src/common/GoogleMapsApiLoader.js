@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Loader } from "@googlemaps/loader";
 
 // Hook
 let googleMapsApiPromise = null;
@@ -12,40 +13,29 @@ function useGoogleMapsApi() {
   useEffect(
     () => {
       if (googleMapsApiPromise === null) {
-        googleMapsApiPromise = new Promise((resolve, _reject) => {
-          console.log("Loading Google Maps API ...");
-          // Create script
-          let script = document.createElement("script");
-          script.src =
-            "https://maps.googleapis.com/maps/api/js?key=" +
-            process.env.REACT_APP_GAPI_KEY;
-          script.async = true;
-
-          script.addEventListener("load", () => resolve(true));
-          script.addEventListener("error", () => resolve(false));
-
-          // Add script to document body
-          document.body.appendChild(script);
-        });
+        googleMapsApiPromise = new Loader({
+          apiKey: process.env.REACT_APP_GAPI_KEY
+        }).load();
       }
 
       let promiseParameters = { gotCanceled: false };
-      googleMapsApiPromise.then(success => {
-        if (promiseParameters.gotCanceled) return;
-        if (success) {
+      googleMapsApiPromise
+        .then(() => {
+          if (promiseParameters.gotCanceled) return;
           console.log("Google Maps API loaded.");
           setState({
             ready: true,
             error: false
           });
-        } else {
-          console.log("Error: Cannot load Google Maps API.");
+        })
+        .catch(e => {
+          if (promiseParameters.gotCanceled) return;
+          console.log("Error: Cannot load Google Maps API:", e);
           setState({
             ready: false,
             error: true
           });
-        }
-      });
+        });
 
       return () => {
         promiseParameters.gotCanceled = true;

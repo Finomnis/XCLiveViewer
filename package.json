@@ -4,6 +4,7 @@
   "homepage": "https://finomnis.github.io/XCLiveViewer/",
   "private": true,
   "dependencies": {
+    "@googlemaps/loader": "0.0.3",
     "@material-ui/core": "^4.7.0",
     "@material-ui/icons": "^4.5.1",
     "color-convert": "^2.0.1",
