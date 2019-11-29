@@ -7,6 +7,7 @@ import { getXContestInterface } from "../../location_provider/XContest/XContestI
 import MapAnimator from "./MapAnimator";
 import { pure } from "recompose";
 import "./gm-style-overrides.css";
+import { createGeolocationMarker } from "../../ext/geolocation-marker";
 
 const LiveMap = () => {
   const [mapReady, mapError, google] = useGoogleMapsApi();
@@ -39,6 +40,9 @@ const LiveMap = () => {
       getXContestInterface().animation.registerCallback(
         mapAnimatorUpdateCallback
       );
+
+      const geolocationMarker = createGeolocationMarker(google, map);
+      geolocationMarker.setPositionOptions({ enableHighAccuracy: true });
 
       return () => {
         getXContestInterface().animation.unregisterCallback(
