@@ -1,7 +1,5 @@
 - Fix InfoBox wiggling around, make distance to anchor fixed
 
-- Make Pilot InfoWindow Semi-Transparent
-
 - Long click / Right click on pilot to open menu with
     - delete
     - follow
@@ -111,3 +109,5 @@ Old Notes:
 
 - Combine screens 1+2 for desktops
 - Fix bug where LastFixState changes to 'landed' too early
+
+- Make Pilot InfoWindow Semi-Transparent
