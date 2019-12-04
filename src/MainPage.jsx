@@ -40,12 +40,12 @@ const MainPage = () => {
 
   const content = isSmartphone ? (
     <React.Fragment>
-      <Box flexGrow={1} clone bgcolor="blue">
+      <Box flexGrow={1} clone bgcolor="blue" display="flex">
         <SwipeableViews disabled index={tabId}>
-          <Box width="100%" height="100%" position="relative" bgcolor="red">
+          <Box width="100%" height="100%" bgcolor="red">
             <LiveMap></LiveMap>
           </Box>
-          <Box width="100%" height="100%" position="relative">
+          <Box width="100%" height="100%">
             <Pilots></Pilots>
           </Box>
         </SwipeableViews>
