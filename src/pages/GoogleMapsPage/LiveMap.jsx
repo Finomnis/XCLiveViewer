@@ -8,6 +8,7 @@ import MapAnimator from "./MapAnimator";
 import { pure } from "recompose";
 import "./gm-style-overrides.css";
 import { createGeolocationMarker } from "../../ext/geolocation-marker";
+import { getSetting, Settings } from "../../common/PersistentState/Settings";
 
 const LiveMap = () => {
   const [mapReady, mapError, google] = useGoogleMapsApi();
@@ -41,13 +42,36 @@ const LiveMap = () => {
         mapAnimatorUpdateCallback
       );
 
-      const geolocationMarker = createGeolocationMarker(google, map);
+      const geolocationMarker = createGeolocationMarker(google, null);
       geolocationMarker.setPositionOptions({ enableHighAccuracy: true });
 
+      // enable/disable geolocation marker on change
+      if (getSetting(Settings.GPS_ENABLED).getValue())
+        geolocationMarker.setMap(map);
+      const geolocationMarkerStateUpdater = enabled => {
+        if (enabled) {
+          geolocationMarker.setMap(map);
+        } else {
+          geolocationMarker.setMap(null);
+        }
+      };
+      getSetting(Settings.GPS_ENABLED).registerCallback(
+        geolocationMarkerStateUpdater
+      );
+
       return () => {
+        // Stop animation
         getXContestInterface().animation.unregisterCallback(
           mapAnimatorUpdateCallback
         );
+
+        // Unregister connection between GPS_ENABLED setting and geolocationMarker
+        getSetting(Settings.GPS_ENABLED).unRegisterCallback(
+          geolocationMarkerStateUpdater
+        );
+
+        // Disable geolocationMarker
+        geolocationMarker.setMap(null);
       };
     }
   }, [map, google]);
