@@ -215,18 +215,20 @@ class AnimatedPilotListEntry extends React.PureComponent {
     const pilotIconRotation =
       pilotIcon.rotation === undefined ? 0 : pilotIcon.rotation;
 
+    const contextMenuHandler = e => {
+      e.preventDefault();
+      this.props.onContextMenuHandler(this.props.pilotId, {
+        left: e.pageX,
+        top: e.pageY
+      });
+    };
+
     return (
-      <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
-        <PilotExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          onContextMenu={e => {
-            e.preventDefault();
-            this.props.onContextMenuHandler(this.props.pilotId, {
-              left: e.pageX,
-              top: e.pageY
-            });
-          }}
-        >
+      <ExpansionPanel
+        TransitionProps={{ unmountOnExit: true }}
+        onContextMenu={contextMenuHandler}
+      >
+        <PilotExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <svg
             width="30px"
             height="30px"
@@ -282,7 +284,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
             </SecondRow>
           </div>
         </PilotExpansionPanelSummary>
-        <ExpansionPanelDetails>
+        <ExpansionPanelDetails onContextMenu={contextMenuHandler}>
           <Typography>TODO: Details</Typography>
         </ExpansionPanelDetails>
       </ExpansionPanel>
