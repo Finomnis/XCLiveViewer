@@ -66,7 +66,7 @@ const LiveMap = () => {
         );
 
         // Unregister connection between GPS_ENABLED setting and geolocationMarker
-        getSetting(Settings.GPS_ENABLED).unRegisterCallback(
+        getSetting(Settings.GPS_ENABLED).unregisterCallback(
           geolocationMarkerStateUpdater
         );
 
