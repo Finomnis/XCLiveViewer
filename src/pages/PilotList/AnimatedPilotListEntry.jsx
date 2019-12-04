@@ -217,7 +217,16 @@ class AnimatedPilotListEntry extends React.PureComponent {
 
     return (
       <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
-        <PilotExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <PilotExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          onContextMenu={e => {
+            e.preventDefault();
+            this.props.onContextMenuHandler(this.props.pilotId, {
+              left: e.pageX,
+              top: e.pageY
+            });
+          }}
+        >
           <svg
             width="30px"
             height="30px"

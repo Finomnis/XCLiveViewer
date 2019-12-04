@@ -1,15 +1,27 @@
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
+import {
+  Box,
+  Typography,
+  Popover,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon
+} from "@material-ui/core";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import AnimatedPilotListEntry from "./AnimatedPilotListEntry";
 import { getGPSProvider } from "../../common/GPSProvider";
 import { getDistance } from "geolib";
 
+import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import DeleteIcon from "@material-ui/icons/Delete";
+
 class AnimatedPilotList extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      onlinePilots: []
+      onlinePilots: [],
+      contextMenu: null
     };
     this.gpsData = getGPSProvider().getData();
   }
@@ -88,6 +100,23 @@ class AnimatedPilotList extends React.PureComponent {
     this.props.removePilots([pilotId]);
   };
 
+  showContextMenu = (pilotId, mousePos) => {
+    this.setState(oldState => ({
+      ...oldState,
+      contextMenu: { pilotId: pilotId, pos: mousePos }
+    }));
+  };
+
+  hideContextMenu = () => {
+    this.setState(oldState => ({ ...oldState, contextMenu: null }));
+  };
+
+  contextMenu_delete = () => {
+    this.hideContextMenu();
+    if (this.state.contextMenu !== null)
+      this.removePilot(this.state.contextMenu.pilotId);
+  };
+
   render() {
     let pilotIsOnline = new Set(this.state.onlinePilots);
 
@@ -115,6 +144,7 @@ class AnimatedPilotList extends React.PureComponent {
               pilotId={pilotId}
               pilotName={getPilotName(pilotId)}
               removePilot={this.removePilot}
+              onContextMenuHandler={this.showContextMenu}
             />
           ))}
         </Box>
@@ -138,6 +168,29 @@ class AnimatedPilotList extends React.PureComponent {
             </Box>
           ))}
         </Box>
+        <Popover
+          open={this.state.contextMenu !== null}
+          anchorReference="anchorPosition"
+          anchorPosition={
+            this.state.contextMenu === null ? null : this.state.contextMenu.pos
+          }
+          onClose={this.hideContextMenu}
+        >
+          <List component="nav" dense>
+            <ListItem button disabled>
+              <ListItemIcon>
+                <PlayArrowIcon />
+              </ListItemIcon>
+              <ListItemText>Show pilot on map</ListItemText>
+            </ListItem>
+            <ListItem button onClick={this.contextMenu_delete}>
+              <ListItemIcon>
+                <DeleteIcon />
+              </ListItemIcon>
+              <ListItemText>Remove Pilot</ListItemText>
+            </ListItem>
+          </List>
+        </Popover>
       </Box>
     );
   }
