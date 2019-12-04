@@ -1,9 +1,8 @@
-- Fix InfoBox wiggling around, make distance to anchor fixed
 
-- Long click / Right click on pilot to open menu with
-    - delete
-    - follow
-    - hide
+- Make offline pilots list prettier
+
+- Add icon to map where pilots can be selected to be followed
+- Add icon to map where pilots can be selected to be hidden
 
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
     - Implement HUD in Map
@@ -111,3 +110,7 @@ Old Notes:
 - Fix bug where LastFixState changes to 'landed' too early
 
 - Make Pilot InfoWindow Semi-Transparent
+- Long click / Right click on pilot to open menu with
+    - delete
+    - follow
+- Fix GPS to actually shut down if disabled in menu
