@@ -47,6 +47,7 @@ export default class GoogleMapsTrack {
       path: [],
       strokeColor: this.trackColor
     });
+    this.newestTrackSegmentData = null;
   }
 
   setMap = map => {
@@ -70,12 +71,71 @@ export default class GoogleMapsTrack {
       return;
     }
 
+    if (
+      startTime === this.currentTrackVersion.startTime &&
+      length > this.currentTrackVersion.length &&
+      endTime > this.currentTrackVersion.endTime
+    ) {
+      let oldTrack = this.track.getPath();
+      let oldLength = oldTrack.getLength();
+      while (oldLength < length) {
+        const newPoint = track[oldLength];
+        oldLength = oldTrack.push(
+          new this.google.maps.LatLng(newPoint.lat, newPoint.lng)
+        );
+      }
+
+      this.currentTrackVersion.endTime = endTime;
+      this.currentTrackVersion.length = length;
+      return;
+    }
+
+    //console.log("Full path update!");
+
     // If the start/end time or length changed, update track in map
     this.currentTrackVersion.startTime = startTime;
     this.currentTrackVersion.endTime = endTime;
     this.currentTrackVersion.length = length;
 
     this.track.setPath(track);
+  };
+
+  _updateNewestSegment = (trackEndPos, currentPos) => {
+    // Initialize if unset
+    if (this.newestTrackSegmentData === null) {
+      this.newestTrackSegment.setPath([trackEndPos, currentPos]);
+      this.newestTrackSegmentData = [trackEndPos, currentPos];
+      //console.log("Set newest track segment new");
+    }
+
+    // Query previous and update previous
+    const [previousTrackEndPos, previousPos] = this.newestTrackSegmentData;
+    this.newestTrackSegmentData = [trackEndPos, currentPos];
+
+    // Get maps polyline
+    const path = this.newestTrackSegment.getPath();
+
+    // Update first piont if necessary
+    if (
+      trackEndPos.lat !== previousTrackEndPos.lat ||
+      trackEndPos.lng !== previousTrackEndPos.lng
+    ) {
+      const point = new this.google.maps.LatLng(
+        trackEndPos.lat,
+        trackEndPos.lng
+      );
+      path.setAt(0, point);
+      //console.log("Set trackEndPos");
+    }
+
+    if (
+      previousPos.lat !== currentPos.lat ||
+      previousPos.lng !== currentPos.lng
+    ) {
+      const point = new this.google.maps.LatLng(currentPos.lat, currentPos.lng);
+      path.setAt(1, point);
+      //console.log("Set currentPos");
+    }
   };
 
   updateData = data => {
@@ -95,10 +155,9 @@ export default class GoogleMapsTrack {
       this.marker.setIcon(newPilotIcon);
 
     if (data.track.length > 0) {
-      this.newestTrackSegment.setPath([
-        data.track[data.track.length - 1],
-        data.pos
-      ]);
+      const currentPos = data.track[data.track.length - 1];
+      const trackEndPos = data.pos;
+      this._updateNewestSegment(trackEndPos, currentPos);
     }
     this._updateTrack(data.track);
   };
