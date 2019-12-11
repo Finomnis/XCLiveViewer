@@ -16,7 +16,7 @@ import { getDistance } from "geolib";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import DeleteIcon from "@material-ui/icons/Delete";
 import DirectionsIcon from "@material-ui/icons/Directions";
-import NavigationIcon from "@material-ui/icons/Navigation";
+import RoomIcon from "@material-ui/icons/Room";
 import { navigateTo } from "../../util/MapLinks";
 
 class AnimatedPilotList extends React.PureComponent {
@@ -196,15 +196,15 @@ class AnimatedPilotList extends React.PureComponent {
             </ListItem>
             <ListItem button disabled>
               <ListItemIcon>
-                <NavigationIcon />
+                <DirectionsIcon />
               </ListItemIcon>
               <ListItemText>Live Navigation</ListItemText>
             </ListItem>
             <ListItem button onClick={this.contextMenu_navigateTo}>
               <ListItemIcon>
-                <DirectionsIcon />
+                <RoomIcon />
               </ListItemIcon>
-              <ListItemText>Navigate to Pilot</ListItemText>
+              <ListItemText>Open in Maps</ListItemText>
             </ListItem>
             <ListItem button onClick={this.contextMenu_delete}>
               <ListItemIcon>
