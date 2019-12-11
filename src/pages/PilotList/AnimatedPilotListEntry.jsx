@@ -217,10 +217,14 @@ class AnimatedPilotListEntry extends React.PureComponent {
 
     const contextMenuHandler = e => {
       e.preventDefault();
-      this.props.onContextMenuHandler(this.props.pilotId, {
-        left: e.pageX,
-        top: e.pageY
-      });
+      this.props.onContextMenuHandler(
+        this.props.pilotId,
+        {
+          left: e.pageX,
+          top: e.pageY
+        },
+        this.pilotProps
+      );
     };
 
     return (

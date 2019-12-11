@@ -15,6 +15,9 @@ import { getDistance } from "geolib";
 
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import DeleteIcon from "@material-ui/icons/Delete";
+import DirectionsIcon from "@material-ui/icons/Directions";
+import NavigationIcon from "@material-ui/icons/Navigation";
+import { navigateTo } from "../../util/MapLinks";
 
 class AnimatedPilotList extends React.PureComponent {
   constructor(props) {
@@ -100,10 +103,10 @@ class AnimatedPilotList extends React.PureComponent {
     this.props.removePilots([pilotId]);
   };
 
-  showContextMenu = (pilotId, mousePos) => {
+  showContextMenu = (pilotId, mousePos, pilotProps) => {
     this.setState(oldState => ({
       ...oldState,
-      contextMenu: { pilotId: pilotId, pos: mousePos }
+      contextMenu: { pilotId: pilotId, pos: mousePos, props: pilotProps }
     }));
   };
 
@@ -112,9 +115,17 @@ class AnimatedPilotList extends React.PureComponent {
   };
 
   contextMenu_delete = () => {
-    this.hideContextMenu();
     if (this.state.contextMenu !== null)
       this.removePilot(this.state.contextMenu.pilotId);
+    this.hideContextMenu();
+  };
+
+  contextMenu_navigateTo = () => {
+    if (this.state.contextMenu !== null) {
+      const pilotProps = this.state.contextMenu.props;
+      navigateTo({ lat: pilotProps.lat, lng: pilotProps.lng });
+    }
+    this.hideContextMenu();
   };
 
   render() {
@@ -181,7 +192,19 @@ class AnimatedPilotList extends React.PureComponent {
               <ListItemIcon>
                 <PlayArrowIcon />
               </ListItemIcon>
-              <ListItemText>Show pilot on map</ListItemText>
+              <ListItemText>Show Pilot on Map</ListItemText>
+            </ListItem>
+            <ListItem button disabled>
+              <ListItemIcon>
+                <NavigationIcon />
+              </ListItemIcon>
+              <ListItemText>Live Navigation</ListItemText>
+            </ListItem>
+            <ListItem button onClick={this.contextMenu_navigateTo}>
+              <ListItemIcon>
+                <DirectionsIcon />
+              </ListItemIcon>
+              <ListItemText>Navigate to Pilot</ListItemText>
             </ListItem>
             <ListItem button onClick={this.contextMenu_delete}>
               <ListItemIcon>
