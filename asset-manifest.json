@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/XCLiveViewer/static/css/main.ce6a6b7a.chunk.css",
+    "main.css": "/XCLiveViewer/static/css/main.f8a31ed0.chunk.css",
     "main.js": "/XCLiveViewer/static/js/main.a40fe727.chunk.js",
     "main.js.map": "/XCLiveViewer/static/js/main.a40fe727.chunk.js.map",
     "runtime-main.js": "/XCLiveViewer/static/js/runtime-main.6d2dc55d.js",
@@ -9,10 +9,10 @@
     "static/js/2.4ce57874.chunk.js": "/XCLiveViewer/static/js/2.4ce57874.chunk.js",
     "static/js/2.4ce57874.chunk.js.map": "/XCLiveViewer/static/js/2.4ce57874.chunk.js.map",
     "index.html": "/XCLiveViewer/index.html",
-    "precache-manifest.d6b8688c01c666c6f8605f1f5ca46a48.js": "/XCLiveViewer/precache-manifest.d6b8688c01c666c6f8605f1f5ca46a48.js",
+    "precache-manifest.54c78a96043336cd7ddadd6cc3db852f.js": "/XCLiveViewer/precache-manifest.54c78a96043336cd7ddadd6cc3db852f.js",
     "service-worker.js": "/XCLiveViewer/service-worker.js",
     "static/css/2.e41bce8f.chunk.css.map": "/XCLiveViewer/static/css/2.e41bce8f.chunk.css.map",
-    "static/css/main.ce6a6b7a.chunk.css.map": "/XCLiveViewer/static/css/main.ce6a6b7a.chunk.css.map",
+    "static/css/main.f8a31ed0.chunk.css.map": "/XCLiveViewer/static/css/main.f8a31ed0.chunk.css.map",
     "static/js/2.4ce57874.chunk.js.LICENSE": "/XCLiveViewer/static/js/2.4ce57874.chunk.js.LICENSE",
     "static/js/main.a40fe727.chunk.js.LICENSE": "/XCLiveViewer/static/js/main.a40fe727.chunk.js.LICENSE",
     "static/media/flag-icon.min.css": "/XCLiveViewer/static/media/zw.8b885465.svg"
@@ -21,7 +21,7 @@
     "static/js/runtime-main.6d2dc55d.js",
     "static/css/2.e41bce8f.chunk.css",
     "static/js/2.4ce57874.chunk.js",
-    "static/css/main.ce6a6b7a.chunk.css",
+    "static/css/main.f8a31ed0.chunk.css",
     "static/js/main.a40fe727.chunk.js"
   ]
 }
