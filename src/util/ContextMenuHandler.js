@@ -1,4 +1,4 @@
-const longPressDuration = 500;
+const longPressDuration = 610;
 
 export default class ContextMenuHandler {
   constructor(callback) {
@@ -33,8 +33,6 @@ export default class ContextMenuHandler {
   };
 
   onContextMenu = e => {
-    if (!this.contextMenuPossible) return;
-
     this.contextMenuPossible = false;
 
     clearTimeout(this.longPressCountdown);
