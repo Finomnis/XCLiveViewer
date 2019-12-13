@@ -185,6 +185,10 @@ class AnimatedPilotList extends React.PureComponent {
           anchorPosition={
             this.state.contextMenu === null ? null : this.state.contextMenu.pos
           }
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right"
+          }}
           onClose={this.hideContextMenu}
         >
           <List component="nav" dense>
