@@ -289,7 +289,15 @@ class AnimatedPilotListEntry extends React.PureComponent {
           </div>
         </PilotExpansionPanelSummary>
         <ExpansionPanelDetails onContextMenu={contextMenuHandler}>
-          <Typography>TODO: Details</Typography>
+          <Typography
+            style={{
+              MozUserSelect: "none",
+              WebkitUserSelect: "none",
+              msUserSelect: "none"
+            }}
+          >
+            TODO: Details
+          </Typography>
         </ExpansionPanelDetails>
       </ExpansionPanel>
     );
