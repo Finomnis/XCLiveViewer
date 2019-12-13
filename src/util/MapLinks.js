@@ -6,7 +6,7 @@ export function navigateTo(pos) {
     navigator.platform.indexOf("iPod") !== -1
   )
     window.open(
-      "maps://maps.google.com/maps?q=" +
+      "https://maps.apple.com/maps?q=" +
         pos.lat.toString() +
         "," +
         pos.lng.toString()
