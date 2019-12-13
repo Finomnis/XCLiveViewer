@@ -52,6 +52,17 @@ class AnimatedPilotListEntry extends React.PureComponent {
     this.heightRef = React.createRef();
     this.liveStateRef = React.createRef();
     this.iconRef = React.createRef();
+
+    this.contextMenuHandler = new ContextMenuHandler(e => {
+      this.props.onContextMenuHandler(
+        this.props.pilotId,
+        {
+          left: e.pageX,
+          top: e.pageY
+        },
+        this.pilotProps
+      );
+    });
   }
 
   //////////////////////////////////////////////////////////////
@@ -216,25 +227,14 @@ class AnimatedPilotListEntry extends React.PureComponent {
     const pilotIconRotation =
       pilotIcon.rotation === undefined ? 0 : pilotIcon.rotation;
 
-    const contextMenuHandler = new ContextMenuHandler(e => {
-      this.props.onContextMenuHandler(
-        this.props.pilotId,
-        {
-          left: e.pageX,
-          top: e.pageY
-        },
-        this.pilotProps
-      );
-    });
-
     return (
       <ExpansionPanel
         TransitionProps={{ unmountOnExit: true }}
-        onContextMenu={contextMenuHandler.onContextMenu}
-        onTouchStart={contextMenuHandler.onTouchStart}
-        onTouchCancel={contextMenuHandler.onTouchCancel}
-        onTouchEnd={contextMenuHandler.onTouchEnd}
-        onTouchMove={contextMenuHandler.onTouchMove}
+        onContextMenu={this.contextMenuHandler.onContextMenu}
+        onTouchStart={this.contextMenuHandler.onTouchStart}
+        onTouchCancel={this.contextMenuHandler.onTouchCancel}
+        onTouchEnd={this.contextMenuHandler.onTouchEnd}
+        onTouchMove={this.contextMenuHandler.onTouchMove}
       >
         <PilotExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <svg
@@ -292,13 +292,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
             </SecondRow>
           </div>
         </PilotExpansionPanelSummary>
-        <ExpansionPanelDetails
-          onContextMenu={contextMenuHandler.onContextMenu}
-          onTouchStart={contextMenuHandler.onTouchStart}
-          onTouchCancel={contextMenuHandler.onTouchCancel}
-          onTouchEnd={contextMenuHandler.onTouchEnd}
-          onTouchMove={contextMenuHandler.onTouchMove}
-        >
+        <ExpansionPanelDetails>
           <Typography
             style={{
               MozUserSelect: "none",
