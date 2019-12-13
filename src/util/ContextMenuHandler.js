@@ -2,7 +2,7 @@ const longPressDuration =
   navigator.platform.indexOf("iPhone") !== -1 ||
   navigator.platform.indexOf("iPad") !== -1 ||
   navigator.platform.indexOf("iPod") !== -1
-    ? 300
+    ? 400
     : 1000;
 
 export default class ContextMenuHandler {
