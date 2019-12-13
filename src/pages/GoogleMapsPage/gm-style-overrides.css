@@ -13,3 +13,16 @@
     rgba(255, 255, 255, 0) 100%
   );
 }
+
+.gm-style .transit-container div {
+  background-color: transparent;
+}
+
+.gm-style .transit-container {
+  background-color: transparent;
+}
+
+.poi-info-window div,
+.poi-info-window a {
+  background-color: transparent;
+}
