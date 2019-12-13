@@ -1,4 +1,6 @@
 
+- Add button to switch map type
+
 - Make offline pilots list prettier
 
 - Add icon to map where pilots can be selected to be followed
