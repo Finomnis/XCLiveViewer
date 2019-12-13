@@ -1,18 +1,27 @@
 {
   "files": {
-    "main.css": "/XCLiveViewer/static/css/main.9ff556a7.chunk.css",
-    "main.js": "/XCLiveViewer/static/js/main.b4d4f5f6.chunk.js",
-    "main.js.map": "/XCLiveViewer/static/js/main.b4d4f5f6.chunk.js.map",
-    "runtime-main.js": "/XCLiveViewer/static/js/runtime-main.1c143e6b.js",
-    "runtime-main.js.map": "/XCLiveViewer/static/js/runtime-main.1c143e6b.js.map",
+    "main.css": "/XCLiveViewer/static/css/main.c62a8879.chunk.css",
+    "main.js": "/XCLiveViewer/static/js/main.5463bc8c.chunk.js",
+    "main.js.map": "/XCLiveViewer/static/js/main.5463bc8c.chunk.js.map",
+    "runtime-main.js": "/XCLiveViewer/static/js/runtime-main.6d2dc55d.js",
+    "runtime-main.js.map": "/XCLiveViewer/static/js/runtime-main.6d2dc55d.js.map",
     "static/css/2.e41bce8f.chunk.css": "/XCLiveViewer/static/css/2.e41bce8f.chunk.css",
-    "static/js/2.1fe5fdec.chunk.js": "/XCLiveViewer/static/js/2.1fe5fdec.chunk.js",
-    "static/js/2.1fe5fdec.chunk.js.map": "/XCLiveViewer/static/js/2.1fe5fdec.chunk.js.map",
+    "static/js/2.4ce57874.chunk.js": "/XCLiveViewer/static/js/2.4ce57874.chunk.js",
+    "static/js/2.4ce57874.chunk.js.map": "/XCLiveViewer/static/js/2.4ce57874.chunk.js.map",
     "index.html": "/XCLiveViewer/index.html",
-    "precache-manifest.59e87e49a32965d9435085e4db715b9e.js": "/XCLiveViewer/precache-manifest.59e87e49a32965d9435085e4db715b9e.js",
+    "precache-manifest.ef8afc42819dcdf60c7b2e3080074d20.js": "/XCLiveViewer/precache-manifest.ef8afc42819dcdf60c7b2e3080074d20.js",
     "service-worker.js": "/XCLiveViewer/service-worker.js",
     "static/css/2.e41bce8f.chunk.css.map": "/XCLiveViewer/static/css/2.e41bce8f.chunk.css.map",
-    "static/css/main.9ff556a7.chunk.css.map": "/XCLiveViewer/static/css/main.9ff556a7.chunk.css.map",
+    "static/css/main.c62a8879.chunk.css.map": "/XCLiveViewer/static/css/main.c62a8879.chunk.css.map",
+    "static/js/2.4ce57874.chunk.js.LICENSE": "/XCLiveViewer/static/js/2.4ce57874.chunk.js.LICENSE",
+    "static/js/main.5463bc8c.chunk.js.LICENSE": "/XCLiveViewer/static/js/main.5463bc8c.chunk.js.LICENSE",
     "static/media/flag-icon.min.css": "/XCLiveViewer/static/media/zw.8b885465.svg"
-  }
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6d2dc55d.js",
+    "static/css/2.e41bce8f.chunk.css",
+    "static/js/2.4ce57874.chunk.js",
+    "static/css/main.c62a8879.chunk.css",
+    "static/js/main.5463bc8c.chunk.js"
+  ]
 }
