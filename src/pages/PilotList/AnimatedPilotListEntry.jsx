@@ -13,6 +13,7 @@ import { getPilotIcon, getPilotIconColor } from "../../common/PilotIcon";
 import { styled, withStyles } from "@material-ui/styles";
 import { getRotationStyle } from "../../util/Rotation";
 import { getSetting, Settings } from "../../common/PersistentState/Settings";
+import ContextMenuHandler from "../../util/ContextMenuHandler";
 
 const FirstRowLeft = styled(Typography)({ overflow: "hidden", flex: "1" });
 
@@ -215,8 +216,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
     const pilotIconRotation =
       pilotIcon.rotation === undefined ? 0 : pilotIcon.rotation;
 
-    const contextMenuHandler = e => {
-      e.preventDefault();
+    const contextMenuHandler = new ContextMenuHandler(e => {
       this.props.onContextMenuHandler(
         this.props.pilotId,
         {
@@ -225,12 +225,16 @@ class AnimatedPilotListEntry extends React.PureComponent {
         },
         this.pilotProps
       );
-    };
+    });
 
     return (
       <ExpansionPanel
         TransitionProps={{ unmountOnExit: true }}
-        onContextMenu={contextMenuHandler}
+        onContextMenu={contextMenuHandler.onContextMenu}
+        onTouchStart={contextMenuHandler.onTouchStart}
+        onTouchCancel={contextMenuHandler.onTouchCancel}
+        onTouchEnd={contextMenuHandler.onTouchEnd}
+        onTouchMove={contextMenuHandler.onTouchMove}
       >
         <PilotExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <svg
@@ -288,7 +292,13 @@ class AnimatedPilotListEntry extends React.PureComponent {
             </SecondRow>
           </div>
         </PilotExpansionPanelSummary>
-        <ExpansionPanelDetails onContextMenu={contextMenuHandler}>
+        <ExpansionPanelDetails
+          onContextMenu={contextMenuHandler.onContextMenu}
+          onTouchStart={contextMenuHandler.onTouchStart}
+          onTouchCancel={contextMenuHandler.onTouchCancel}
+          onTouchEnd={contextMenuHandler.onTouchEnd}
+          onTouchMove={contextMenuHandler.onTouchMove}
+        >
           <Typography
             style={{
               MozUserSelect: "none",
