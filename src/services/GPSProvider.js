@@ -1,4 +1,4 @@
-import { getSetting, Settings } from "./PersistentState/Settings";
+import { getSetting, Settings } from "../common/PersistentState/Settings";
 
 class GPSProvider {
   constructor() {

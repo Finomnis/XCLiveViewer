@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import AnimatedPilotListEntry from "./AnimatedPilotListEntry";
-import { getGPSProvider } from "../../common/GPSProvider";
+import { getGPSProvider } from "../../services/GPSProvider";
 import { getDistance } from "geolib";
 
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";

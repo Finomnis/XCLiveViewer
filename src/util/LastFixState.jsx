@@ -1,5 +1,5 @@
 import React from "react";
-import { getGPSProvider } from "../common/GPSProvider";
+import { getGPSProvider } from "../services/GPSProvider";
 import { getDistance, getRhumbLineBearing } from "geolib";
 import { getRotationStyle } from "./Rotation";
 

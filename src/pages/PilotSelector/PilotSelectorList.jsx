@@ -5,7 +5,7 @@ import { CircularProgress } from "@material-ui/core";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 
 import { arraysEqual } from "../../util/CompareArrays";
-import { getGPSProvider } from "../../common/GPSProvider";
+import { getGPSProvider } from "../../services/GPSProvider";
 import { getDistance } from "geolib";
 import { renderRow, TableHeader, rowHeight } from "./PilotSelectorListRenderer";
 import { FixedSizeList } from "react-window";

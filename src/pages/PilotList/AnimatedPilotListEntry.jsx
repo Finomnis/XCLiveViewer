@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
-import { getGPSProvider } from "../../common/GPSProvider";
+import { getGPSProvider } from "../../services/GPSProvider";
 import { LastFixState, LastFixArrow } from "../../util/LastFixState";
 import { getPilotIcon, getPilotIconColor } from "../../common/PilotIcon";
 import { styled, withStyles } from "@material-ui/styles";
