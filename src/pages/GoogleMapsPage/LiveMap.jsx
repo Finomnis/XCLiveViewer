@@ -22,10 +22,10 @@ const LiveMap = () => {
         new google.maps.Map(mapsRef.current, {
           center: { lat: 46.509012, lng: 11.827984 },
           mapTypeId: "terrain",
-          zoom: 12,
+          zoom: 5,
           maxZoom: 15,
           disableDefaultUI: true,
-          scaleControl: true,
+          zoomControl: true,
           fullscreenControl: true,
           styles: mapStyle
         })
