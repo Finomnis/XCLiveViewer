@@ -6,6 +6,11 @@
 - Add icon to map where pilots can be selected to be followed
 - Add icon to map where pilots can be selected to be hidden
 
+- MapViewportController:
+    - Free camera on drag
+    - Catch camera on double click on pilot
+    - Later: Catch camera to group on Follow button press
+
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
     - Implement HUD in Map
 
