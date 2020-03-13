@@ -75,12 +75,19 @@ export default class GoogleMapsController {
   };
 
   onAnimationFrame = (pilotInfos, controllerState) => {
-    // Set initial map position and scale if
+    // Set initial map position after map creations
     if (!this.viewportInitialized) {
       let watchedCoords = [];
 
       for (const [, pilotInfo] of Object.entries(pilotInfos)) {
         watchedCoords.push(pilotInfo.pos);
+      }
+
+      if (this.gpsState) {
+        watchedCoords.push({
+          lat: this.gpsState.coords.latitude,
+          lng: this.gpsState.coords.longitude
+        });
       }
 
       if (watchedCoords.length !== 0) {
