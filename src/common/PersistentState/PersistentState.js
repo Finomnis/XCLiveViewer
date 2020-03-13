@@ -53,6 +53,10 @@ class PersistentState {
     this._notifyAll();
   };
 
+  updateValue = cb => {
+    this.setValue(cb(this.getValue()));
+  };
+
   use = () => {
     const [value, setValue] = useState(this.getValue);
 
