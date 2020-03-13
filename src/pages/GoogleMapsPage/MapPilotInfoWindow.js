@@ -16,6 +16,12 @@ export default class MapPilotInfoWindow {
     this.updateContent();
   };
 
+  close = () => {
+    this.infoWindow.close();
+    this.currentPilot = null;
+    this.updateContent();
+  };
+
   update = data => {
     this.data = data;
     this.updateContent();
