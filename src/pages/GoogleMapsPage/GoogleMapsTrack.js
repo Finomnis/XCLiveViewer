@@ -4,6 +4,7 @@ import {
   getPilotTrackColor,
   pilotIconChanged
 } from "../../common/PilotIcon";
+import { getMapViewportControllerService } from "../../services/MapViewportControllerService";
 
 export default class GoogleMapsTrack {
   constructor(google, map, pilotInfo, initialData, pilotInfoWindow) {
@@ -32,6 +33,12 @@ export default class GoogleMapsTrack {
       this.pilotInfoWindow.open(
         this.map,
         this.marker,
+        pilotInfo.info.user.username
+      );
+    });
+
+    this.marker.addListener("dblclick", () => {
+      getMapViewportControllerService().setSinglePilotMode(
         pilotInfo.info.user.username
       );
     });

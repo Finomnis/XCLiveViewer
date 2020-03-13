@@ -9,6 +9,8 @@ import { pure } from "recompose";
 import "./gm-style-overrides.css";
 import { createGeolocationMarker } from "../../ext/geolocation-marker";
 import { getSetting, Settings } from "../../common/PersistentState/Settings";
+import { getMapViewportControllerService } from "../../services/MapViewportControllerService";
+import GoogleMapsController from "./GoogleMapsController";
 
 const LiveMap = () => {
   const [mapReady, mapError, google] = useGoogleMapsApi();
@@ -59,7 +61,19 @@ const LiveMap = () => {
         geolocationMarkerStateUpdater
       );
 
+      // Register Map Controller
+      let mapController = new GoogleMapsController(google, map);
+      getMapViewportControllerService().registerMapController(mapController);
+
       return () => {
+        // Unregister Map Controller
+        getMapViewportControllerService().unregisterMapController(
+          mapController
+        );
+
+        // Shutdown mapController
+        mapController.shutdown();
+
         // Stop animation
         getXContestInterface().animation.unregisterCallback(
           mapAnimatorUpdateCallback
