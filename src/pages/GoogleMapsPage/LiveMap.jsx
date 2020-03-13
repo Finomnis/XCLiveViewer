@@ -48,8 +48,9 @@ const LiveMap = () => {
       geolocationMarker.setPositionOptions({ enableHighAccuracy: true });
 
       // enable/disable geolocation marker on change
-      if (getSetting(Settings.GPS_ENABLED).getValue())
+      if (getSetting(Settings.GPS_ENABLED).getValue()) {
         geolocationMarker.setMap(map);
+      }
       const geolocationMarkerStateUpdater = enabled => {
         if (enabled) {
           geolocationMarker.setMap(map);
