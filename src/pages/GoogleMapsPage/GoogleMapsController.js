@@ -14,8 +14,8 @@ export default class GoogleMapsController {
     this.singlePersonMode = false;
 
     this.userInputListeners = [
-      map.addListener(map, "dragstart", this.onUserInput),
-      map.addListener(map, "center_changed", this.onUserInput)
+      map.addListener("dragstart", this.onUserInput),
+      map.addListener("center_changed", this.onUserInput)
     ];
 
     this.insideMapsApiFunction = false;
