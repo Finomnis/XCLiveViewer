@@ -19,8 +19,10 @@ import LiveMap from "./pages/GoogleMapsPage/LiveMap";
 import Pilots from "./pages/PilotList/Pilots";
 import TitleBar from "./pages/TitleBar";
 
+import PageState from "./common/PersistentState/PageState";
+
 const MainPage = () => {
-  const [tabId, setTabId] = React.useState(1);
+  const [tabId, setTabId] = PageState.TabID.use();
   const [windowHeight, setWindowHeight] = React.useState(0);
   const theme = useTheme();
   const isSmartphone = useMediaQuery(theme.breakpoints.down("sm"));
