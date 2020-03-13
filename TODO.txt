@@ -7,8 +7,6 @@
 - Add icon to map where pilots can be selected to be hidden
 
 - MapViewportController:
-    - Free camera on drag
-    - Catch camera on double click on pilot
     - Later: Catch camera to group on Follow button press
 
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
@@ -82,6 +80,10 @@ Animation:
     - Solution: Write little helper class for each flight, that determines the data state per-track
 - Implement hardware back button in popups
 - Add nice icons to map
+
+- MapViewportController:
+    - Free camera on drag
+    - Catch camera on double click on pilot
 
 
 Old Notes:
