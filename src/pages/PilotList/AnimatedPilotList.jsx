@@ -18,6 +18,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import DirectionsIcon from "@material-ui/icons/Directions";
 import RoomIcon from "@material-ui/icons/Room";
 import { navigateTo } from "../../util/MapLinks";
+import PageState from "../../common/PersistentState/PageState";
+import { getMapViewportControllerService } from "../../services/MapViewportControllerService";
 
 class AnimatedPilotList extends React.PureComponent {
   constructor(props) {
@@ -128,6 +130,15 @@ class AnimatedPilotList extends React.PureComponent {
     this.hideContextMenu();
   };
 
+  contextMenu_showOnMap = () => {
+    if (this.state.contextMenu !== null) {
+      const pilotId = this.state.contextMenu.pilotId;
+      PageState.switchToMap();
+      getMapViewportControllerService().setSinglePilotMode(pilotId);
+    }
+    this.hideContextMenu();
+  };
+
   render() {
     let pilotIsOnline = new Set(this.state.onlinePilots);
 
@@ -192,7 +203,7 @@ class AnimatedPilotList extends React.PureComponent {
           onClose={this.hideContextMenu}
         >
           <List component="nav" dense>
-            <ListItem button disabled>
+            <ListItem button onClick={this.contextMenu_showOnMap}>
               <ListItemIcon>
                 <PlayArrowIcon />
               </ListItemIcon>
