@@ -64,7 +64,7 @@ const MainPage = () => {
       </Box>
     </React.Fragment>
   ) : (
-    <Box width="100%" flexGrow={1} display="flex">
+    <Box width="100%" flexGrow={1} display="flex" overflow="hidden">
       <Box flexGrow={1} height="100%">
         <LiveMap></LiveMap>
       </Box>
@@ -75,7 +75,12 @@ const MainPage = () => {
   );
 
   return (
-    <Box height={windowHeight} display="flex" flexDirection="column">
+    <Box
+      height={windowHeight}
+      display="flex"
+      flexDirection="column"
+      overflow="hidden"
+    >
       <Box zIndex={100}>
         <TitleBar></TitleBar>
       </Box>
