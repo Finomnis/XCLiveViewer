@@ -12,6 +12,9 @@ import { getSetting, Settings } from "../../common/PersistentState/Settings";
 import { getMapViewportControllerService } from "../../services/MapViewportControllerService";
 import GoogleMapsController from "./GoogleMapsController";
 
+import "./CustomButtons/CustomButtons.css";
+import { createSatelliteMapButton } from "./CustomButtons/SatelliteMapButton";
+
 const LiveMap = () => {
   const [mapReady, mapError, google] = useGoogleMapsApi();
   const mapsRef = useRef();
@@ -28,12 +31,32 @@ const LiveMap = () => {
           maxZoom: 15,
           disableDefaultUI: true,
           zoomControl: true,
+          scaleControl: true,
           fullscreenControl: true,
           styles: mapStyle
         })
       );
     }
   }, [mapReady, map, google, mapsRef]);
+
+  // Additional maps callbacks to influence maps behaviour
+  useEffect(() => {
+    if (map && google) {
+      // Register map type callback
+      map.addListener("maptypeid_changed", () => {
+        if (map.getMapTypeId() === google.maps.MapTypeId.TERRAIN) {
+          map.setOptions({ maxZoom: 15 });
+        } else {
+          map.setOptions({ maxZoom: 50 });
+        }
+      });
+
+      // Add custom map controls
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(
+        createSatelliteMapButton(google, map)
+      );
+    }
+  });
 
   // Register map for updates
   useEffect(() => {

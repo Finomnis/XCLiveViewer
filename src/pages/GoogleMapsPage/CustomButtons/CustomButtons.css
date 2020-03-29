@@ -1,0 +1,28 @@
+.custom-google-maps-button {
+  background-color: rgb(255, 255, 255);
+  border: 0px;
+  margin: 10px;
+  padding: 0px;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 2px;
+  height: 40px;
+  width: 40px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-google-maps-button svg {
+  width: 40px;
+  height: 40px;
+}
+
+.custom-google-maps-button path {
+  fill: #666;
+}
+
+.custom-google-maps-button:hover path {
+  fill: #333;
+}
