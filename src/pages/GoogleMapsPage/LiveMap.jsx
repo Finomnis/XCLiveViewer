@@ -14,6 +14,7 @@ import GoogleMapsController from "./GoogleMapsController";
 
 import "./CustomButtons/CustomButtons.css";
 import { createSatelliteMapButton } from "./CustomButtons/SatelliteMapButton";
+import { createFocusCameraMapButton } from "./CustomButtons/FocusCameraMapButton";
 
 const LiveMap = () => {
   const [mapReady, mapError, google] = useGoogleMapsApi();
@@ -54,6 +55,9 @@ const LiveMap = () => {
       // Add custom map controls
       map.controls[google.maps.ControlPosition.TOP_LEFT].push(
         createSatelliteMapButton(google, map)
+      );
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(
+        createFocusCameraMapButton(google, map)
       );
     }
   });

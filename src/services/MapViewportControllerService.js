@@ -40,6 +40,14 @@ class MapViewportControllerService {
     this._emitZoomToSinglePilot();
   };
 
+  setFollowMode = () => {
+    this.state.updateValue(oldValue => ({
+      ...oldValue,
+      enabled: true,
+      followSinglePilot: null
+    }));
+  };
+
   // Sends single pilot mode signal to controllers
   _emitZoomToSinglePilot = () => {
     for (const mapController of this.mapControllers) {
