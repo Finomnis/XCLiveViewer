@@ -5,6 +5,7 @@
     - '+' in friendlist should open the current add-pilots list
 
 - Make offline pilots list prettier
+- Remember last position of offline pilot
 
 - Right click on pilot icon to open context menu (in map)
 
