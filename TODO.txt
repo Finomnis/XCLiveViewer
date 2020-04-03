@@ -1,26 +1,19 @@
+- Make ?add=xxx url that automatically adds given pilots (without removing existing ones. Replacing can be done by first deleting your own ones and then calling the url)
 
-- Add button to switch map type
+- Add friendlist
+    - '+' in pilot list should show friendlist
+    - '+' in friendlist should open the current add-pilots list
 
 - Make offline pilots list prettier
 
-- Add icon to map where pilots can be selected to be followed
-- Add icon to map where pilots can be selected to be hidden
-
-- MapViewportController:
-    - Later: Catch camera to group on Follow button press
+- Right click on pilot icon to open context menu (in map)
 
 - Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
     - Implement HUD in Map
 
 - Add own position (GPS) button to map
 
-- Add button that enables automatic map scale and position
-    - should include all selected pilots + some space
-    - Implement MapAutoPositioner
-        - Implement PositionType SubClasses:
-            - Free
-            - Group
-            - SinglePilot
+- Todo: Add filtering on which pilots the camera should focus
 
 - Add optional nosleep.js (and add setting)
 
@@ -41,7 +34,6 @@
         - altitude histogram
     + Make animated
 
-- Make ?add=xxx url that automatically adds given pilots (without removing existing ones. Replacing can be done by first deleting your own ones and then calling the url)
 
 - Implement Navigation (for drivers)
 
@@ -50,7 +42,7 @@
 
 
 
-
+np
 
 
 
@@ -119,3 +111,6 @@ Old Notes:
     - delete
     - follow
 - Fix GPS to actually shut down if disabled in menu
+
+- Add button to switch map type
+- Later: Catch camera to group on Follow button press
