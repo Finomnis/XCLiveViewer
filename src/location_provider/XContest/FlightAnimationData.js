@@ -2,7 +2,7 @@ import RunningDerivation from "../../util/RunningDerivation";
 import { getDistance } from "geolib";
 import findBisect from "../../util/FindBisect";
 
-export const parseTime = isoStr => {
+export const parseTime = (isoStr) => {
   return Math.round(Date.parse(isoStr) / 1000);
 };
 
@@ -18,7 +18,7 @@ export default class FlightAnimationData {
     );
   }
 
-  at = index => this.data[index];
+  at = (index) => this.data[index];
 
   clear() {
     // reset everything
@@ -62,7 +62,7 @@ export default class FlightAnimationData {
         gpsVario: gpsVario,
         baroVario: baroVario,
         velocity: velocity,
-        t: timestamp
+        t: timestamp,
       };
       this.data.push(newElem);
     }
@@ -89,7 +89,7 @@ export default class FlightAnimationData {
         gpsVario: null,
         baroVario: null,
         velocity: null,
-        t: timestamp
+        t: timestamp,
       };
       newElements.push(newElem);
     }
@@ -142,8 +142,8 @@ export default class FlightAnimationData {
     }
   }
 
-  findBisect = timestamp => {
-    return findBisect(timestamp, this.data.length, pos => this.data[pos].t);
+  findBisect = (timestamp) => {
+    return findBisect(timestamp, this.data.length, (pos) => this.data[pos].t);
   };
 
   findForwardSwipe = (timestamp, startPos) => {

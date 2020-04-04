@@ -25,18 +25,18 @@ class FlightAnimationDataCache {
 }
 
 class DataGens {
-  static fallbackData = flightInfos => {
+  static fallbackData = (flightInfos) => {
     return {
       baroAlt: flightInfos.lastFix.baroAlt,
       gpsAlt: flightInfos.lastFix.gpsAlt,
       elevation: flightInfos.lastFix.elevation,
       pos: {
         lat: flightInfos.lastFix.lat,
-        lng: flightInfos.lastFix.lon
+        lng: flightInfos.lastFix.lon,
       },
       gpsVario: null,
       baroVario: null,
-      velocity: null
+      velocity: null,
     };
   };
 
@@ -47,11 +47,11 @@ class DataGens {
       elevation: data.elevation,
       pos: {
         lat: data.pos.lat,
-        lng: data.pos.lng
+        lng: data.pos.lng,
       },
       gpsVario: data.gpsVario,
       baroVario: data.baroVario,
-      velocity: data.velocity
+      velocity: data.velocity,
     };
   }
 
@@ -63,11 +63,11 @@ class DataGens {
       elevation: lerp(data1.elevation, data2.elevation, pct),
       pos: {
         lat: lerp(data1.pos.lat, data2.pos.lat, pct),
-        lng: lerp(data1.pos.lng, data2.pos.lng, pct)
+        lng: lerp(data1.pos.lng, data2.pos.lng, pct),
       },
       gpsVario: lerp(data1.gpsVario, data2.gpsVario, pct),
       baroVario: lerp(data1.baroVario, data2.baroVario, pct),
-      velocity: lerp(data1.velocity, data2.velocity, pct)
+      velocity: lerp(data1.velocity, data2.velocity, pct),
     };
   }
 
@@ -99,11 +99,11 @@ class DataGens {
           data3.pos.lng,
           data3.t,
           timeStamp
-        )
+        ),
       },
       gpsVario: lerp(data1.gpsVario, data2.gpsVario, pct),
       baroVario: lerp(data1.baroVario, data2.baroVario, pct),
-      velocity: lerp(data1.velocity, data2.velocity, pct)
+      velocity: lerp(data1.velocity, data2.velocity, pct),
     };
   }
 
@@ -202,20 +202,20 @@ class FlightAnimation {
       timeOffsetSeconds: getSetting(Settings.ANIMATION_DELAY).getValue(),
       lowLatencyMode: getSetting(Settings.LOW_LATENCY).getValue(),
       trackLengthMinutes: getSetting(Settings.PATH_LENGTH).getValue(),
-      limitTracks: getSetting(Settings.LIMIT_PATHS).getValue()
+      limitTracks: getSetting(Settings.LIMIT_PATHS).getValue(),
     };
     this.liveDataCache.reset();
     this.flightInfoDataCache.reset();
   };
 
-  updateInfos = infos => {
+  updateInfos = (infos) => {
     this.landed |= infos.landed;
     this.flightInfos = infos;
     this.flightInfoData.replace(infos.track);
     this.flightInfoDataCache.reset();
   };
 
-  updateData = data => {
+  updateData = (data) => {
     if (data.length < 1) return;
 
     // Compute start time
@@ -281,7 +281,7 @@ class FlightAnimation {
           ? data.at(cache.currentArrayPos - 2)
           : {
               ...data1,
-              t: data1.t - 1
+              t: data1.t - 1,
             };
 
       const data3 =
@@ -289,7 +289,7 @@ class FlightAnimation {
           ? data.at(cache.currentArrayPos + 1)
           : {
               ...data2,
-              t: data2.t + 1
+              t: data2.t + 1,
             };
 
       // Blend via spline
@@ -316,7 +316,7 @@ class FlightAnimation {
       startOfTrack,
       endOfTrack,
       newestDataTimestamp,
-      velocityVec
+      velocityVec,
     ];
   };
 
@@ -326,7 +326,7 @@ class FlightAnimation {
       false,
       true,
       parseTime(this.flightInfos.lastFix.timestamp),
-      null
+      null,
     ];
   };
 
@@ -347,7 +347,7 @@ class FlightAnimation {
         lat: elem.pos.lat,
         lng: elem.pos.lng,
         timestamp: elem.t,
-        elevation: elem.gpsAlt
+        elevation: elem.gpsAlt,
       });
       cache.mapsPathNewestPos += 1;
     }
@@ -371,7 +371,7 @@ class FlightAnimation {
     return track;
   };
 
-  updateAnimation = animationTimeMillis => {
+  updateAnimation = (animationTimeMillis) => {
     const animationTimeSeconds = this.settings.lowLatencyMode
       ? animationTimeMillis / 1000
       : animationTimeMillis / 1000 - this.settings.timeOffsetSeconds;
@@ -413,7 +413,7 @@ class FlightAnimation {
       startOfTrack,
       endOfTrack,
       newestDataTimestamp,
-      velocityVec
+      velocityVec,
     ] = animationResult;
 
     // Special case for endOfTrack for lowLatencyMode
@@ -439,7 +439,7 @@ class FlightAnimation {
       name: this.flightInfos.info.user.fullname,
       newestDataTimestamp: newestDataTimestamp,
       track: track,
-      velocityVec: velocityVec
+      velocityVec: velocityVec,
     };
 
     return result;

@@ -6,7 +6,7 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemIcon
+  ListItemIcon,
 } from "@material-ui/core";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import AnimatedPilotListEntry from "./AnimatedPilotListEntry";
@@ -26,44 +26,44 @@ class AnimatedPilotList extends React.PureComponent {
     super(props);
     this.state = {
       onlinePilots: [],
-      contextMenu: null
+      contextMenu: null,
     };
     this.gpsData = getGPSProvider().getData();
   }
 
-  getSortedPilotList = pilotData => {
+  getSortedPilotList = (pilotData) => {
     // If we have GPS, return pilot list in whatever order
     if (this.gpsData === null) return Object.keys(pilotData);
 
     // Get own position
     const myPos = {
       lat: this.gpsData.coords.latitude,
-      lng: this.gpsData.coords.longitude
+      lng: this.gpsData.coords.longitude,
     };
 
     // Get distances to pilots
     let pilotsAndDistances = Object.entries(pilotData).map(([name, data]) => [
       name,
-      getDistance(myPos, data.pos)
+      getDistance(myPos, data.pos),
     ]);
 
     // Sort
     pilotsAndDistances.sort((el1, el2) => el1[1] - el2[1]);
 
     // Return the sorted pilot names
-    return pilotsAndDistances.map(el => el[0]);
+    return pilotsAndDistances.map((el) => el[0]);
   };
 
-  onAnimationFrame = pilotData => {
+  onAnimationFrame = (pilotData) => {
     // Sort
     const sortedPilotList = this.getSortedPilotList(pilotData);
 
     // Split pilots by landed and not landed
     const landedPilotList = sortedPilotList.filter(
-      name => pilotData[name].endOfTrack && pilotData[name].landed
+      (name) => pilotData[name].endOfTrack && pilotData[name].landed
     );
     const notLandedPilotList = sortedPilotList.filter(
-      name => !(pilotData[name].endOfTrack && pilotData[name].landed)
+      (name) => !(pilotData[name].endOfTrack && pilotData[name].landed)
     );
 
     // Show landed pilots at the end of the list
@@ -84,11 +84,11 @@ class AnimatedPilotList extends React.PureComponent {
 
     // If it changed, run a component update
     if (pilotListChanged) {
-      this.setState(state => ({ ...state, onlinePilots: pilotList }));
+      this.setState((state) => ({ ...state, onlinePilots: pilotList }));
     }
   };
 
-  onNewGPSDataReceived = gpsData => {
+  onNewGPSDataReceived = (gpsData) => {
     this.gpsData = gpsData;
   };
 
@@ -101,19 +101,19 @@ class AnimatedPilotList extends React.PureComponent {
     getGPSProvider().unregisterCallback(this.onNewGPSDataReceived);
   }
 
-  removePilot = pilotId => {
+  removePilot = (pilotId) => {
     this.props.removePilots([pilotId]);
   };
 
   showContextMenu = (pilotId, mousePos, pilotProps) => {
-    this.setState(oldState => ({
+    this.setState((oldState) => ({
       ...oldState,
-      contextMenu: { pilotId: pilotId, pos: mousePos, props: pilotProps }
+      contextMenu: { pilotId: pilotId, pos: mousePos, props: pilotProps },
     }));
   };
 
   hideContextMenu = () => {
-    this.setState(oldState => ({ ...oldState, contextMenu: null }));
+    this.setState((oldState) => ({ ...oldState, contextMenu: null }));
   };
 
   contextMenu_delete = () => {
@@ -144,14 +144,14 @@ class AnimatedPilotList extends React.PureComponent {
 
     // Show online pilots first
     const onlinePilots = this.state.onlinePilots.filter(
-      pilotId => pilotId in this.props.pilots
+      (pilotId) => pilotId in this.props.pilots
     );
 
     const offlinePilots = Object.keys(this.props.pilots).filter(
-      pilotId => !pilotIsOnline.has(pilotId)
+      (pilotId) => !pilotIsOnline.has(pilotId)
     );
 
-    const getPilotName = pilotId => {
+    const getPilotName = (pilotId) => {
       const name = this.props.pilots[pilotId];
       if (name === undefined || name === null) return pilotId;
       return name;
@@ -160,7 +160,7 @@ class AnimatedPilotList extends React.PureComponent {
     return (
       <Box height="100%" bgcolor="#eeeef5" overflow="auto">
         <Box margin={1}>
-          {onlinePilots.map(pilotId => (
+          {onlinePilots.map((pilotId) => (
             <AnimatedPilotListEntry
               key={pilotId}
               pilotId={pilotId}
@@ -171,7 +171,7 @@ class AnimatedPilotList extends React.PureComponent {
           ))}
         </Box>
         <Box margin={1}>
-          {offlinePilots.map(pilotId => (
+          {offlinePilots.map((pilotId) => (
             <Box
               key={pilotId}
               onClick={() => {
@@ -198,7 +198,7 @@ class AnimatedPilotList extends React.PureComponent {
           }
           transformOrigin={{
             vertical: "top",
-            horizontal: "right"
+            horizontal: "right",
           }}
           onClose={this.hideContextMenu}
         >
