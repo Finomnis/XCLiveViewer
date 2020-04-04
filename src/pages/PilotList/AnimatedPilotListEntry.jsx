@@ -3,7 +3,7 @@ import {
   ExpansionPanel,
   ExpansionPanelSummary,
   Typography,
-  ExpansionPanelDetails
+  ExpansionPanelDetails,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
@@ -19,24 +19,24 @@ const FirstRowLeft = styled(Typography)({ overflow: "hidden", flex: "1" });
 
 const FirstRowRight = styled(Typography)({
   marginRight: ".2em",
-  marginLeft: ".5em"
+  marginLeft: ".5em",
 });
 
 const SecondRow = styled(Typography)({
   display: "flex",
   justifyContent: "space-between",
-  paddingLeft: ".5em"
+  paddingLeft: ".5em",
 });
 
 const PilotExpansionPanelSummary = withStyles({
   root: {
-    paddingLeft: "12px"
+    paddingLeft: "12px",
   },
   content: {
     overflow: "hidden",
     alignItems: "center",
-    whiteSpace: "nowrap"
-  }
+    whiteSpace: "nowrap",
+  },
 })(ExpansionPanelSummary);
 
 class AnimatedPilotListEntry extends React.PureComponent {
@@ -53,12 +53,12 @@ class AnimatedPilotListEntry extends React.PureComponent {
     this.liveStateRef = React.createRef();
     this.iconRef = React.createRef();
 
-    this.contextMenuHandler = new ContextMenuHandler(e => {
+    this.contextMenuHandler = new ContextMenuHandler((e) => {
       this.props.onContextMenuHandler(
         this.props.pilotId,
         {
           left: e.pageX,
-          top: e.pageY
+          top: e.pageY,
         },
         this.pilotProps
       );
@@ -68,7 +68,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
   //////////////////////////////////////////////////////////////
   /// BOILERPLATE CODE FOR UPDATING THE COMPONENT
   ///
-  extractImportantProps = pilotInfo => {
+  extractImportantProps = (pilotInfo) => {
     return {
       height: pilotInfo.gpsAlt !== null ? pilotInfo.gpsAlt : pilotInfo.baroAlt,
       elevation: pilotInfo.elevation,
@@ -83,11 +83,11 @@ class AnimatedPilotListEntry extends React.PureComponent {
         pilotInfo.velocityVec === null ? null : pilotInfo.velocityVec.lat,
       velocityLng:
         pilotInfo.velocityVec === null ? null : pilotInfo.velocityVec.lng,
-      velocity: pilotInfo.velocity
+      velocity: pilotInfo.velocity,
     };
   };
 
-  propsChanged = newProps => {
+  propsChanged = (newProps) => {
     const oldProps = this.pilotProps;
     for (let p in oldProps) {
       if (!(p in newProps)) return true;
@@ -99,11 +99,11 @@ class AnimatedPilotListEntry extends React.PureComponent {
     return false;
   };
 
-  onNewGPSDataReceived = gpsData => {
+  onNewGPSDataReceived = (gpsData) => {
     this.gpsData = gpsData;
   };
 
-  onNewDataReceived = pilotData => {
+  onNewDataReceived = (pilotData) => {
     if (!(this.props.pilotId in pilotData)) return;
 
     const pilotInfo = pilotData[this.props.pilotId];
@@ -131,7 +131,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
     if (this.lastFixRef.current !== null && propsChanged) {
       this.lastFixRef.current.setFix({
         lat: this.pilotProps.lat,
-        lng: this.pilotProps.lng
+        lng: this.pilotProps.lng,
       });
     }
 
@@ -169,7 +169,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
         landed: this.pilotProps.landed,
         endOfTrack: this.pilotProps.endOfTrack,
         relative: true,
-        showLastFix: getSetting(Settings.LOW_LATENCY).getValue()
+        showLastFix: getSetting(Settings.LOW_LATENCY).getValue(),
       });
     }
   };
@@ -244,7 +244,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
             display="block"
             style={{
               flex: "0 0 auto",
-              ...getRotationStyle(pilotIconRotation)
+              ...getRotationStyle(pilotIconRotation),
             }}
             ref={this.iconRef}
           >
@@ -254,14 +254,14 @@ class AnimatedPilotListEntry extends React.PureComponent {
             style={{
               flex: "1 1 auto",
               overflow: "hidden",
-              marginLeft: "10px"
+              marginLeft: "10px",
             }}
           >
             <div
               style={{
                 width: "100%",
                 display: "flex",
-                overflow: "hidden"
+                overflow: "hidden",
               }}
             >
               <FirstRowLeft variant="body2">
@@ -272,7 +272,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
                   ref={this.lastFixRef}
                   lastFix={{
                     lat: this.pilotProps.lat,
-                    lng: this.pilotProps.lng
+                    lng: this.pilotProps.lng,
                   }}
                 />
               </FirstRowRight>
