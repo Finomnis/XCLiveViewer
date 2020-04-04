@@ -7,14 +7,9 @@
 - Make offline pilots list prettier
 - Remember last position of offline pilot
 
-- Right click on pilot icon to open context menu (in map)
-
-- Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
-    - Implement HUD in Map
 
 - Add own position (GPS) button to map
 
-- Todo: Add filtering on which pilots the camera should focus
 
 - Add optional nosleep.js (and add setting)
 
@@ -27,11 +22,11 @@
         + status
         + altitude/altitude gnd
         + distance, direction
-        - vario
+        - (vario)
         - (velocity)
-        - airtime
-        - xc kilometer
-        - (takeoff, country flag)
+        + airtime
+        + xc kilometer
+        + takeoff (- country flag)
         - altitude histogram
     + Make animated
 
@@ -43,10 +38,16 @@
 
 
 
-np
 
+ABANDONED:
 
+// - Right click on pilot icon to open context menu (in map)
+// Posponed - can't be done easily
 
+- Map: click on pilot -> open details tab on the bottom, showing name,stats,histogram
+    - Implement HUD in Map
+- Todo: Add filtering on which pilots the camera should focus
+    -> Instead, use friendlist
 
 
 DONE:
