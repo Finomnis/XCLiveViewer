@@ -11,9 +11,13 @@ import { getGPSProvider } from "../../services/GPSProvider";
 import { LastFixState, LastFixArrow } from "../../util/LastFixState";
 import { getPilotIcon, getPilotIconColor } from "../../common/PilotIcon";
 import { styled, withStyles } from "@material-ui/styles";
+import TimerIcon from "@material-ui/icons/Timer";
+import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
+import FlagIcon from "@material-ui/icons/Flag";
 import { getRotationStyle } from "../../util/Rotation";
 import { getSetting, Settings } from "../../common/PersistentState/Settings";
 import ContextMenuHandler from "../../util/ContextMenuHandler";
+import { parseTime } from "../../location_provider/XContest/FlightAnimationData";
 
 const FirstRowLeft = styled(Typography)({ overflow: "hidden", flex: "1" });
 
@@ -28,6 +32,13 @@ const SecondRow = styled(Typography)({
   paddingLeft: ".5em",
 });
 
+const DetailsRow = styled(Typography)({
+  display: "flex",
+  justifyContent: "flex-start",
+  alignItems: "center",
+  paddingLeft: ".5em",
+});
+
 const PilotExpansionPanelSummary = withStyles({
   root: {
     paddingLeft: "12px",
@@ -39,6 +50,39 @@ const PilotExpansionPanelSummary = withStyles({
   },
 })(ExpansionPanelSummary);
 
+const PilotExpansionPanelDetails = withStyles({
+  root: {
+    display: "flex",
+    alignItems: "flex-start",
+    flexDirection: "column",
+    MozUserSelect: "none",
+    WebkitUserSelect: "none",
+    msUserSelect: "none",
+  },
+})(ExpansionPanelDetails);
+
+const DetailTimerIcon = withStyles({
+  root: {
+    paddingRight: ".2em",
+    width: ".6em",
+    height: ".6em",
+  },
+})(TimerIcon);
+const DetailDistanceIcon = withStyles({
+  root: {
+    paddingRight: ".2em",
+    width: ".6em",
+    height: ".6em",
+  },
+})(DoubleArrowIcon);
+const DetailLaunchIcon = withStyles({
+  root: {
+    paddingRight: ".2em",
+    width: ".6em",
+    height: ".6em",
+  },
+})(FlagIcon);
+
 class AnimatedPilotListEntry extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -47,11 +91,27 @@ class AnimatedPilotListEntry extends React.PureComponent {
     this.gpsData = getGPSProvider().getData();
     this.pilotColor = getPilotIconColor(this.props.pilotId);
 
+    // Get initial pilotinfo
+    this.state = {
+      launchSite: null,
+      launchTime: null,
+      scoreDistance: null,
+      scoreType: null,
+    };
+    Object.assign(
+      this.state,
+      this.stateChangesFromPilotInfos(
+        this.state,
+        getXContestInterface().getPilotInfos()
+      )
+    );
+
     // References
     this.lastFixRef = React.createRef();
     this.heightRef = React.createRef();
     this.liveStateRef = React.createRef();
     this.iconRef = React.createRef();
+    this.flightDurationRef = React.createRef();
 
     this.contextMenuHandler = new ContextMenuHandler((e) => {
       this.props.onContextMenuHandler(
@@ -84,6 +144,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
       velocityLng:
         pilotInfo.velocityVec === null ? null : pilotInfo.velocityVec.lng,
       velocity: pilotInfo.velocity,
+      lastPotentialAirTime: pilotInfo.lastPotentialAirTime,
     };
   };
 
@@ -119,7 +180,42 @@ class AnimatedPilotListEntry extends React.PureComponent {
     }
   };
 
-  shallowRerender = propsChanged => {
+  onNewPilotInfos = (infos) => {
+    const stateChanges = this.stateChangesFromPilotInfos(this.state, infos);
+    if (Object.keys(stateChanges).length !== 0) {
+      this.setState(stateChanges);
+    }
+  };
+
+  stateChangesFromPilotInfos = (oldState, allInfos) => {
+    const stateChanges = {};
+
+    const processInfo = (name, value) => {
+      if (name in oldState && oldState[name] === value) {
+        return;
+      }
+      stateChanges[name] = value;
+    };
+
+    if (this.props.pilotId in allInfos) {
+      const infos = allInfos[this.props.pilotId];
+
+      processInfo("launchSite", infos.info.launch);
+      processInfo("launchTime", parseTime(infos.info.launchPoint.timestamp));
+
+      if ("contest" in infos && "score" in infos.contest) {
+        const score = infos.contest.score;
+        if (score.distance != null)
+          processInfo("scoreDistance", score.distance.toFixed(1));
+        if ("type" in score) {
+          processInfo("scoreType", score.type.tag);
+        }
+      }
+    }
+    return stateChanges;
+  };
+
+  shallowRerender = (propsChanged) => {
     // Update height
     if (this.heightRef.current !== null && propsChanged) {
       const newHeight = AnimatedPilotListEntry.renderHeight(this.pilotProps);
@@ -172,15 +268,27 @@ class AnimatedPilotListEntry extends React.PureComponent {
         showLastFix: getSetting(Settings.LOW_LATENCY).getValue(),
       });
     }
+
+    // Update Flight Duration
+    if (this.flightDurationRef.current !== null && propsChanged) {
+      const newFlightDuration = AnimatedPilotListEntry.renderFlightDuration(
+        this.state.launchTime,
+        this.pilotProps.lastPotentialAirTime
+      );
+      if (newFlightDuration !== this.flightDurationRef.current.innerHTML)
+        this.flightDurationRef.current.innerHTML = newFlightDuration;
+    }
   };
 
   componentDidMount() {
     getXContestInterface().animation.registerCallback(this.onNewDataReceived);
+    getXContestInterface().pilotInfos.registerCallback(this.onNewPilotInfos);
     getGPSProvider().registerCallback(this.onNewGPSDataReceived);
   }
 
   componentWillUnmount() {
     getXContestInterface().animation.unregisterCallback(this.onNewDataReceived);
+    getXContestInterface().pilotInfos.unregisterCallback(this.onNewPilotInfos);
     getGPSProvider().unregisterCallback(this.onNewGPSDataReceived);
   }
   ///
@@ -199,6 +307,29 @@ class AnimatedPilotListEntry extends React.PureComponent {
       Math.round(Math.max(0, height - pilotProps.elevation)) +
       "m)"
     );
+  }
+
+  static renderFlightDuration(launchTime, currentTime) {
+    if (launchTime == null || currentTime == null) return "-:-- h";
+
+    const duration = Math.round((currentTime - launchTime) / 60);
+    const durationMinutes = (duration % 60).toString().padStart(2, "0");
+    const durationHours = Math.floor(duration / 60);
+    return durationHours + ":" + durationMinutes + " h";
+  }
+
+  static scoreTypes = {
+    FlatTriangle: " (flat)",
+    FaiTriangle: " (fai)",
+    FreeFlight: " (free)",
+  };
+
+  static renderScore(scoreDistance, scoreType) {
+    const scoreTypeStr =
+      scoreType in AnimatedPilotListEntry.scoreTypes
+        ? AnimatedPilotListEntry.scoreTypes[scoreType]
+        : scoreType;
+    return scoreDistance + " km " + scoreTypeStr;
   }
 
   render() {
@@ -292,17 +423,27 @@ class AnimatedPilotListEntry extends React.PureComponent {
             </SecondRow>
           </div>
         </PilotExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Typography
-            style={{
-              MozUserSelect: "none",
-              WebkitUserSelect: "none",
-              msUserSelect: "none"
-            }}
-          >
-            TODO: Details
-          </Typography>
-        </ExpansionPanelDetails>
+        <PilotExpansionPanelDetails>
+          <DetailsRow variant="caption">
+            <DetailTimerIcon />
+            <span ref={this.flightDurationRef}>
+              {AnimatedPilotListEntry.renderFlightDuration(
+                this.state.launchTime,
+                this.pilotProps.lastPotentialAirTime
+              )}
+            </span>
+          </DetailsRow>
+          <DetailsRow variant="caption">
+            <DetailDistanceIcon />
+            {AnimatedPilotListEntry.renderScore(
+              this.state.scoreDistance,
+              this.state.scoreType
+            )}
+          </DetailsRow>
+          <DetailsRow variant="caption">
+            <DetailLaunchIcon /> {this.state.launchSite}
+          </DetailsRow>
+        </PilotExpansionPanelDetails>
       </ExpansionPanel>
     );
   }
