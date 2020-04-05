@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "91802ce65a36953ce09ea8c4490d931a",
+    "revision": "9c0da9c32bd38d9cc795b17493d46e3b",
     "url": "/XCLiveViewer/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/XCLiveViewer/static/css/2.69712b45.chunk.css"
   },
   {
-    "revision": "a920df65690c218765b7",
+    "revision": "74e5357b9c5575b8c2ab",
     "url": "/XCLiveViewer/static/css/main.7850548b.chunk.css"
   },
   {
@@ -20,12 +20,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/XCLiveViewer/static/js/2.c6254e12.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "a920df65690c218765b7",
-    "url": "/XCLiveViewer/static/js/main.20cda02f.chunk.js"
+    "revision": "74e5357b9c5575b8c2ab",
+    "url": "/XCLiveViewer/static/js/main.8dceb993.chunk.js"
   },
   {
     "revision": "a50a647bf31c842a7b59462da61dfab1",
-    "url": "/XCLiveViewer/static/js/main.20cda02f.chunk.js.LICENSE.txt"
+    "url": "/XCLiveViewer/static/js/main.8dceb993.chunk.js.LICENSE.txt"
   },
   {
     "revision": "d92e57419cfcdee85d27",
