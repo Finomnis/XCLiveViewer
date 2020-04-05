@@ -4,11 +4,13 @@
   "homepage": "https://finomnis.github.io/XCLiveViewer/",
   "private": true,
   "dependencies": {
+    "@craco/craco": "^5.6.4",
     "@googlemaps/loader": "^0.0.8",
     "@material-ui/core": "^4.9.9",
     "@material-ui/icons": "^4.9.1",
     "cesium": "^1.68.0",
     "color-convert": "^2.0.1",
+    "craco-cesium": "^1.2.0",
     "dotenv": "^8.2.0",
     "flag-icon-css": "^3.4.6",
     "geolib": "^3.2.1",
@@ -21,9 +23,9 @@
     "recompose": "^0.30.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
