@@ -5,7 +5,7 @@ import {
   BottomNavigation,
   BottomNavigationAction,
   useMediaQuery,
-  useTheme
+  useTheme,
 } from "@material-ui/core";
 
 import PeopleIcon from "@material-ui/icons/People";

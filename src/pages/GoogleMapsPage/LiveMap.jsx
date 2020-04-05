@@ -34,7 +34,7 @@ const LiveMap = () => {
           zoomControl: true,
           scaleControl: true,
           fullscreenControl: true,
-          styles: mapStyle
+          styles: mapStyle,
         })
       );
     }
@@ -60,7 +60,7 @@ const LiveMap = () => {
         createFocusCameraMapButton(google, map)
       );
     }
-  });
+  }, [map, google]);
 
   // Register map for updates
   useEffect(() => {
@@ -78,7 +78,7 @@ const LiveMap = () => {
       if (getSetting(Settings.GPS_ENABLED).getValue()) {
         geolocationMarker.setMap(map);
       }
-      const geolocationMarkerStateUpdater = enabled => {
+      const geolocationMarkerStateUpdater = (enabled) => {
         if (enabled) {
           geolocationMarker.setMap(map);
         } else {
