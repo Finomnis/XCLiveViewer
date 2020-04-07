@@ -347,7 +347,8 @@ class FlightAnimation {
         lat: elem.pos.lat,
         lng: elem.pos.lng,
         timestamp: elem.t,
-        elevation: elem.gpsAlt,
+        altitude: elem.gpsAlt !== null ? elem.gpsAlt : elem.baroAlt,
+        elevation: elem.elevation,
       });
       cache.mapsPathNewestPos += 1;
     }
