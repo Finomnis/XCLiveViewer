@@ -18,6 +18,7 @@ import { getRotationStyle } from "../../util/Rotation";
 import { getSetting, Settings } from "../../common/PersistentState/Settings";
 import ContextMenuHandler from "../../util/ContextMenuHandler";
 import { parseTime } from "../../location_provider/XContest/FlightAnimationData";
+import { ElevationHistogram } from "./ElevationHistogram";
 
 const FirstRowLeft = styled(Typography)({ overflow: "hidden", flex: "1" });
 
@@ -29,13 +30,6 @@ const FirstRowRight = styled(Typography)({
 const SecondRow = styled(Typography)({
   display: "flex",
   justifyContent: "space-between",
-  paddingLeft: ".5em",
-});
-
-const DetailsRow = styled(Typography)({
-  display: "flex",
-  justifyContent: "flex-start",
-  alignItems: "center",
   paddingLeft: ".5em",
 });
 
@@ -53,13 +47,34 @@ const PilotExpansionPanelSummary = withStyles({
 const PilotExpansionPanelDetails = withStyles({
   root: {
     display: "flex",
-    alignItems: "flex-start",
-    flexDirection: "column",
+    alignItems: "stretch",
+    justifyContent: "space-between",
     MozUserSelect: "none",
     WebkitUserSelect: "none",
     msUserSelect: "none",
   },
 })(ExpansionPanelDetails);
+
+const DetailsStats = styled(Typography)({
+  flex: "1 0 0",
+  display: "flex",
+  justifyContent: "flex-start",
+  flexDirection: "column",
+  alignItems: "flex-start",
+  paddingRight: "1em",
+});
+
+const DetailsGraph = styled(Typography)({
+  flex: "2 1 0",
+  display: "flex",
+});
+
+const DetailsRow = styled(Typography)({
+  display: "flex",
+  justifyContent: "flex-start",
+  alignItems: "center",
+  whiteSpace: "nowrap",
+});
 
 const DetailTimerIcon = withStyles({
   root: {
@@ -424,25 +439,30 @@ class AnimatedPilotListEntry extends React.PureComponent {
           </div>
         </PilotExpansionPanelSummary>
         <PilotExpansionPanelDetails>
-          <DetailsRow variant="caption">
-            <DetailTimerIcon />
-            <span ref={this.flightDurationRef}>
-              {AnimatedPilotListEntry.renderFlightDuration(
-                this.state.launchTime,
-                this.pilotProps.lastPotentialAirTime
+          <DetailsStats>
+            <DetailsRow variant="caption">
+              <DetailTimerIcon />
+              <span ref={this.flightDurationRef}>
+                {AnimatedPilotListEntry.renderFlightDuration(
+                  this.state.launchTime,
+                  this.pilotProps.lastPotentialAirTime
+                )}
+              </span>
+            </DetailsRow>
+            <DetailsRow variant="caption">
+              <DetailDistanceIcon />
+              {AnimatedPilotListEntry.renderScore(
+                this.state.scoreDistance,
+                this.state.scoreType
               )}
-            </span>
-          </DetailsRow>
-          <DetailsRow variant="caption">
-            <DetailDistanceIcon />
-            {AnimatedPilotListEntry.renderScore(
-              this.state.scoreDistance,
-              this.state.scoreType
-            )}
-          </DetailsRow>
-          <DetailsRow variant="caption">
-            <DetailLaunchIcon /> {this.state.launchSite}
-          </DetailsRow>
+            </DetailsRow>
+            <DetailsRow variant="caption">
+              <DetailLaunchIcon /> {this.state.launchSite}
+            </DetailsRow>
+          </DetailsStats>
+          <DetailsGraph variant="caption">
+            <ElevationHistogram pilot={this.props.pilotId} />
+          </DetailsGraph>
         </PilotExpansionPanelDetails>
       </ExpansionPanel>
     );
