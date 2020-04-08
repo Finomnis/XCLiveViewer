@@ -47,7 +47,7 @@ export class ElevationHistogram extends React.PureComponent {
       return [x, y];
     };
 
-    const [_, lastKnownElevationY] = getCoord(0, currentElevation);
+    const [, lastKnownElevationY] = getCoord(0, currentElevation);
 
     let ctx = canvas.getContext("2d", {
       alpha: false,
