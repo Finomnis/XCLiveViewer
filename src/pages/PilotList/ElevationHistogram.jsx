@@ -18,11 +18,18 @@ export class ElevationHistogram extends React.PureComponent {
     this.lastRenderedTimestamp = 0;
   }
 
-  prepareCanvas = (canvas) => {
+  prepareCanvasAndComputeLimits = (canvas, pilotData) => {
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
+
+    // If landed, display the elevation histogram of the entire flight
+    if (pilotData.landed && pilotData.track.length > 0) {
+      const finalTimestamp = pilotData.lastPotentialAirTime;
+      const beginningTimestamp = pilotData.track[0].timestamp;
+      return Math.max(1, finalTimestamp - beginningTimestamp);
+    }
 
     // Return number of minutes to be included in the histogram
     return 15 * 60;
@@ -117,7 +124,7 @@ export class ElevationHistogram extends React.PureComponent {
     if (currentHeight === null) return;
 
     // Prepare canvas and compute timeframe
-    const timeFrame = this.prepareCanvas(canvas);
+    const timeFrame = this.prepareCanvasAndComputeLimits(canvas, pilotData);
 
     // Compute max/min value
     let minValue = currentElevation;
