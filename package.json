@@ -20,7 +20,9 @@
     "react-swipeable-views": "^0.13.9",
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5",
-    "recompose": "^0.30.0"
+    "recompose": "^0.30.0",
+    "wtf-8": "^1.0.1",
+    "zlib": "^1.0.5"
   },
   "scripts": {
     "start": "craco start",
