@@ -382,9 +382,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
         onTouchEnd={this.contextMenuHandler.onTouchEnd}
         onTouchMove={this.contextMenuHandler.onTouchMove}
         style={{
-          filter: this.props.highlighted
-            ? undefined
-            : "grayscale(100%) opacity(70%)",
+          filter: this.props.shown ? undefined : "grayscale(100%) opacity(70%)",
         }}
       >
         <PilotExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>

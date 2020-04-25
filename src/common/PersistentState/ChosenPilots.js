@@ -51,13 +51,14 @@ export function setChosenPilotsAndUpdateNames(chosenPilots = null) {
 // The default pilot entry for new pilots
 export const defaultPilotEntry = (pilotName) => ({
   name: pilotName,
-  highlighted: true,
+  shown: true,
   lastKnownPosition: null,
 });
 
 // Add new pilots
 export const addPilots = (pilotIds) => {
   const newPilotState = { ...getChosenPilots() };
+
   let changed = false;
   for (const pilotId of pilotIds) {
     if (!(pilotId in newPilotState)) {

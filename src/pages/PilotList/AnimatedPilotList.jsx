@@ -143,13 +143,13 @@ class AnimatedPilotList extends React.PureComponent {
     let pilotIsOnline = new Set(this.state.onlinePilots);
 
     // Show online pilots first
-    const onlineHighlightedPilots = this.state.onlinePilots.filter(
-      (pilotId) =>
-        pilotId in this.props.pilots && this.props.pilots[pilotId].highlighted
-    );
     const onlinePilots = this.state.onlinePilots.filter(
       (pilotId) =>
-        pilotId in this.props.pilots && !this.props.pilots[pilotId].highlighted
+        pilotId in this.props.pilots && this.props.pilots[pilotId].shown
+    );
+    const onlineHiddenPilots = this.state.onlinePilots.filter(
+      (pilotId) =>
+        pilotId in this.props.pilots && !this.props.pilots[pilotId].shown
     );
 
     const offlinePilots = Object.keys(this.props.pilots).filter(
@@ -164,11 +164,11 @@ class AnimatedPilotList extends React.PureComponent {
 
     return (
       <Box height="100%" bgcolor="#eeeef5" overflow="auto">
-        {onlineHighlightedPilots.length > 0 ? (
+        {onlinePilots.length > 0 ? (
           <Box margin={1} marginBottom={2}>
-            {onlineHighlightedPilots.map((pilotId) => (
+            {onlinePilots.map((pilotId) => (
               <AnimatedPilotListEntry
-                highlighted={true}
+                shown={true}
                 key={pilotId}
                 pilotId={pilotId}
                 pilotName={getPilotName(pilotId)}
@@ -178,11 +178,11 @@ class AnimatedPilotList extends React.PureComponent {
             ))}
           </Box>
         ) : null}
-        {onlinePilots.length > 0 ? (
+        {onlineHiddenPilots.length > 0 ? (
           <Box margin={1} marginBottom={2}>
-            {onlinePilots.map((pilotId) => (
+            {onlineHiddenPilots.map((pilotId) => (
               <AnimatedPilotListEntry
-                highlighted={false}
+                shown={false}
                 key={pilotId}
                 pilotId={pilotId}
                 pilotName={getPilotName(pilotId)}
