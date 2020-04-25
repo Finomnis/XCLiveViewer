@@ -32,11 +32,11 @@ export function setChosenPilotsAndUpdateNames(chosenPilots = null) {
       // Get new name
       const currentName = pilotList[pilotId].info.user.fullname;
       // Get stored name
-      const previousName = chosenPilots[pilotId];
+      const previousName = chosenPilots[pilotId].name;
 
       // If new name is different, update
       if (currentName !== previousName) {
-        chosenPilots[pilotId] = currentName;
+        chosenPilots[pilotId].name = currentName;
         chosenPilotsUpdated = true;
       }
     }
@@ -48,13 +48,20 @@ export function setChosenPilotsAndUpdateNames(chosenPilots = null) {
   }
 }
 
+// The default pilot entry for new pilots
+export const defaultPilotEntry = (pilotName) => ({
+  name: pilotName,
+  highlighted: true,
+  lastKnownPosition: null,
+});
+
 // Add new pilots
-export const addPilots = pilotIds => {
+export const addPilots = (pilotIds) => {
   const newPilotState = { ...getChosenPilots() };
   let changed = false;
   for (const pilotId of pilotIds) {
     if (!(pilotId in newPilotState)) {
-      newPilotState[pilotId] = pilotId;
+      newPilotState[pilotId] = defaultPilotEntry(pilotId);
       changed = true;
     }
   }
@@ -65,7 +72,7 @@ export const addPilots = pilotIds => {
 };
 
 // Remove pilots
-export const removePilots = pilotIds => {
+export const removePilots = (pilotIds) => {
   const newPilotState = { ...getChosenPilots() };
 
   let changed = false;
@@ -81,8 +88,8 @@ export const removePilots = pilotIds => {
   }
 };
 
-export function useChosenPilots() {
+/*export function useChosenPilots() {
   const [chosenPilots] = persistentChosenPilots.use();
 
   return [chosenPilots, addPilots, removePilots];
-}
+}*/

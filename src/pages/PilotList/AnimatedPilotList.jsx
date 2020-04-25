@@ -152,9 +152,9 @@ class AnimatedPilotList extends React.PureComponent {
     );
 
     const getPilotName = (pilotId) => {
-      const name = this.props.pilots[pilotId];
-      if (name === undefined || name === null) return pilotId;
-      return name;
+      const pilotData = this.props.pilots[pilotId];
+      if (pilotData === undefined || pilotData === null) return pilotId;
+      return pilotData.name;
     };
 
     return (
