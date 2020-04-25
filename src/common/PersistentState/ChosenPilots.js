@@ -48,6 +48,25 @@ export function setChosenPilotsAndUpdateNames(chosenPilots = null) {
   }
 }
 
+// Change which pilots are shown
+export const updateShownPilots = (pilotIds) => {
+  const newPilotState = { ...getChosenPilots() };
+
+  let changed = false;
+  for (const pilotId in newPilotState) {
+    const pilotShouldBeShown = pilotIds.indexOf(pilotId) !== -1;
+    const pilotIsShown = newPilotState[pilotId].shown;
+    if (pilotShouldBeShown !== pilotIsShown) {
+      newPilotState[pilotId].shown = pilotShouldBeShown;
+      changed = true;
+    }
+  }
+
+  if (changed) {
+    setChosenPilotsAndUpdateNames(newPilotState);
+  }
+};
+
 // The default pilot entry for new pilots
 export const defaultPilotEntry = (pilotName) => ({
   name: pilotName,

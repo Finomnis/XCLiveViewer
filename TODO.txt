@@ -1,5 +1,19 @@
 - Make ?add=xxx url that automatically adds given pilots (without removing existing ones. Replacing can be done by first deleting your own ones and then calling the url)
 
+- Visibility:
+    - Add to right click menu
+    - Implement selector
+    - Implement in map
+
+- Export pilots menu
+- Import pilots
+    Open link with installed PWA:
+    https://developers.google.com/web/fundamentals/integration/webapks
+
+- Right click menu:
+    - move to custom class/file
+    - differentiate shown/hidden/offline
+
 - Add friendlist
     - '+' in pilot list should show friendlist
     - '+' in friendlist should open the current add-pilots list
