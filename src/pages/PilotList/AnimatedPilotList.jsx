@@ -143,8 +143,13 @@ class AnimatedPilotList extends React.PureComponent {
     let pilotIsOnline = new Set(this.state.onlinePilots);
 
     // Show online pilots first
+    const onlineHighlightedPilots = this.state.onlinePilots.filter(
+      (pilotId) =>
+        pilotId in this.props.pilots && this.props.pilots[pilotId].highlighted
+    );
     const onlinePilots = this.state.onlinePilots.filter(
-      (pilotId) => pilotId in this.props.pilots
+      (pilotId) =>
+        pilotId in this.props.pilots && !this.props.pilots[pilotId].highlighted
     );
 
     const offlinePilots = Object.keys(this.props.pilots).filter(
@@ -159,17 +164,34 @@ class AnimatedPilotList extends React.PureComponent {
 
     return (
       <Box height="100%" bgcolor="#eeeef5" overflow="auto">
-        <Box margin={1}>
-          {onlinePilots.map((pilotId) => (
-            <AnimatedPilotListEntry
-              key={pilotId}
-              pilotId={pilotId}
-              pilotName={getPilotName(pilotId)}
-              removePilot={this.removePilot}
-              onContextMenuHandler={this.showContextMenu}
-            />
-          ))}
-        </Box>
+        {onlineHighlightedPilots.length > 0 ? (
+          <Box margin={1} marginBottom={2}>
+            {onlineHighlightedPilots.map((pilotId) => (
+              <AnimatedPilotListEntry
+                highlighted={true}
+                key={pilotId}
+                pilotId={pilotId}
+                pilotName={getPilotName(pilotId)}
+                removePilot={this.removePilot}
+                onContextMenuHandler={this.showContextMenu}
+              />
+            ))}
+          </Box>
+        ) : null}
+        {onlinePilots.length > 0 ? (
+          <Box margin={1} marginBottom={2}>
+            {onlinePilots.map((pilotId) => (
+              <AnimatedPilotListEntry
+                highlighted={false}
+                key={pilotId}
+                pilotId={pilotId}
+                pilotName={getPilotName(pilotId)}
+                removePilot={this.removePilot}
+                onContextMenuHandler={this.showContextMenu}
+              />
+            ))}
+          </Box>
+        ) : null}
         <Box margin={1}>
           {offlinePilots.map((pilotId) => (
             <Box
