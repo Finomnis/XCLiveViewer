@@ -12,7 +12,7 @@ import { FixedSizeList } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
 const filterPilotList = (pilotList, pilotInfos, search) => {
-  const matchesSearch = name => {
+  const matchesSearch = (name) => {
     if (search === "") {
       return true;
     }
@@ -20,7 +20,7 @@ const filterPilotList = (pilotList, pilotInfos, search) => {
   };
 
   // Create virtual pilot if nobody found
-  let filteredPilots = pilotList.filter(pilotId => {
+  let filteredPilots = pilotList.filter((pilotId) => {
     return (
       matchesSearch(pilotInfos[pilotId].info.user.username) ||
       matchesSearch(pilotInfos[pilotId].info.user.fullname)
@@ -44,7 +44,7 @@ const sortPilotList = (pilotInfos, gps) => {
       return [pilotId, distance];
     });
     distances.sort((el1, el2) => el1[1] - el2[1]);
-    const pilotIds = distances.map(el => el[0]);
+    const pilotIds = distances.map((el) => el[0]);
     return pilotIds;
   } else {
     // Else, sort by name
@@ -58,17 +58,17 @@ const sortPilotList = (pilotInfos, gps) => {
 export default class PilotSelectorList extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { didMount: false };
     this.gpsData = getGPSProvider().getData();
     const pilotInfos = getXContestInterface().pilotInfos.getValue();
     this.state = {
+      didMount: false,
       pilotInfos: pilotInfos,
-      sortedPilotList: sortPilotList(pilotInfos, this.gpsData)
+      sortedPilotList: sortPilotList(pilotInfos, this.gpsData),
     };
   }
 
   startRendering = () => {
-    this.setState(state => ({ ...state, didMount: true }));
+    this.setState((state) => ({ ...state, didMount: true }));
   };
 
   componentDidMount() {
@@ -90,25 +90,25 @@ export default class PilotSelectorList extends React.PureComponent {
     const newPilotList = sortPilotList(this.state.pilotInfos, this.gpsData);
 
     if (!arraysEqual(this.state.sortedPilotList, newPilotList))
-      this.setState(state => ({ ...state, sortedPilotList: newPilotList }));
+      this.setState((state) => ({ ...state, sortedPilotList: newPilotList }));
   };
 
-  onNewGpsData = gpsData => {
+  onNewGpsData = (gpsData) => {
     // update only if gps position changed pilot list
     this.gpsData = gpsData;
     this.updatePilotListIfNecessary();
   };
 
-  onNewPilotInfos = pilotInfos => {
+  onNewPilotInfos = (pilotInfos) => {
     // Always update on new pilot infos
-    this.setState(state => ({
+    this.setState((state) => ({
       ...state,
       pilotInfos: pilotInfos,
-      sortedPilotList: sortPilotList(pilotInfos, this.gpsData)
+      sortedPilotList: sortPilotList(pilotInfos, this.gpsData),
     }));
   };
 
-  onPilotClicked = pilotId => {
+  onPilotClicked = (pilotId) => {
     if (this.props.onPilotClicked) this.props.onPilotClicked(pilotId);
   };
 
@@ -120,7 +120,7 @@ export default class PilotSelectorList extends React.PureComponent {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-            overflow: "hidden"
+            overflow: "hidden",
           }}
         >
           <CircularProgress disableShrink style={{ margin: "2em" }} />
@@ -150,7 +150,7 @@ export default class PilotSelectorList extends React.PureComponent {
                   data: this.state.pilotInfos,
                   selected: this.props.selected,
                   alreadyAdded: this.props.alreadyAdded,
-                  onPilotClicked: this.onPilotClicked
+                  onPilotClicked: this.onPilotClicked,
                 }}
                 itemKey={(index, { keys }) => keys[index]}
               >
