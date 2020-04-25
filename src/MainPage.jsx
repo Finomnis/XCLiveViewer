@@ -15,7 +15,8 @@ import "./MainPage.css";
 
 // TODO import LazyLoading from "./util/LazyLoading";
 
-import LiveMap from "./pages/GoogleMapsPage/LiveMap";
+//import LiveMap from "./pages/GoogleMapsPage/LiveMap";
+import Live3DMap from "./pages/CesiumMapsPage/Live3DMap";
 import Pilots from "./pages/PilotList/Pilots";
 import TitleBar from "./pages/TitleBar";
 
@@ -45,7 +46,7 @@ const MainPage = () => {
       <Box flexGrow={1} clone display="flex">
         <SwipeableViews disabled index={tabId}>
           <Box width="100%" height="100%" position="relative">
-            <LiveMap></LiveMap>
+            <Live3DMap></Live3DMap>
           </Box>
           <Box width="100%" height="100%" position="relative">
             <Pilots></Pilots>
@@ -66,7 +67,7 @@ const MainPage = () => {
   ) : (
     <Box width="100%" flexGrow={1} display="flex" overflow="hidden">
       <Box flexGrow={1} height="100%">
-        <LiveMap></LiveMap>
+        <Live3DMap></Live3DMap>
       </Box>
       <Box width="450px" height="100%" zIndex={50} boxShadow={3}>
         <Pilots></Pilots>
