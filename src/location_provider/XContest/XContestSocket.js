@@ -62,13 +62,13 @@ export default class XContestSocket {
       this.sock.send(
         JSON.stringify({
           tag: "WebFollow",
-          contents: formattedSubscribedFlights
+          contents: formattedSubscribedFlights,
         })
       );
     }
   };
 
-  setSubscribedFlights = flights => {
+  setSubscribedFlights = (flights) => {
     this.subscribedFlights = flights;
     this.refreshSubscribedFlights();
   };
@@ -83,7 +83,10 @@ export default class XContestSocket {
     this.sock.send(
       JSON.stringify({
         tag: "WebFilterArea",
-        area: [{ lat: -90, lon: -180 }, { lat: 90, lon: 180 }]
+        area: [
+          { lat: -90, lon: -180 },
+          { lat: 90, lon: 180 },
+        ],
       })
     );
 
@@ -98,12 +101,12 @@ export default class XContestSocket {
     this.sock.send(
       JSON.stringify({
         tag: "WebFollow",
-        contents: formattedSubscribedFlights
+        contents: formattedSubscribedFlights,
       })
     );
   };
 
-  onMessage = evt => {
+  onMessage = (evt) => {
     console.debug("WebSocket: Message!");
     this.setConnectionState(ConnectionState.ACTIVE);
 
@@ -119,7 +122,7 @@ export default class XContestSocket {
     this.processMessage(msg);
   };
 
-  onClose = evt => {
+  onClose = (evt) => {
     this.connected = false;
     console.debug("WebSocket: Close!");
     this.setConnectionState(ConnectionState.NO_CONNECTION);
@@ -127,7 +130,7 @@ export default class XContestSocket {
     setTimeout(this.connect.bind(this), 1000);
   };
 
-  onError = evt => {
+  onError = (evt) => {
     this.connected = false;
     console.debug("WebSocket: Error!");
   };
@@ -136,7 +139,7 @@ export default class XContestSocket {
   handleReset = () => {
     console.log("TODO: handle reset!");
   };
-  processMessage = msg => {
+  processMessage = (msg) => {
     if (!("tag" in msg)) {
       console.warn("Warning: Invalid message format!", msg);
       return;
