@@ -54,7 +54,7 @@ class AnimatedPilotList extends React.PureComponent {
     return pilotsAndDistances.map((el) => el[0]);
   };
 
-  onAnimationFrame = (pilotData) => {
+  onAnimationFrame = ({ pilotData }) => {
     // Sort
     const sortedPilotList = this.getSortedPilotList(pilotData);
 

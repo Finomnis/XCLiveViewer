@@ -179,7 +179,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
     this.gpsData = gpsData;
   };
 
-  onNewDataReceived = (pilotData) => {
+  onNewDataReceived = ({ pilotData }) => {
     if (!(this.props.pilotId in pilotData)) return;
 
     const pilotInfo = pilotData[this.props.pilotId];
@@ -349,7 +349,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
 
   render() {
     {
-      const pilotData = getXContestInterface().animation.getData();
+      const pilotData = getXContestInterface().animation.getData().pilotData;
       const pilotInfo =
         this.props.pilotId in pilotData ? pilotData[this.props.pilotId] : null;
       this.pilotProps = this.extractImportantProps(pilotInfo);

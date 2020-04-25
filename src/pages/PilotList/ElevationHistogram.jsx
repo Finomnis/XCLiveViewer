@@ -161,12 +161,12 @@ export class ElevationHistogram extends React.PureComponent {
     }
   };
 
-  onNewAnimationData = (data) => {
-    this.shallowRerender(data);
+  onNewAnimationData = ({ pilotData }) => {
+    this.shallowRerender(pilotData);
   };
 
   componentDidMount = () => {
-    this.shallowRerender(getXContestInterface().animation.getData());
+    this.shallowRerender(getXContestInterface().animation.getData().pilotData);
     getXContestInterface().animation.registerCallback(this.onNewAnimationData);
   };
   componentDidUpdate = () => {

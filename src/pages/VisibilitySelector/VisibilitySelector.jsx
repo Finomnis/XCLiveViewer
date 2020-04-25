@@ -38,6 +38,8 @@ class VisibilitySelector extends React.PureComponent {
 
       return { open: props.open, selected, shown: selected };
     }
+
+    return null;
   };
 
   pilotClicked = (name) => {
