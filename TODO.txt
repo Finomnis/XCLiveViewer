@@ -1,12 +1,13 @@
 
-- Visibility:
-    - Add to right click menu
++ Visibility:
+    + Add to right click menu
     + Implement selector
     + Implement in map
+    - Merge
 
-- Right click menu:
-    - move to custom class/file
-    - differentiate shown/hidden/offline
++ Right click menu:
+    + move to custom class/file
+    + differentiate shown/hidden/offline
 
 - Export pilots menu
     - Via share
@@ -18,11 +19,8 @@
     Add all pilots from link, and set visibility to pilots from link
 
 
-- Add friendlist
-    - '+' in pilot list should show friendlist
-    - '+' in friendlist should open the current add-pilots list
-
 - Make offline pilots list prettier
+    - add right click menu for offline pilots
 - Remember last position of offline pilot
 
 
@@ -42,10 +40,11 @@
         + distance, direction
         - (vario)
         - (velocity)
+        - (glider)
         + airtime
         + xc kilometer
         + takeoff (- country flag)
-        - altitude histogram
+        + altitude histogram
     + Make animated
 
 
@@ -67,6 +66,10 @@ ABANDONED:
 - Todo: Add filtering on which pilots the camera should focus
     -> Instead, use friendlist
 
+- Add friendlist
+    - '+' in pilot list should show friendlist
+    - '+' in friendlist should open the current add-pilots list
+    -> Replaced with hidden/shown pilots
 
 DONE:
 - Implement title bar
