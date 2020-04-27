@@ -1,14 +1,4 @@
 
-+ Visibility:
-    + Add to right click menu
-    + Implement selector
-    + Implement in map
-    - Merge
-
-+ Right click menu:
-    + move to custom class/file
-    + differentiate shown/hidden/offline
-
 - Export pilots menu
     - Via share
     - Similar to Visibility Selector, maybe copy code
@@ -137,3 +127,13 @@ Old Notes:
 
 - Add button to switch map type
 - Later: Catch camera to group on Follow button press
+
+
++ Visibility:
+    + Add to right click menu
+    + Implement selector
+    + Implement in map
+
++ Right click menu:
+    + move to custom class/file
+    + differentiate shown/hidden/offline
