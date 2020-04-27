@@ -1,25 +1,15 @@
 import React from "react";
-import {
-  Box,
-  Typography,
-  Popover,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-} from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import AnimatedPilotListEntry from "./AnimatedPilotListEntry";
 import { getGPSProvider } from "../../services/GPSProvider";
 import { getDistance } from "geolib";
 
-import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import DeleteIcon from "@material-ui/icons/Delete";
-import DirectionsIcon from "@material-ui/icons/Directions";
-import RoomIcon from "@material-ui/icons/Room";
 import { navigateTo } from "../../util/MapLinks";
 import PageState from "../../common/PersistentState/PageState";
 import { getMapViewportControllerService } from "../../services/MapViewportControllerService";
+import ContextMenu from "./ContextMenu";
+import { setPilotShown } from "../../common/PersistentState/ChosenPilots";
 
 class AnimatedPilotList extends React.PureComponent {
   constructor(props) {
@@ -54,7 +44,7 @@ class AnimatedPilotList extends React.PureComponent {
     return pilotsAndDistances.map((el) => el[0]);
   };
 
-  onAnimationFrame = (pilotData) => {
+  onAnimationFrame = ({ pilotData }) => {
     // Sort
     const sortedPilotList = this.getSortedPilotList(pilotData);
 
@@ -105,15 +95,19 @@ class AnimatedPilotList extends React.PureComponent {
     this.props.removePilots([pilotId]);
   };
 
-  showContextMenu = (pilotId, mousePos, pilotProps) => {
-    this.setState((oldState) => ({
-      ...oldState,
-      contextMenu: { pilotId: pilotId, pos: mousePos, props: pilotProps },
-    }));
+  showContextMenu = (pilotId, mousePos, pilotProps, shown) => {
+    this.setState({
+      contextMenu: {
+        pilotId,
+        pos: mousePos,
+        props: pilotProps,
+        shown,
+      },
+    });
   };
 
   hideContextMenu = () => {
-    this.setState((oldState) => ({ ...oldState, contextMenu: null }));
+    this.setState({ contextMenu: null });
   };
 
   contextMenu_delete = () => {
@@ -139,12 +133,33 @@ class AnimatedPilotList extends React.PureComponent {
     this.hideContextMenu();
   };
 
+  contextMenu_onHidePilot = () => {
+    if (this.state.contextMenu !== null) {
+      const pilotId = this.state.contextMenu.pilotId;
+      setPilotShown(pilotId, false);
+    }
+    this.hideContextMenu();
+  };
+
+  contextMenu_onUnhidePilot = () => {
+    if (this.state.contextMenu !== null) {
+      const pilotId = this.state.contextMenu.pilotId;
+      setPilotShown(pilotId, true);
+    }
+    this.hideContextMenu();
+  };
+
   render() {
     let pilotIsOnline = new Set(this.state.onlinePilots);
 
     // Show online pilots first
     const onlinePilots = this.state.onlinePilots.filter(
-      (pilotId) => pilotId in this.props.pilots
+      (pilotId) =>
+        pilotId in this.props.pilots && this.props.pilots[pilotId].shown
+    );
+    const onlineHiddenPilots = this.state.onlinePilots.filter(
+      (pilotId) =>
+        pilotId in this.props.pilots && !this.props.pilots[pilotId].shown
     );
 
     const offlinePilots = Object.keys(this.props.pilots).filter(
@@ -159,17 +174,34 @@ class AnimatedPilotList extends React.PureComponent {
 
     return (
       <Box height="100%" bgcolor="#eeeef5" overflow="auto">
-        <Box margin={1}>
-          {onlinePilots.map((pilotId) => (
-            <AnimatedPilotListEntry
-              key={pilotId}
-              pilotId={pilotId}
-              pilotName={getPilotName(pilotId)}
-              removePilot={this.removePilot}
-              onContextMenuHandler={this.showContextMenu}
-            />
-          ))}
-        </Box>
+        {onlinePilots.length > 0 ? (
+          <Box margin={1} marginBottom={2}>
+            {onlinePilots.map((pilotId) => (
+              <AnimatedPilotListEntry
+                shown={true}
+                key={pilotId}
+                pilotId={pilotId}
+                pilotName={getPilotName(pilotId)}
+                removePilot={this.removePilot}
+                onContextMenuHandler={this.showContextMenu}
+              />
+            ))}
+          </Box>
+        ) : null}
+        {onlineHiddenPilots.length > 0 ? (
+          <Box margin={1} marginBottom={2}>
+            {onlineHiddenPilots.map((pilotId) => (
+              <AnimatedPilotListEntry
+                shown={false}
+                key={pilotId}
+                pilotId={pilotId}
+                pilotName={getPilotName(pilotId)}
+                removePilot={this.removePilot}
+                onContextMenuHandler={this.showContextMenu}
+              />
+            ))}
+          </Box>
+        ) : null}
         <Box margin={1}>
           {offlinePilots.map((pilotId) => (
             <Box
@@ -190,45 +222,15 @@ class AnimatedPilotList extends React.PureComponent {
             </Box>
           ))}
         </Box>
-        <Popover
-          open={this.state.contextMenu !== null}
-          anchorReference="anchorPosition"
-          anchorPosition={
-            this.state.contextMenu === null ? null : this.state.contextMenu.pos
-          }
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
+        <ContextMenu
+          data={this.state.contextMenu}
+          onShowOnMap={this.contextMenu_showOnMap}
+          onDelete={this.contextMenu_delete}
+          onNavigateTo={this.contextMenu_navigateTo}
+          onHidePilot={this.contextMenu_onHidePilot}
+          onUnhidePilot={this.contextMenu_onUnhidePilot}
           onClose={this.hideContextMenu}
-        >
-          <List component="nav" dense>
-            <ListItem button onClick={this.contextMenu_showOnMap}>
-              <ListItemIcon>
-                <PlayArrowIcon />
-              </ListItemIcon>
-              <ListItemText>Show Pilot on Map</ListItemText>
-            </ListItem>
-            <ListItem button disabled>
-              <ListItemIcon>
-                <DirectionsIcon />
-              </ListItemIcon>
-              <ListItemText>Live Navigation</ListItemText>
-            </ListItem>
-            <ListItem button onClick={this.contextMenu_navigateTo}>
-              <ListItemIcon>
-                <RoomIcon />
-              </ListItemIcon>
-              <ListItemText>Open in Maps</ListItemText>
-            </ListItem>
-            <ListItem button onClick={this.contextMenu_delete}>
-              <ListItemIcon>
-                <DeleteIcon />
-              </ListItemIcon>
-              <ListItemText>Remove Pilot</ListItemText>
-            </ListItem>
-          </List>
-        </Popover>
+        />
       </Box>
     );
   }

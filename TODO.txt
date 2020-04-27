@@ -1,10 +1,26 @@
-- Make ?add=xxx url that automatically adds given pilots (without removing existing ones. Replacing can be done by first deleting your own ones and then calling the url)
 
-- Add friendlist
-    - '+' in pilot list should show friendlist
-    - '+' in friendlist should open the current add-pilots list
++ Visibility:
+    + Add to right click menu
+    + Implement selector
+    + Implement in map
+    - Merge
+
++ Right click menu:
+    + move to custom class/file
+    + differentiate shown/hidden/offline
+
+- Export pilots menu
+    - Via share
+    - Similar to Visibility Selector, maybe copy code
+    
+- Import pilots
+    Open link with installed PWA:
+    https://developers.google.com/web/fundamentals/integration/webapks
+    Add all pilots from link, and set visibility to pilots from link
+
 
 - Make offline pilots list prettier
+    - add right click menu for offline pilots
 - Remember last position of offline pilot
 
 
@@ -24,10 +40,11 @@
         + distance, direction
         - (vario)
         - (velocity)
+        - (glider)
         + airtime
         + xc kilometer
         + takeoff (- country flag)
-        - altitude histogram
+        + altitude histogram
     + Make animated
 
 
@@ -49,6 +66,10 @@ ABANDONED:
 - Todo: Add filtering on which pilots the camera should focus
     -> Instead, use friendlist
 
+- Add friendlist
+    - '+' in pilot list should show friendlist
+    - '+' in friendlist should open the current add-pilots list
+    -> Replaced with hidden/shown pilots
 
 DONE:
 - Implement title bar

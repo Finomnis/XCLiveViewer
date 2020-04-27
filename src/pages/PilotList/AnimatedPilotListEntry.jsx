@@ -135,7 +135,8 @@ class AnimatedPilotListEntry extends React.PureComponent {
           left: e.pageX,
           top: e.pageY,
         },
-        this.pilotProps
+        this.pilotProps,
+        this.props.shown
       );
     });
   }
@@ -179,7 +180,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
     this.gpsData = gpsData;
   };
 
-  onNewDataReceived = (pilotData) => {
+  onNewDataReceived = ({ pilotData }) => {
     if (!(this.props.pilotId in pilotData)) return;
 
     const pilotInfo = pilotData[this.props.pilotId];
@@ -349,7 +350,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
 
   render() {
     {
-      const pilotData = getXContestInterface().animation.getData();
+      const pilotData = getXContestInterface().animation.getData().pilotData;
       const pilotInfo =
         this.props.pilotId in pilotData ? pilotData[this.props.pilotId] : null;
       this.pilotProps = this.extractImportantProps(pilotInfo);
@@ -381,6 +382,9 @@ class AnimatedPilotListEntry extends React.PureComponent {
         onTouchCancel={this.contextMenuHandler.onTouchCancel}
         onTouchEnd={this.contextMenuHandler.onTouchEnd}
         onTouchMove={this.contextMenuHandler.onTouchMove}
+        style={{
+          filter: this.props.shown ? undefined : "grayscale(100%) opacity(70%)",
+        }}
       >
         <PilotExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <svg

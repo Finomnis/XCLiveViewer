@@ -1,6 +1,6 @@
 import {
   getChosenPilots,
-  getChosenPilotsObject
+  getChosenPilotsObject,
 } from "../../common/PersistentState/ChosenPilots";
 import FlightAnimation from "./FlightAnimation";
 import HighPrecisionTimeSync from "../../util/HighPrecisionTimeSync";
@@ -14,7 +14,7 @@ function eqSet(as, bs) {
 
 export default class XContestAnimation {
   constructor(setSubscribedFlights) {
-    this._currentAnimationData = {};
+    this._currentAnimationData = { pilotData: {}, pilotData_filtered: {} };
     this._callbacks = [];
     this._subscribedPilots = getChosenPilots();
     this._subscribedFlights = new Set();
@@ -27,14 +27,14 @@ export default class XContestAnimation {
     // Cached settings values for performance improvements. Not sure if actually worth
     this._setting_limitFps = settings_limitFps.getValue();
     this._setting_fps = settings_fps.getValue();
-    settings_limitFps.registerCallback(value => {
+    settings_limitFps.registerCallback((value) => {
       this._setting_limitFps = value;
     });
-    settings_fps.registerCallback(value => {
+    settings_fps.registerCallback((value) => {
       this._setting_fps = value;
     });
 
-    this._setSubscribedFlightsCallback = flights => {
+    this._setSubscribedFlightsCallback = (flights) => {
       setSubscribedFlights(Array.from(flights));
     };
     getChosenPilotsObject().registerCallback(this.setSubscribedPilots);
@@ -58,21 +58,30 @@ export default class XContestAnimation {
       }
 
       const newAnimationData = {};
-      Object.keys(this._subscribedPilots).forEach(pilot => {
+      const newFilteredAnimationData = {};
+      Object.entries(this._subscribedPilots).forEach(([pilot, pilotData]) => {
         if (pilot in this._pilotInfos) {
           const flightId = this._pilotInfos[pilot].flightId;
           if (flightId in this._flightAnimations) {
             const flightAnim = this._flightAnimations[flightId];
-            newAnimationData[pilot] = flightAnim.updateAnimation(absTime);
+
+            const pilotAnimationFrame = flightAnim.updateAnimation(absTime);
+            newAnimationData[pilot] = pilotAnimationFrame;
+            if (pilotData.shown) {
+              newFilteredAnimationData[pilot] = pilotAnimationFrame;
+            }
           }
         }
       });
-      this._submitAnimationFrame(newAnimationData);
+      this._submitAnimationFrame({
+        pilotData: newAnimationData,
+        pilotData_filtered: newFilteredAnimationData,
+      });
     }
     requestAnimationFrame(this.animationLoop);
   };
 
-  _submitAnimationFrame = data => {
+  _submitAnimationFrame = (data) => {
     this._currentAnimationData = data;
     for (const cb of this._callbacks) {
       cb(data);
@@ -80,18 +89,18 @@ export default class XContestAnimation {
   };
 
   // External
-  setSubscribedPilots = subscribedPilots => {
+  setSubscribedPilots = (subscribedPilots) => {
     this._subscribedPilots = subscribedPilots;
     this._updateImportantFlights();
   };
 
-  pushNewInfo = pilotInfo => {
+  pushNewInfo = (pilotInfo) => {
     console.log("newInfo: ", pilotInfo);
     this._pilotInfos = pilotInfo;
     this._updateImportantFlights();
 
     // Update flight info in flightAnimations
-    Object.values(pilotInfo).forEach(flightInfo => {
+    Object.values(pilotInfo).forEach((flightInfo) => {
       const flightId = flightInfo.flightId;
       if (flightId in this._flightAnimations) {
         this._flightAnimations[flightId].updateInfos(flightInfo);
@@ -105,18 +114,18 @@ export default class XContestAnimation {
       this._flightAnimations[trackId].updateData(trackData);
   };
 
-  pushFlightLanded = flightId => {
+  pushFlightLanded = (flightId) => {
     if (flightId in this._flightAnimations)
       this._flightAnimations[flightId].updateLanded();
   };
 
   // callback gets called every frame with new data
-  registerCallback = cb => {
+  registerCallback = (cb) => {
     if (!this._callbacks.includes(cb)) this._callbacks.push(cb);
     cb(this._currentAnimationData);
   };
 
-  unregisterCallback = cb => {
+  unregisterCallback = (cb) => {
     const index = this._callbacks.indexOf(cb);
     if (index >= 0) {
       this._callbacks.splice(index, 1);
@@ -132,8 +141,8 @@ export default class XContestAnimation {
     // Filter important flights
     let importantFlights = {};
     Object.values(this._pilotInfos)
-      .filter(val => val.info.user.username in this._subscribedPilots)
-      .forEach(val => {
+      .filter((val) => val.info.user.username in this._subscribedPilots)
+      .forEach((val) => {
         importantFlights[val.flightId] = val;
       });
 
@@ -168,11 +177,11 @@ export default class XContestAnimation {
       // Get the timestamp of the newest track element, to prevent loading the same data multiple times
       let flightsWithTimestamps = [];
       console.log(this._flightAnimations);
-      importantFlightSet.forEach(flightId => {
+      importantFlightSet.forEach((flightId) => {
         console.log(flightId, this._flightAnimations[flightId]);
         flightsWithTimestamps.push([
           flightId,
-          this._flightAnimations[flightId].getNewestTimestamp()
+          this._flightAnimations[flightId].getNewestTimestamp(),
         ]);
       });
 

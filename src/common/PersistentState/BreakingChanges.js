@@ -1,8 +1,11 @@
-import { getChosenPilotsObject, defaultPilotEntry } from "./ChosenPilots";
+import {
+  getChosenPilots,
+  setChosenPilots,
+  defaultPilotEntry,
+} from "./ChosenPilots";
 
 function fixChosenPilots() {
-  let chosenPilotsObject = getChosenPilotsObject();
-  let chosenPilots = { ...chosenPilotsObject.getValue() };
+  let chosenPilots = { ...getChosenPilots() };
 
   let changed = false;
   for (let pilotId of [...Object.keys(chosenPilots)]) {
@@ -20,7 +23,7 @@ function fixChosenPilots() {
   }
 
   if (changed) {
-    chosenPilotsObject.setValue(chosenPilots);
+    setChosenPilots(chosenPilots);
   }
 }
 

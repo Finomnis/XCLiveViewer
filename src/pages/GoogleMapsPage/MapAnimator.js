@@ -10,7 +10,7 @@ export default class MapAnimator {
     this.infoWindow = new MapPilotInfoWindow(google);
   }
 
-  cleanupOldTracks = data => {
+  cleanupOldTracks = (data) => {
     const toRemove = [];
     for (const pilot in this.tracks) {
       if (!(pilot in data)) {
@@ -23,14 +23,14 @@ export default class MapAnimator {
     }
   };
 
-  update = data => {
+  update = ({ pilotData_filtered }) => {
     const pilotInfos = getXContestInterface().getPilotInfos();
 
     // Remove tracks that we unsubscribed from
-    this.cleanupOldTracks(data);
+    this.cleanupOldTracks(pilotData_filtered);
 
     // Update all pilots
-    Object.entries(data).forEach(([pilot, pilotData]) => {
+    Object.entries(pilotData_filtered).forEach(([pilot, pilotData]) => {
       if (!(pilot in pilotInfos)) return;
       const info = pilotInfos[pilot];
 
@@ -50,6 +50,6 @@ export default class MapAnimator {
       track.updateData(pilotData);
     });
 
-    this.infoWindow.update(data);
+    this.infoWindow.update(pilotData_filtered);
   };
 }

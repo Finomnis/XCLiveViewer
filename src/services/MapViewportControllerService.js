@@ -10,7 +10,7 @@ class MapViewportControllerService {
       includeSelf: true,
       enabled: true,
       followSinglePilot: null,
-      pilots: {}
+      pilots: {},
     });
 
     // Reset state at every new page load.
@@ -24,27 +24,27 @@ class MapViewportControllerService {
 
   // Disables the controllers, enables manual mode
   setFreeMode = () => {
-    this.state.updateValue(oldValue => ({
+    this.state.updateValue((oldValue) => ({
       ...oldValue,
-      enabled: false
+      enabled: false,
     }));
   };
 
   // Follows a single pilot
-  setSinglePilotMode = pilotId => {
-    this.state.updateValue(oldValue => ({
+  setSinglePilotMode = (pilotId) => {
+    this.state.updateValue((oldValue) => ({
       ...oldValue,
       enabled: true,
-      followSinglePilot: pilotId
+      followSinglePilot: pilotId,
     }));
     this._emitZoomToSinglePilot();
   };
 
   setFollowMode = () => {
-    this.state.updateValue(oldValue => ({
+    this.state.updateValue((oldValue) => ({
       ...oldValue,
       enabled: true,
-      followSinglePilot: null
+      followSinglePilot: null,
     }));
   };
 
@@ -56,21 +56,21 @@ class MapViewportControllerService {
   };
 
   // Update this and every registered map controller.
-  onAnimationFrame = pilotInfos => {
+  onAnimationFrame = ({ pilotData_filtered }) => {
     // Add new pilots, remove old pilots
-    this.state.updateValue(oldState => {
+    this.state.updateValue((oldState) => {
       const newState = { ...oldState };
       newState.pilots = { ...newState.pilots };
 
       // Remove old pilots
       for (const pilotName in oldState.pilots) {
-        if (!(pilotName in pilotInfos)) {
+        if (!(pilotName in pilotData_filtered)) {
           delete newState.pilots[pilotName];
         }
       }
 
       // Add new pilots
-      for (const pilotName in pilotInfos) {
+      for (const pilotName in pilotData_filtered) {
         if (!(pilotName in newState.pilots)) {
           newState.pilots[pilotName] = true;
         }
@@ -80,18 +80,18 @@ class MapViewportControllerService {
     });
 
     for (const mapController of this.mapControllers) {
-      mapController.onAnimationFrame(pilotInfos, this.state.getValue());
+      mapController.onAnimationFrame(pilotData_filtered, this.state.getValue());
     }
   };
 
   // All other map controllers register here.
-  registerMapController = controller => {
+  registerMapController = (controller) => {
     if (!this.mapControllers.includes(controller))
       this.mapControllers.push(controller);
   };
 
   // All other map controllers unregister here.
-  unregisterMapController = controller => {
+  unregisterMapController = (controller) => {
     const index = this.mapControllers.indexOf(controller);
     if (index >= 0) {
       this.mapControllers.splice(index, 1);
