@@ -63,7 +63,19 @@ export const updateShownPilots = (pilotIds) => {
   }
 
   if (changed) {
-    setChosenPilotsAndUpdateNames(newPilotState);
+    setChosenPilots(newPilotState);
+  }
+};
+
+export const setPilotShown = (pilotId, shown) => {
+  const newPilotState = { ...getChosenPilots() };
+
+  if (pilotId in newPilotState) {
+    const pilotState = newPilotState[pilotId];
+    if (pilotState.shown !== shown) {
+      pilotState.shown = shown;
+      setChosenPilots(newPilotState);
+    }
   }
 };
 

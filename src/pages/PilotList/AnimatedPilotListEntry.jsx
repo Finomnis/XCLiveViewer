@@ -135,7 +135,8 @@ class AnimatedPilotListEntry extends React.PureComponent {
           left: e.pageX,
           top: e.pageY,
         },
-        this.pilotProps
+        this.pilotProps,
+        this.props.shown
       );
     });
   }
