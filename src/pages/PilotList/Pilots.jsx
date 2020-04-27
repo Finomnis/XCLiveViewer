@@ -1,7 +1,7 @@
 import React from "react";
 import { Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import StarIcon from "@material-ui/icons/StarRate";
+import StarRateIcon from "@material-ui/icons/StarRate";
 import Box from "@material-ui/core/Box";
 import PilotSelector from "../PilotSelector/PilotSelector";
 import {
@@ -72,7 +72,7 @@ class Pilots extends React.Component {
             color="primary"
             onClick={this.openVisibilitySelector}
           >
-            <StarIcon />
+            <StarRateIcon />
           </Fab>
         </Box>
         <Box position="absolute" bottom="16px" right="16px">
