@@ -8,7 +8,8 @@ export const Settings = {
   ANIMATION_DELAY: "ANIMATION_DELAY",
   FPS_LIMIT: "FPS_LIMIT",
   FPS_RATE: "FPS_RATE",
-  GPS_ENABLED: "GPS_ENABLED"
+  GPS_ENABLED: "GPS_ENABLED",
+  GPS_SHOWN: "GPS_SHOWN",
 };
 
 // Wrapper for simplification
@@ -23,13 +24,14 @@ const settingsObjects = {
   ANIMATION_DELAY: createSetting(Settings.ANIMATION_DELAY, 80),
   FPS_LIMIT: createSetting(Settings.FPS_LIMIT, true),
   FPS_RATE: createSetting(Settings.FPS_RATE, 10),
-  GPS_ENABLED: createSetting(Settings.GPS_ENABLED, true)
+  GPS_ENABLED: createSetting(Settings.GPS_ENABLED, true),
+  GPS_SHOWN: createSetting(Settings.GPS_SHOWN, true),
 };
 
-export const getSetting = key => settingsObjects[key];
+export const getSetting = (key) => settingsObjects[key];
 
 export const resetAllSettings = () => {
-  Object.values(settingsObjects).forEach(settingsObj =>
+  Object.values(settingsObjects).forEach((settingsObj) =>
     settingsObj.setValue(null)
   );
 };

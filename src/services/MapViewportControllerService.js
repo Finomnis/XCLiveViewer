@@ -1,5 +1,6 @@
 import { getXContestInterface } from "../location_provider/XContest/XContestInterface";
 import { registerPersistentState } from "../common/PersistentState/PersistentState";
+import { getSetting, Settings } from "../common/PersistentState/Settings";
 
 class MapViewportControllerService {
   constructor() {
@@ -7,19 +8,22 @@ class MapViewportControllerService {
 
     // The state of the viewport controller service
     this.state = registerPersistentState("viewport-state", {
-      includeSelf: true,
+      includeSelf: getSetting(Settings.GPS_SHOWN).getValue(),
       enabled: true,
       followSinglePilot: null,
       pilots: {},
     });
 
     // Reset state at every new page load.
-    // If this turns out to be intended behaviour, convert the persistent state to
+    // TODO If this turns out to be intended behaviour, convert the persistent state to
     // a local class state.
     this.state.setValue(null);
 
     // Register for animation frame updates
     getXContestInterface().animation.registerCallback(this.onAnimationFrame);
+
+    // Register for changes in GPS_SHOWN setting
+    getSetting(Settings.GPS_SHOWN).registerCallback(this.onSelfShownChanged);
   }
 
   // Disables the controllers, enables manual mode
@@ -53,6 +57,14 @@ class MapViewportControllerService {
     for (const mapController of this.mapControllers) {
       mapController.zoomToSinglePilot();
     }
+  };
+
+  // When GPS_SHOWN setting changed
+  onSelfShownChanged = (value) => {
+    this.state.updateValue((oldState) => ({
+      ...oldState,
+      includeSelf: value,
+    }));
   };
 
   // Update this and every registered map controller.

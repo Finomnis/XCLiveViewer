@@ -15,6 +15,11 @@ import GoogleMapsController from "./GoogleMapsController";
 import "./CustomButtons/CustomButtons.css";
 import { createSatelliteMapButton } from "./CustomButtons/SatelliteMapButton";
 import { createFocusCameraMapButton } from "./CustomButtons/FocusCameraMapButton";
+import {
+  createDisplayGpsMapButton,
+  updateGpsMapButton,
+} from "./CustomButtons/DisplayGpsMapButton";
+import { getGPSProvider } from "../../services/GPSProvider";
 
 const LiveMap = () => {
   const [mapReady, mapError, google] = useGoogleMapsApi();
@@ -56,9 +61,22 @@ const LiveMap = () => {
       map.controls[google.maps.ControlPosition.TOP_LEFT].push(
         createSatelliteMapButton(google, map)
       );
-      map.controls[google.maps.ControlPosition.TOP_LEFT].push(
+      const gpsMapButton = createDisplayGpsMapButton(google, map);
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(gpsMapButton);
+      map.controls[google.maps.ControlPosition.RIGHT_TOP].push(
         createFocusCameraMapButton(google, map)
       );
+
+      // Update gps button on change
+      let mapButtonUpdater = (value) => {
+        updateGpsMapButton(gpsMapButton, value);
+      };
+      getSetting(Settings.GPS_SHOWN).registerCallback(mapButtonUpdater);
+
+      // Cleanups
+      return () => {
+        getSetting(Settings.GPS_SHOWN).unregisterCallback(mapButtonUpdater);
+      };
     }
   }, [map, google]);
 
@@ -75,18 +93,26 @@ const LiveMap = () => {
       geolocationMarker.setPositionOptions({ enableHighAccuracy: true });
 
       // enable/disable geolocation marker on change
-      if (getSetting(Settings.GPS_ENABLED).getValue()) {
-        geolocationMarker.setMap(map);
-      }
-      const geolocationMarkerStateUpdater = (enabled) => {
-        if (enabled) {
+      const geolocationMarkerUpdateState = (newValue) => {
+        let enabled = getSetting(Settings.GPS_ENABLED).getValue();
+        let shown = getSetting(Settings.GPS_SHOWN).getValue();
+        if (enabled && shown) {
           geolocationMarker.setMap(map);
+          // Manually update the position to trigger a redrawing.
+          // Kinda hacky, workaround to bug in geolocationMarker
+          const currentGPSData = getGPSProvider().getData();
+          if (currentGPSData !== null)
+            geolocationMarker.updatePosition_(currentGPSData);
         } else {
           geolocationMarker.setMap(null);
         }
       };
+      geolocationMarkerUpdateState();
       getSetting(Settings.GPS_ENABLED).registerCallback(
-        geolocationMarkerStateUpdater
+        geolocationMarkerUpdateState
+      );
+      getSetting(Settings.GPS_SHOWN).registerCallback(
+        geolocationMarkerUpdateState
       );
 
       // Register Map Controller
@@ -109,7 +135,10 @@ const LiveMap = () => {
 
         // Unregister connection between GPS_ENABLED setting and geolocationMarker
         getSetting(Settings.GPS_ENABLED).unregisterCallback(
-          geolocationMarkerStateUpdater
+          geolocationMarkerUpdateState
+        );
+        getSetting(Settings.GPS_SHOWN).unregisterCallback(
+          geolocationMarkerUpdateState
         );
 
         // Disable geolocationMarker
