@@ -1,7 +1,7 @@
 import XContestSocket from "./XContestSocket";
 import XContestAnimation from "./XContestAnimation";
 import EventfulState from "../../util/EventfulState";
-import { setChosenPilotsAndUpdateNames } from "../../common/PersistentState/ChosenPilots";
+import { setChosenPilotsAndUpdateInfos } from "../../common/PersistentState/ChosenPilots";
 
 export const ConnectionState = {
   CONNECTING: "connecting", //orange
@@ -10,7 +10,7 @@ export const ConnectionState = {
   ACTIVE: "active", //green
   INACTIVE: "inactive", //orange
   NO_CONNECTION: "no connection", //red
-  NO_INFORMATION: "no information" //gray
+  NO_INFORMATION: "no information", //gray
 };
 
 class XContestInterface {
@@ -27,17 +27,17 @@ class XContestInterface {
     this.animation = new XContestAnimation(this.setSubscribedFlights);
   }
 
-  setSubscribedFlights = flights => {
+  setSubscribedFlights = (flights) => {
     this.socket.setSubscribedFlights(flights);
   };
 
   getPilotInfos = () => this.pilots;
 
-  onConnectionStateChanged = state => {
+  onConnectionStateChanged = (state) => {
     this.connectionState.set(state);
   };
 
-  onInfoMessageReceived = msg => {
+  onInfoMessageReceived = (msg) => {
     this.pilots = {};
     for (const [trackId, track] of msg) {
       // Skip if we have a newer track of the same person
@@ -51,14 +51,14 @@ class XContestInterface {
     this.pilotInfos.set(this.pilots);
 
     // Set pilot names if available
-    setChosenPilotsAndUpdateNames();
+    setChosenPilotsAndUpdateInfos();
   };
 
-  onTracklogMessageReceived = msg => {
+  onTracklogMessageReceived = (msg) => {
     this.animation.pushNewData(msg.flightUuid, msg.trackChunk);
   };
 
-  onFlightLandedMessageReceived = flightId => {
+  onFlightLandedMessageReceived = (flightId) => {
     this.animation.pushFlightLanded(flightId);
   };
 }

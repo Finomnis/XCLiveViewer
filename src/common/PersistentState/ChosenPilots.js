@@ -16,7 +16,7 @@ export function setChosenPilots(newValue) {
 
 // Sets new chosen pilots and also looks up their names.
 // When used without argument, just updates the names of the existing pilots.
-export function setChosenPilotsAndUpdateNames(chosenPilots = null) {
+export function setChosenPilotsAndUpdateInfos(chosenPilots = null) {
   let chosenPilotsUpdated = true;
 
   // if no new chosenPilots list was defined, take over previous one and disable updating unless a name changed
@@ -37,6 +37,17 @@ export function setChosenPilotsAndUpdateNames(chosenPilots = null) {
       // If new name is different, update
       if (currentName !== previousName) {
         chosenPilots[pilotId].name = currentName;
+        chosenPilotsUpdated = true;
+      }
+
+      const lastFix = pilotList[pilotId].lastFix;
+      const previousLastFix = chosenPilots[pilotId].lastFix;
+      if (!previousLastFix || previousLastFix.t !== lastFix.timestamp) {
+        chosenPilots[pilotId].lastFix = {
+          t: lastFix.timestamp,
+          lat: lastFix.lat,
+          lon: lastFix.lon,
+        };
         chosenPilotsUpdated = true;
       }
     }
@@ -83,7 +94,7 @@ export const setPilotShown = (pilotId, shown) => {
 export const defaultPilotEntry = (pilotName) => ({
   name: pilotName,
   shown: true,
-  lastKnownPosition: null,
+  lastFix: null,
 });
 
 // Add new pilots
@@ -99,7 +110,7 @@ export const addPilots = (pilotIds) => {
   }
 
   if (changed) {
-    setChosenPilotsAndUpdateNames(newPilotState);
+    setChosenPilotsAndUpdateInfos(newPilotState);
   }
 };
 
