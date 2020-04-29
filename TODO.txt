@@ -8,14 +8,9 @@
     https://developers.google.com/web/fundamentals/integration/webapks
     Add all pilots from link, and set visibility to pilots from link
 
-
 - Make offline pilots list prettier
     - add right click menu for offline pilots
 - Remember last position of offline pilot
-
-
-- Add own position (GPS) button to map
-
 
 - Add optional nosleep.js (and add setting)
 
@@ -36,6 +31,7 @@
         + takeoff (- country flag)
         + altitude histogram
     + Make animated
+    - Make configurable
 
 
 - Implement Navigation (for drivers)
@@ -90,6 +86,17 @@ Animation:
     - Free camera on drag
     - Catch camera on double click on pilot
 
++ Visibility:
+    + Add to right click menu
+    + Implement selector
+    + Implement in map
+
++ Right click menu:
+    + move to custom class/file
+    + differentiate shown/hidden/offline
+
+- Add own position (GPS) button to map
+
 
 Old Notes:
 - The markers should be a some kind of arrow / google maps marker with a state symbol inside (double arrow for live, ? for no symbol, some symbol for landed)
@@ -128,12 +135,3 @@ Old Notes:
 - Add button to switch map type
 - Later: Catch camera to group on Follow button press
 
-
-+ Visibility:
-    + Add to right click menu
-    + Implement selector
-    + Implement in map
-
-+ Right click menu:
-    + move to custom class/file
-    + differentiate shown/hidden/offline
