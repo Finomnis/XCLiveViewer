@@ -2,6 +2,7 @@ import { decodeBase64 } from "./util/Base64Data";
 import {
   getChosenPilots,
   defaultPilotEntry,
+  setChosenPilots,
 } from "./common/PersistentState/ChosenPilots";
 
 export function processUrlParameters() {
@@ -25,14 +26,20 @@ function processGroup(groupData) {
   // Create pilots and update names
   Object.entries(groupPilots).forEach(([pilotId, pilotName]) => {
     if (pilotId in chosenPilots) {
-      chosenPilots[pilotId].name = pilotName;
+      if (pilotName != null)
+        chosenPilots[pilotId] = { ...chosenPilots[pilotId], name: pilotName };
     } else {
       chosenPilots[pilotId] = defaultPilotEntry(pilotName);
     }
   });
 
   // Set visibility
-  Object.entries(chosenPilots).forEach(([pilotId, pilotData]) => {
-    pilotData.shown = pilotId in groupPilots;
+  Object.keys(chosenPilots).forEach((pilotId) => {
+    chosenPilots[pilotId] = {
+      ...chosenPilots[pilotId],
+      shown: pilotId in groupPilots,
+    };
   });
+
+  setChosenPilots(chosenPilots);
 }
