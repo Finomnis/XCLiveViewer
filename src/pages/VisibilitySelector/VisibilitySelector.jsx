@@ -61,8 +61,16 @@ class VisibilitySelector extends React.PureComponent {
     this.setState({ selected });
   };
 
+  clear = () => {
+    this.setState({ selected: {} });
+  };
+
   render() {
     const fullScreen = false;
+
+    const allPilotsSelected =
+      Object.keys(this.props.pilots).length ===
+      Object.keys(this.state.selected).length;
 
     return (
       <SubWindow
@@ -84,8 +92,11 @@ class VisibilitySelector extends React.PureComponent {
           onPilotClicked={this.pilotClicked}
         />
         <DialogActions>
-          <Button onClick={this.reset} color="primary">
-            Reset
+          <Button
+            onClick={allPilotsSelected ? this.clear : this.reset}
+            color="primary"
+          >
+            {allPilotsSelected ? "Clear" : "Reset"}
           </Button>
           <Button onClick={this.closeWindow} color="primary">
             Cancel
