@@ -29,7 +29,11 @@ function processGroup(groupData) {
       if (pilotName != null)
         chosenPilots[pilotId] = { ...chosenPilots[pilotId], name: pilotName };
     } else {
-      chosenPilots[pilotId] = defaultPilotEntry(pilotName);
+      if (pilotName != null) {
+        chosenPilots[pilotId] = defaultPilotEntry(pilotName);
+      } else {
+        chosenPilots[pilotId] = defaultPilotEntry(pilotId);
+      }
     }
   });
 
