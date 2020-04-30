@@ -7,12 +7,16 @@ import resolveBreakingChanges from "./common/PersistentState/BreakingChanges";
 import "flag-icon-css/css/flag-icon.min.css";
 
 import * as serviceWorker from "./serviceWorker";
+import { processUrlParameters } from "./UrlParameters";
 
 // Read the .env file
 require("dotenv").config();
 
 // Update breaking changes
 resolveBreakingChanges();
+
+// Process url parameters
+processUrlParameters();
 
 // Render the page
 ReactDOM.render(<App />, document.getElementById("root"));

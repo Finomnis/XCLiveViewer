@@ -28,6 +28,5 @@ function fixChosenPilots() {
 }
 
 export default function resolveBreakingChanges() {
-  console.log("Bla!");
   fixChosenPilots();
 }

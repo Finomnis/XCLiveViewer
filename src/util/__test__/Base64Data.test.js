@@ -1,17 +1,16 @@
 import { decodeBase64, encodeBase64 } from "../Base64Data";
-import * as wtf8 from "wtf-8";
 
 function test_enc_dec(data) {
   const encodedData = encodeBase64(data);
-  //console.log(encodedData);
-  /*
-  console.log(
-    "Size: ",
-    encodedData.length,
-    " / ",
-    btoa(wtf8.encode(JSON.stringify(data))).length
+  console.log(encodedData);
+
+  // Compute uncompressed size
+  const { TextEncoder } = require("util");
+  const uncompressed_utf8 = new TextEncoder("utf-8").encode(
+    JSON.stringify(data)
   );
-  */
+  const uncompressed_base64 = Buffer.from(uncompressed_utf8).toString("base64");
+  console.log("Size: ", encodedData.length, " / ", uncompressed_base64.length);
 
   const decodedData = decodeBase64(encodedData);
   expect(decodedData).toEqual(data);
