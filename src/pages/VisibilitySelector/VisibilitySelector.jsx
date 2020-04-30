@@ -13,8 +13,7 @@ class VisibilitySelector extends React.PureComponent {
     super(props);
 
     this.state = {
-      selected: [],
-      shown: [],
+      selected: {},
       open: false,
     };
   }
@@ -25,45 +24,40 @@ class VisibilitySelector extends React.PureComponent {
     if (props.open !== state.open) {
       if (props.open === false) return { open: props.open };
 
-      let selected = Object.entries(props.pilots)
-        .filter(([, pilotData]) => pilotData.shown)
-        .map(([pilotId]) => pilotId);
+      let selected = {};
+      Object.entries(props.pilots).forEach(([pilotId, pilotData]) => {
+        if (pilotData.shown) {
+          selected[pilotId] = true;
+        }
+      });
 
-      return { open: props.open, selected, shown: selected };
+      return { open: props.open, selected };
     }
 
     return null;
   };
 
   pilotClicked = (name) => {
-    const selected = [...this.state.selected];
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
+    const selected = { ...this.state.selected };
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
+    if (name in selected) {
+      delete selected[name];
+    } else {
+      selected[name] = true;
     }
 
-    this.setState({ selected: newSelected });
+    this.setState({ selected });
   };
 
   closeWindow = () => {
     this.props.onClose();
   };
 
-  selectAll = () => {
-    let selected = Object.entries(this.props.pilots).map(
-      ([pilotId]) => pilotId
-    );
+  reset = () => {
+    let selected = {};
+    Object.keys(this.props.pilots).forEach((pilotId) => {
+      selected[pilotId] = true;
+    });
     this.setState({ selected });
   };
 
@@ -90,7 +84,7 @@ class VisibilitySelector extends React.PureComponent {
           onPilotClicked={this.pilotClicked}
         />
         <DialogActions>
-          <Button onClick={this.selectAll} color="primary">
+          <Button onClick={this.reset} color="primary">
             Reset
           </Button>
           <Button onClick={this.closeWindow} color="primary">
@@ -99,7 +93,7 @@ class VisibilitySelector extends React.PureComponent {
           <Button
             disabled={false}
             onClick={() => {
-              this.props.onUpdateVisibility(this.state.selected);
+              this.props.onUpdateVisibility(Object.keys(this.state.selected));
               this.closeWindow();
             }}
             color="primary"

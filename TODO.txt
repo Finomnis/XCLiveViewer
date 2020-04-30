@@ -1,16 +1,28 @@
 
-- Export pilots menu
-    - Via share
-    - Similar to Visibility Selector, maybe copy code
-    
+
 - Import pilots
     Open link with installed PWA:
     https://developers.google.com/web/fundamentals/integration/webapks
     Add all pilots from link, and set visibility to pilots from link
+    
+- Export pilots menu
+    - Via share
+    - Similar to Visibility Selector, maybe copy code
+    
+
+- Invert highlighting
+    - No pilots highlighted: All shown
+    - Some pilots highlighted: Only those shown
+    - Highlighting Menu: Reset removes all highlights
+    - Right-Click menu:
+        - Highlight/Don't highlight
+
+- Grey out non-highlighted pilots instead of hiding them in map
+    - Move highlighted pilots to the front on map
 
 - Make offline pilots list prettier
     - add right click menu for offline pilots
-    
+
 - Add 'Go to last known position' button to offline pilots
 
 - Add optional nosleep.js (and add setting)

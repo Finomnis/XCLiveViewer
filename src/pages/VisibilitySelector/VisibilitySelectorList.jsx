@@ -68,7 +68,7 @@ export default class VisibilitySelectorList extends React.PureComponent {
     }
 
     const pilots = this.getSortedPilotIds();
-    console.log(this.props);
+
     return (
       <Box overflow="scroll">
         <Table /*size="small"*/ style={{ overflow: "scroll" }}>
@@ -77,10 +77,10 @@ export default class VisibilitySelectorList extends React.PureComponent {
               <TableRow
                 key={pilotId}
                 onClick={() => this.onPilotClicked(pilotId)}
-                selected={this.props.selected.includes(pilotId)}
+                selected={pilotId in this.props.selected}
               >
                 <TableCell padding="checkbox">
-                  <Checkbox checked={this.props.selected.includes(pilotId)} />
+                  <Checkbox checked={pilotId in this.props.selected} />
                 </TableCell>
                 <TableCell component="th" scope="row" padding="none">
                   <Typography variant="body2" component="span">
