@@ -8,18 +8,21 @@ import {
   Box,
   Typography,
   Toolbar,
-  useTheme
+  useTheme,
 } from "@material-ui/core";
 import { IconButton } from "@material-ui/core";
 
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import SettingsIcon from "@material-ui/icons/Settings";
+import ShareIcon from "@material-ui/icons/Share";
 
 import SettingsPage from "./SettingsPage/SettingsPage";
+import LinkCreator from "./LinkCreator/LinkCreator";
 
-const MainMenu = props => {
+const MainMenu = (props) => {
   const theme = useTheme();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [linkCreatorOpen, setLinkCreatorOpen] = useState(false);
 
   return (
     <React.Fragment>
@@ -32,7 +35,7 @@ const MainMenu = props => {
         <Toolbar
           style={{
             backgroundColor: theme.palette.primary.light,
-            minWidth: "200px"
+            minWidth: "200px",
           }}
           onClick={props.onClose}
         >
@@ -57,12 +60,28 @@ const MainMenu = props => {
             </ListItemIcon>
             <ListItemText primary="Settings" />
           </ListItem>
+          <ListItem
+            button
+            onClick={() => {
+              props.onClose();
+              setLinkCreatorOpen(true);
+            }}
+          >
+            <ListItemIcon>
+              <ShareIcon />
+            </ListItemIcon>
+            <ListItemText primary="Create Pilot Link" />
+          </ListItem>
         </List>
       </SwipeableDrawer>
       <SettingsPage
         open={settingsOpen}
         onClose={() => setSettingsOpen(false)}
       ></SettingsPage>
+      <LinkCreator
+        open={linkCreatorOpen}
+        onClose={() => setLinkCreatorOpen(false)}
+      ></LinkCreator>
     </React.Fragment>
   );
 };

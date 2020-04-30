@@ -5,7 +5,7 @@ import { Button, DialogActions } from "@material-ui/core";
 
 import SubWindow from "../../util/SubWindow";
 
-import VisibilitySelectorList from "./VisibilitySelectorList";
+import PilotMultipleChoiceList from "../common/PilotMultipleChoiceList";
 
 // Base window, without the table
 class VisibilitySelector extends React.PureComponent {
@@ -78,7 +78,7 @@ class VisibilitySelector extends React.PureComponent {
           </Typography>
         </Toolbar>
         <Divider />
-        <VisibilitySelectorList
+        <PilotMultipleChoiceList
           pilots={this.props.pilots}
           selected={this.state.selected}
           onPilotClicked={this.pilotClicked}
