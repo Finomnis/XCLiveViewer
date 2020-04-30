@@ -1,14 +1,8 @@
 
-
-- Import pilots
-    Open link with installed PWA:
-    https://developers.google.com/web/fundamentals/integration/webapks
-    Add all pilots from link, and set visibility to pilots from link
-    
-- Export pilots menu
-    - Via share
-    - Similar to Visibility Selector, maybe copy code
-    
+- Make offline pilots list prettier
+    - add right click menu for offline pilots
+    - Start with "offline:". Otherwise GUI is confusing if
+      only one pilot is displayed.
 
 - Invert highlighting
     - No pilots highlighted: All shown
@@ -20,8 +14,6 @@
 - Grey out non-highlighted pilots instead of hiding them in map
     - Move highlighted pilots to the front on map
 
-- Make offline pilots list prettier
-    - add right click menu for offline pilots
 
 - Add 'Go to last known position' button to offline pilots
 
@@ -111,6 +103,15 @@ Animation:
 - Add own position (GPS) button to map
 + Remember last position of offline pilot
 
+- Import pilots
+    Open link with installed PWA:
+    https://developers.google.com/web/fundamentals/integration/webapks
+    Add all pilots from link, and set visibility to pilots from link
+    
+- Export pilots menu
+    - Via share
+    - Similar to Visibility Selector, maybe copy code
+    
 
 Old Notes:
 - The markers should be a some kind of arrow / google maps marker with a state symbol inside (double arrow for live, ? for no symbol, some symbol for landed)
