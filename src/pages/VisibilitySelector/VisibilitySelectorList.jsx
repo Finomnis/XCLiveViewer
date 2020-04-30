@@ -1,10 +1,15 @@
 import React from "react";
 
-import { CircularProgress, Divider } from "@material-ui/core";
-
-import { renderRow, rowHeight } from "./VisibilitySelectorListRenderer";
-import { FixedSizeList } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
+import {
+  CircularProgress,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  Box,
+  Checkbox,
+  Typography,
+} from "@material-ui/core";
 
 // The list content
 export default class VisibilitySelectorList extends React.PureComponent {
@@ -63,32 +68,38 @@ export default class VisibilitySelectorList extends React.PureComponent {
     }
 
     const pilots = this.getSortedPilotIds();
-
+    console.log(this.props);
     return (
-      <React.Fragment>
-        <Divider />
-        <div style={{ flex: "1" }}>
-          <AutoSizer>
-            {({ height, width }) => (
-              <FixedSizeList
-                width={width}
-                height={height}
-                itemCount={pilots.length}
-                itemSize={rowHeight}
-                itemData={{
-                  keys: pilots,
-                  data: this.props.pilots,
-                  selected: this.props.selected,
-                  onPilotClicked: this.onPilotClicked,
-                }}
-                itemKey={(index, { keys }) => keys[index]}
+      <Box overflow="scroll">
+        <Table /*size="small"*/ style={{ overflow: "scroll" }}>
+          <TableBody>
+            {pilots.map((pilotId) => (
+              <TableRow
+                key={pilotId}
+                onClick={() => this.onPilotClicked(pilotId)}
+                selected={this.props.selected.includes(pilotId)}
               >
-                {renderRow}
-              </FixedSizeList>
-            )}
-          </AutoSizer>
-        </div>
-      </React.Fragment>
+                <TableCell padding="checkbox">
+                  <Checkbox checked={this.props.selected.includes(pilotId)} />
+                </TableCell>
+                <TableCell component="th" scope="row" padding="none">
+                  <Typography variant="body2" component="span">
+                    {this.props.pilots[pilotId].name}
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    color="textSecondary"
+                    style={{ paddingLeft: ".5em" }}
+                    component="span"
+                  >
+                    [{pilotId}]
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Box>
     );
   }
 }

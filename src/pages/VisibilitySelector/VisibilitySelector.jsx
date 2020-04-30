@@ -1,18 +1,11 @@
 import React from "react";
-import { Box, Typography, Toolbar } from "@material-ui/core";
+import { Typography, Toolbar, Divider } from "@material-ui/core";
 
-import { withStyles } from "@material-ui/styles";
 import { Button, DialogActions } from "@material-ui/core";
 
 import SubWindow from "../../util/SubWindow";
 
 import VisibilitySelectorList from "./VisibilitySelectorList";
-
-const FullHeightSubWindow = withStyles({
-  paper: {
-    height: "100%",
-  },
-})(SubWindow);
 
 // Base window, without the table
 class VisibilitySelector extends React.PureComponent {
@@ -78,7 +71,7 @@ class VisibilitySelector extends React.PureComponent {
     const fullScreen = false;
 
     return (
-      <FullHeightSubWindow
+      <SubWindow
         open={this.props.open}
         onClose={this.closeWindow}
         fullScreen={fullScreen}
@@ -90,19 +83,12 @@ class VisibilitySelector extends React.PureComponent {
             Select shown pilots:
           </Typography>
         </Toolbar>
-        <Box
-          flex="1 1 auto"
-          marginY="8px"
-          display="flex"
-          flexDirection="column"
-          alignItems="stretch"
-        >
-          <VisibilitySelectorList
-            pilots={this.props.pilots}
-            selected={this.state.selected}
-            onPilotClicked={this.pilotClicked}
-          />
-        </Box>
+        <Divider />
+        <VisibilitySelectorList
+          pilots={this.props.pilots}
+          selected={this.state.selected}
+          onPilotClicked={this.pilotClicked}
+        />
         <DialogActions>
           <Button onClick={this.selectAll} color="primary">
             Reset
@@ -121,7 +107,7 @@ class VisibilitySelector extends React.PureComponent {
             Save
           </Button>
         </DialogActions>
-      </FullHeightSubWindow>
+      </SubWindow>
     );
   }
 }

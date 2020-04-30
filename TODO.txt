@@ -10,8 +10,8 @@
 
 - Make offline pilots list prettier
     - add right click menu for offline pilots
-- Remember last position of offline pilot
-    - Add 'Go to last known position' button to offline pilots
+    
+- Add 'Go to last known position' button to offline pilots
 
 - Add optional nosleep.js (and add setting)
 
@@ -97,6 +97,7 @@ Animation:
     + differentiate shown/hidden/offline
 
 - Add own position (GPS) button to map
++ Remember last position of offline pilot
 
 
 Old Notes:
