@@ -111,6 +111,11 @@ export default class LiveMap extends React.PureComponent {
     getXContestInterface().animation.registerCallback(
       mapAnimatorUpdateCallback
     );
+    this.cleanups.push(() => {
+      getXContestInterface().animation.unregisterCallback(
+        mapAnimatorUpdateCallback
+      );
+    });
 
     const geolocationMarker = createGeolocationMarker(google, null);
     geolocationMarker.setPositionOptions({ enableHighAccuracy: true });
@@ -137,23 +142,7 @@ export default class LiveMap extends React.PureComponent {
     getSetting(Settings.GPS_SHOWN).registerCallback(
       geolocationMarkerUpdateState
     );
-
-    // Register Map Controller
-    let mapController = new GoogleMapsController(google, map);
-    getMapViewportControllerService().registerMapController(mapController);
-
     this.cleanups.push(() => {
-      // Unregister Map Controller
-      getMapViewportControllerService().unregisterMapController(mapController);
-
-      // Shutdown mapController
-      mapController.shutdown();
-
-      // Stop animation
-      getXContestInterface().animation.unregisterCallback(
-        mapAnimatorUpdateCallback
-      );
-
       // Unregister connection between GPS_ENABLED setting and geolocationMarker
       getSetting(Settings.GPS_ENABLED).unregisterCallback(
         geolocationMarkerUpdateState
@@ -164,6 +153,17 @@ export default class LiveMap extends React.PureComponent {
 
       // Disable geolocationMarker
       geolocationMarker.setMap(null);
+    });
+
+    // Register Map Controller
+    let mapController = new GoogleMapsController(google, map);
+    getMapViewportControllerService().registerMapController(mapController);
+    this.cleanups.push(() => {
+      // Unregister Map Controller
+      getMapViewportControllerService().unregisterMapController(mapController);
+
+      // Shutdown mapController
+      mapController.shutdown();
     });
 
     this.mapInitialized = true;
@@ -178,9 +178,7 @@ export default class LiveMap extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    for (let cleanup of this.cleanups) {
-      cleanup();
-    }
+    [...this.cleanups].reverse().forEach((cleanup) => cleanup());
   }
 
   render() {
