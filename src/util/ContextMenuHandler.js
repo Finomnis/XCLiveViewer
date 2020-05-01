@@ -12,8 +12,8 @@ export default class ContextMenuHandler {
     this.contextMenuPossible = false;
   }
 
-  onTouchStart = e => {
-    console.log(this.toString(), "onTouchStart");
+  onTouchStart = (e) => {
+    //console.log(this.toString(), "onTouchStart");
     this.contextMenuPossible = true;
 
     const touch = e.touches[0];
@@ -21,29 +21,29 @@ export default class ContextMenuHandler {
     this.longPressCountdown = setTimeout(() => {
       this.contextMenuPossible = false;
       this.callback(touch);
-      console.log(this.toString(), "CONTEXT_MENU");
+      //console.log(this.toString(), "CONTEXT_MENU");
     }, longPressDuration);
   };
 
-  onTouchMove = e => {
-    console.log(this.toString(), "onTouchMove");
+  onTouchMove = (e) => {
+    //console.log(this.toString(), "onTouchMove");
     clearTimeout(this.longPressCountdown);
   };
 
-  onTouchCancel = e => {
-    console.log(this.toString(), "onTouchCancel");
+  onTouchCancel = (e) => {
+    //console.log(this.toString(), "onTouchCancel");
     this.contextMenuPossible = false;
     clearTimeout(this.longPressCountdown);
   };
 
-  onTouchEnd = e => {
-    console.log(this.toString(), "onTouchEnd");
+  onTouchEnd = (e) => {
+    //console.log(this.toString(), "onTouchEnd");
     this.contextMenuPossible = false;
     clearTimeout(this.longPressCountdown);
   };
 
-  onContextMenu = e => {
-    console.log(this.toString(), "onContextMenu");
+  onContextMenu = (e) => {
+    //console.log(this.toString(), "onContextMenu");
     this.contextMenuPossible = false;
 
     clearTimeout(this.longPressCountdown);
