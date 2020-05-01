@@ -19,6 +19,9 @@ import {
   updateGpsMapButton,
 } from "./CustomButtons/DisplayGpsMapButton";
 import { getGPSProvider } from "../../services/GPSProvider";
+import ContextMenuHandler from "../../util/ContextMenuHandler";
+import ContextMenu from "../common/ContextMenu";
+import { getChosenPilots } from "../../common/PersistentState/ChosenPilots";
 
 export default class LiveMap extends React.PureComponent {
   constructor() {
@@ -26,6 +29,7 @@ export default class LiveMap extends React.PureComponent {
 
     this.map = null;
     this.google = null;
+    this.mapAnimator = null;
 
     this.mapsRef = React.createRef();
     this.cleanups = [];
@@ -33,7 +37,10 @@ export default class LiveMap extends React.PureComponent {
     this.state = {
       mapReady: false,
       mapError: false,
+      contextMenu: null,
     };
+
+    this.contextMenuHandler = new ContextMenuHandler(this.onContextMenu);
 
     this.initializeGoogleMapsApi();
   }
@@ -60,19 +67,20 @@ export default class LiveMap extends React.PureComponent {
 
   initializeMapIfNecessary = () => {
     if (!this.state.mapReady || this.state.mapError) return;
-    if (this.map === null) {
-      this.map = new this.google.maps.Map(this.mapsRef.current, {
-        center: { lat: 46.509012, lng: 11.827984 },
-        mapTypeId: "terrain",
-        zoom: 5,
-        maxZoom: 15,
-        disableDefaultUI: true,
-        zoomControl: true,
-        scaleControl: true,
-        fullscreenControl: true,
-        styles: mapStyle,
-      });
-    }
+
+    if (this.map !== null) return;
+
+    this.map = new this.google.maps.Map(this.mapsRef.current, {
+      center: { lat: 46.509012, lng: 11.827984 },
+      mapTypeId: "terrain",
+      zoom: 5,
+      maxZoom: 15,
+      disableDefaultUI: true,
+      zoomControl: true,
+      scaleControl: true,
+      fullscreenControl: true,
+      styles: mapStyle,
+    });
 
     const map = this.map;
     const google = this.google;
@@ -106,8 +114,8 @@ export default class LiveMap extends React.PureComponent {
     });
 
     // Map animator
-    const mapAnimator = new MapAnimator(map, google);
-    const mapAnimatorUpdateCallback = mapAnimator.update;
+    this.mapAnimator = new MapAnimator(map, google);
+    const mapAnimatorUpdateCallback = this.mapAnimator.update;
     getXContestInterface().animation.registerCallback(
       mapAnimatorUpdateCallback
     );
@@ -181,6 +189,45 @@ export default class LiveMap extends React.PureComponent {
     [...this.cleanups].reverse().forEach((cleanup) => cleanup());
   }
 
+  onContextMenu = (e) => {
+    if (this.mapAnimator == null) return;
+
+    // Get mouse position
+    const mousePos = {
+      left: e.pageX,
+      top: e.pageY,
+    };
+
+    // Get pilot, if any selected
+    const mouseOvers = Object.keys(this.mapAnimator.currentMouseOvers);
+    if (mouseOvers.length < 1) return;
+    const pilotId = mouseOvers[0];
+
+    // Get pilot props
+    const { pilotData } = getXContestInterface().animation.getData();
+    if (!(pilotId in pilotData)) return;
+    const pilotProps = pilotData[pilotId];
+
+    // Get whether or not the pilot is currently shown
+    const chosenPilots = getChosenPilots();
+    if (!(pilotId in chosenPilots)) return;
+    const shown = chosenPilots[pilotId].shown;
+    console.log(shown);
+
+    this.setState({
+      contextMenu: {
+        pilotId,
+        pos: mousePos,
+        props: pilotProps,
+        shown,
+      },
+    });
+  };
+
+  hideContextMenu = () => {
+    this.setState({ contextMenu: null });
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -195,6 +242,11 @@ export default class LiveMap extends React.PureComponent {
             // Free camera on mouse wheel
             getMapViewportControllerService().setFreeMode();
           }}
+          onTouchStart={this.contextMenuHandler.onTouchStart}
+          onTouchMove={this.contextMenuHandler.onTouchMove}
+          onTouchCancel={this.contextMenuHandler.onTouchCancel}
+          onTouchEnd={this.contextMenuHandler.onTouchEnd}
+          onContextMenu={this.contextMenuHandler.onContextMenu}
         ></Box>
         <LoadingPage // Shown if !ready,!error
           message="Loading Maps ..."
@@ -204,6 +256,11 @@ export default class LiveMap extends React.PureComponent {
           message="Unable to load map!"
           hideIf={!this.state.mapError}
         ></ErrorPage>
+        <ContextMenu
+          onMap
+          data={this.state.contextMenu}
+          onClose={this.hideContextMenu}
+        />
       </React.Fragment>
     );
   }
