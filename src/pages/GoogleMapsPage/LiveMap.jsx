@@ -117,7 +117,7 @@ export default class LiveMap extends React.PureComponent {
     this.mapAnimator = new MapAnimator(
       map,
       google,
-      () => this.state.contextMenu === null
+      () => this.state.contextMenu === null || !this.state.contextMenu.open
     );
     const mapAnimatorUpdateCallback = this.mapAnimator.update;
     getXContestInterface().animation.registerCallback(
