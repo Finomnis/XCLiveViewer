@@ -71,7 +71,7 @@ export default class ContextMenu extends React.PureComponent {
 
   render() {
     const { data } = this.props;
-    console.log(data);
+
     return (
       <Popover
         open={data !== null}
