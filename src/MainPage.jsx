@@ -72,7 +72,7 @@ const MainPage = () => {
       <Box flexGrow={1} height="100%">
         <LiveMap></LiveMap>
       </Box>
-      <Box width="450px" height="100%" zIndex={50} boxShadow={3}>
+      <Box width="400px" height="100%" zIndex={50} boxShadow={3}>
         <Pilots></Pilots>
       </Box>
     </Box>
