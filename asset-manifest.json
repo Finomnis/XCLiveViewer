@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/XCLiveViewer/static/css/main.7850548b.chunk.css",
-    "main.js": "/XCLiveViewer/static/js/main.bf4087eb.chunk.js",
-    "main.js.map": "/XCLiveViewer/static/js/main.bf4087eb.chunk.js.map",
+    "main.js": "/XCLiveViewer/static/js/main.358d5971.chunk.js",
+    "main.js.map": "/XCLiveViewer/static/js/main.358d5971.chunk.js.map",
     "runtime-main.js": "/XCLiveViewer/static/js/runtime-main.cdd4df36.js",
     "runtime-main.js.map": "/XCLiveViewer/static/js/runtime-main.cdd4df36.js.map",
     "static/css/2.69712b45.chunk.css": "/XCLiveViewer/static/css/2.69712b45.chunk.css",
@@ -372,12 +372,12 @@
     "cesium/Workers/upsampleQuantizedTerrainMesh.js": "/XCLiveViewer/cesium/Workers/upsampleQuantizedTerrainMesh.js",
     "cesium/Workers/when-c2e8ef35.js": "/XCLiveViewer/cesium/Workers/when-c2e8ef35.js",
     "index.html": "/XCLiveViewer/index.html",
-    "precache-manifest.a75cbf6edcca8a7a684bdd0575e5b085.js": "/XCLiveViewer/precache-manifest.a75cbf6edcca8a7a684bdd0575e5b085.js",
+    "precache-manifest.64109d22fd9ed23917da3f47c9309803.js": "/XCLiveViewer/precache-manifest.64109d22fd9ed23917da3f47c9309803.js",
     "service-worker.js": "/XCLiveViewer/service-worker.js",
     "static/css/2.69712b45.chunk.css.map": "/XCLiveViewer/static/css/2.69712b45.chunk.css.map",
     "static/css/main.7850548b.chunk.css.map": "/XCLiveViewer/static/css/main.7850548b.chunk.css.map",
     "static/js/2.e8d7d836.chunk.js.LICENSE.txt": "/XCLiveViewer/static/js/2.e8d7d836.chunk.js.LICENSE.txt",
-    "static/js/main.bf4087eb.chunk.js.LICENSE.txt": "/XCLiveViewer/static/js/main.bf4087eb.chunk.js.LICENSE.txt",
+    "static/js/main.358d5971.chunk.js.LICENSE.txt": "/XCLiveViewer/static/js/main.358d5971.chunk.js.LICENSE.txt",
     "static/media/flag-icon.min.css": "/XCLiveViewer/static/media/zw.8b885465.svg"
   },
   "entrypoints": [
@@ -385,6 +385,6 @@
     "static/css/2.69712b45.chunk.css",
     "static/js/2.e8d7d836.chunk.js",
     "static/css/main.7850548b.chunk.css",
-    "static/js/main.bf4087eb.chunk.js"
+    "static/js/main.358d5971.chunk.js"
   ]
 }
