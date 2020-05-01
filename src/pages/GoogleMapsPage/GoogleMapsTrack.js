@@ -13,7 +13,8 @@ export default class GoogleMapsTrack {
     pilotInfo,
     initialData,
     pilotInfoWindow,
-    onMouseOver
+    onMouseOver,
+    canOpenInfoWindow
   ) {
     this.google = google;
     this.pilotInfoWindow = pilotInfoWindow;
@@ -37,11 +38,13 @@ export default class GoogleMapsTrack {
     });
 
     this.marker.addListener("click", () => {
-      this.pilotInfoWindow.open(
-        this.map,
-        this.marker,
-        pilotInfo.info.user.username
-      );
+      if (canOpenInfoWindow()) {
+        this.pilotInfoWindow.open(
+          this.map,
+          this.marker,
+          pilotInfo.info.user.username
+        );
+      }
     });
 
     this.marker.addListener("dblclick", () => {

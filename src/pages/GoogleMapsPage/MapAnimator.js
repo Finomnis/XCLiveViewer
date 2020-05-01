@@ -3,12 +3,13 @@ import GoogleMapsTrack from "./GoogleMapsTrack";
 import MapPilotInfoWindow from "./MapPilotInfoWindow";
 
 export default class MapAnimator {
-  constructor(map, google) {
+  constructor(map, google, canReceiveMouseClicks) {
     this.map = map;
     this.google = google;
     this.tracks = {};
     this.infoWindow = new MapPilotInfoWindow(google);
     this.currentMouseOvers = {};
+    this.canReceiveMouseClicks = canReceiveMouseClicks;
   }
 
   cleanupOldTracks = (data) => {
@@ -58,7 +59,8 @@ export default class MapAnimator {
           info,
           pilotData,
           this.infoWindow,
-          (isOver) => this.onMouseOver(pilot, isOver)
+          (isOver) => this.onMouseOver(pilot, isOver),
+          this.canReceiveMouseClicks
         );
       }
 
