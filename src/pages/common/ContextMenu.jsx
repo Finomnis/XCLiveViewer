@@ -6,6 +6,7 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
+  ListSubheader,
 } from "@material-ui/core";
 
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
@@ -18,6 +19,7 @@ import PageState from "../../common/PersistentState/PageState";
 import {
   setPilotShown,
   removePilots,
+  getChosenPilots,
 } from "../../common/PersistentState/ChosenPilots";
 import { getMapViewportControllerService } from "../../services/MapViewportControllerService";
 
@@ -72,6 +74,16 @@ export default class ContextMenu extends React.PureComponent {
   render() {
     const { data } = this.props;
 
+    const onMap = "onMap" in this.props;
+    let name = "";
+    if (data !== null) {
+      const pilotId = data.pilotId;
+      const chosenPilots = getChosenPilots();
+      if (pilotId in chosenPilots) {
+        name = chosenPilots[pilotId].name;
+      }
+    }
+
     return (
       <Popover
         open={data !== null}
@@ -83,8 +95,15 @@ export default class ContextMenu extends React.PureComponent {
         }}
         onClose={this.close}
       >
-        <List component="nav" dense>
-          {"onMap" in this.props
+        <List
+          dense
+          subheader={
+            onMap && data !== null ? (
+              <ListSubheader>{name}</ListSubheader>
+            ) : null
+          }
+        >
+          {onMap
             ? null
             : this.generateMenuEntry(
                 <PlayArrowIcon />,
