@@ -1,21 +1,19 @@
 
+BUG: Reloating makes camera behave indeterministic,
+     depending on whether google maps or the pilot data load faster.
+     Camera should not deactivate when no pilots are online.
+
 - Make offline pilots list prettier
     - add right click menu for offline pilots
     - Start with "offline:". Otherwise GUI is confusing if
       only one pilot is displayed.
-
-- Invert highlighting
-    - No pilots highlighted: All shown
-    - Some pilots highlighted: Only those shown
-    - Highlighting Menu: Reset removes all highlights
-    - Right-Click menu:
-        - Highlight/Don't highlight
+      
+- Add 'Go to last known position' button to offline pilots
 
 - Grey out non-highlighted pilots instead of hiding them in map
     - Move highlighted pilots to the front on map
 
 
-- Add 'Go to last known position' button to offline pilots
 
 - Add optional nosleep.js (and add setting)
 
@@ -61,6 +59,15 @@ ABANDONED:
     - '+' in pilot list should show friendlist
     - '+' in friendlist should open the current add-pilots list
     -> Replaced with hidden/shown pilots
+
+- Invert highlighting
+    - No pilots highlighted: All shown
+    - Some pilots highlighted: Only those shown
+    - Highlighting Menu: Reset removes all highlights
+    - Right-Click menu:
+        - Highlight/Don't highlight
+
+
 
 DONE:
 - Implement title bar

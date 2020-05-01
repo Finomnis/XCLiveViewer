@@ -13,16 +13,15 @@ export default class GoogleMapsController {
     this.viewportInitialized = false;
     this.singlePersonMode = false;
 
-    this.userInputListeners = [
-      map.addListener("dragstart", this.onUserInput),
-      map.addListener("center_changed", this.onUserInput)
-    ];
+    this.userInputListeners = [map.addListener("dragstart", this.onUserInput)];
 
     this.insideMapsApiFunction = false;
   }
 
   zoomToSinglePilot = () => {
+    this.insideMapsApiFunction = true;
     if (this.map.getZoom() < 12) this.map.setZoom(12);
+    this.insideMapsApiFunction = false;
   };
 
   shutdown = () => {
@@ -33,7 +32,7 @@ export default class GoogleMapsController {
     getGPSProvider().unregisterCallback(this.onGpsUpdate);
   };
 
-  onGpsUpdate = gpsData => {
+  onGpsUpdate = (gpsData) => {
     this.gpsState = gpsData;
   };
 
@@ -42,7 +41,7 @@ export default class GoogleMapsController {
       getMapViewportControllerService().setFreeMode();
   };
 
-  updateViewport = watchedCoords => {
+  updateViewport = (watchedCoords) => {
     const previousSinglePersonMode = this.singlePersonMode;
     this.singlePersonMode = false;
 
@@ -67,7 +66,7 @@ export default class GoogleMapsController {
       watchedCoords[0]
     );
 
-    watchedCoords.forEach(coord => bounds.extend(coord));
+    watchedCoords.forEach((coord) => bounds.extend(coord));
 
     this.insideMapsApiFunction = true;
     this.map.fitBounds(bounds);
@@ -86,7 +85,7 @@ export default class GoogleMapsController {
       if (this.gpsState) {
         watchedCoords.push({
           lat: this.gpsState.coords.latitude,
-          lng: this.gpsState.coords.longitude
+          lng: this.gpsState.coords.longitude,
         });
       }
 
@@ -119,7 +118,7 @@ export default class GoogleMapsController {
       if (this.gpsState) {
         watchedCoords.push({
           lat: this.gpsState.coords.latitude,
-          lng: this.gpsState.coords.longitude
+          lng: this.gpsState.coords.longitude,
         });
       }
     }

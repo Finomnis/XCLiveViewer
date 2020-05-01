@@ -154,6 +154,10 @@ const LiveMap = () => {
         height="100%"
         display={mapReady ? "block" : "none"}
         ref={mapsRef}
+        onWheel={() => {
+          // Free camera on mouse wheel
+          getMapViewportControllerService().setFreeMode();
+        }}
       ></Box>
       <LoadingPage
         message="Loading Maps ..."
