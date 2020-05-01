@@ -239,7 +239,10 @@ export default class LiveMap extends React.PureComponent {
           onTouchMove={this.contextMenuHandler.onTouchMove}
           onTouchCancel={this.contextMenuHandler.onTouchCancel}
           onTouchEnd={this.contextMenuHandler.onTouchEnd}
-          onContextMenu={this.contextMenuHandler.onContextMenu}
+          onContextMenu={(e) => {
+            this.contextMenuHandler.onContextMenu(e);
+            e.preventDefault();
+          }}
         ></Box>
         <LoadingPage // Shown if !ready,!error
           message="Loading Maps ..."
