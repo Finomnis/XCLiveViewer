@@ -5,11 +5,8 @@ import AnimatedPilotListEntry from "./AnimatedPilotListEntry";
 import { getGPSProvider } from "../../services/GPSProvider";
 import { getDistance } from "geolib";
 
-import { navigateTo } from "../../util/MapLinks";
-import PageState from "../../common/PersistentState/PageState";
-import { getMapViewportControllerService } from "../../services/MapViewportControllerService";
-import ContextMenu from "./ContextMenu";
-import { setPilotShown } from "../../common/PersistentState/ChosenPilots";
+import ContextMenu from "../common/ContextMenu";
+import { removePilots } from "../../common/PersistentState/ChosenPilots";
 
 class AnimatedPilotList extends React.PureComponent {
   constructor(props) {
@@ -92,7 +89,7 @@ class AnimatedPilotList extends React.PureComponent {
   }
 
   removePilot = (pilotId) => {
-    this.props.removePilots([pilotId]);
+    removePilots([pilotId]);
   };
 
   showContextMenu = (pilotId, mousePos, pilotProps, shown) => {
@@ -108,45 +105,6 @@ class AnimatedPilotList extends React.PureComponent {
 
   hideContextMenu = () => {
     this.setState({ contextMenu: null });
-  };
-
-  contextMenu_delete = () => {
-    if (this.state.contextMenu !== null)
-      this.removePilot(this.state.contextMenu.pilotId);
-    this.hideContextMenu();
-  };
-
-  contextMenu_navigateTo = () => {
-    if (this.state.contextMenu !== null) {
-      const pilotProps = this.state.contextMenu.props;
-      navigateTo({ lat: pilotProps.lat, lng: pilotProps.lng });
-    }
-    this.hideContextMenu();
-  };
-
-  contextMenu_showOnMap = () => {
-    if (this.state.contextMenu !== null) {
-      const pilotId = this.state.contextMenu.pilotId;
-      PageState.switchToMap();
-      getMapViewportControllerService().setSinglePilotMode(pilotId);
-    }
-    this.hideContextMenu();
-  };
-
-  contextMenu_onHidePilot = () => {
-    if (this.state.contextMenu !== null) {
-      const pilotId = this.state.contextMenu.pilotId;
-      setPilotShown(pilotId, false);
-    }
-    this.hideContextMenu();
-  };
-
-  contextMenu_onUnhidePilot = () => {
-    if (this.state.contextMenu !== null) {
-      const pilotId = this.state.contextMenu.pilotId;
-      setPilotShown(pilotId, true);
-    }
-    this.hideContextMenu();
   };
 
   render() {
@@ -224,11 +182,6 @@ class AnimatedPilotList extends React.PureComponent {
         </Box>
         <ContextMenu
           data={this.state.contextMenu}
-          onShowOnMap={this.contextMenu_showOnMap}
-          onDelete={this.contextMenu_delete}
-          onNavigateTo={this.contextMenu_navigateTo}
-          onHidePilot={this.contextMenu_onHidePilot}
-          onUnhidePilot={this.contextMenu_onUnhidePilot}
           onClose={this.hideContextMenu}
         />
       </Box>

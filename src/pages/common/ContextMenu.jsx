@@ -13,6 +13,13 @@ import DeleteIcon from "@material-ui/icons/Delete";
 //import DirectionsIcon from "@material-ui/icons/Directions";
 import StarRateIcon from "@material-ui/icons/StarRate";
 import RoomIcon from "@material-ui/icons/Room";
+import { navigateTo } from "../../util/MapLinks";
+import PageState from "../../common/PersistentState/PageState";
+import {
+  setPilotShown,
+  removePilots,
+} from "../../common/PersistentState/ChosenPilots";
+import { getMapViewportControllerService } from "../../services/MapViewportControllerService";
 
 export default class ContextMenu extends React.PureComponent {
   generateMenuEntry = (icon, text, action, disabled = false) => (
@@ -22,9 +29,49 @@ export default class ContextMenu extends React.PureComponent {
     </ListItem>
   );
 
+  close = () => {
+    this.props.onClose();
+  };
+
+  onDelete = () => {
+    const pilotId = this.props.data.pilotId;
+    removePilots([pilotId]);
+
+    this.close();
+  };
+
+  onNavigateTo = () => {
+    const pilotProps = this.props.data.props;
+    navigateTo({ lat: pilotProps.lat, lng: pilotProps.lng });
+
+    this.close();
+  };
+
+  onShowOnMap = () => {
+    const pilotId = this.props.data.pilotId;
+    PageState.switchToMap();
+    getMapViewportControllerService().setSinglePilotMode(pilotId);
+
+    this.close();
+  };
+
+  onHidePilot = () => {
+    const pilotId = this.props.data.pilotId;
+    setPilotShown(pilotId, false);
+
+    this.close();
+  };
+
+  onUnhidePilot = () => {
+    const pilotId = this.props.data.pilotId;
+    setPilotShown(pilotId, true);
+
+    this.close();
+  };
+
   render() {
     const { data } = this.props;
-
+    console.log(data);
     return (
       <Popover
         open={data !== null}
@@ -34,14 +81,16 @@ export default class ContextMenu extends React.PureComponent {
           vertical: "top",
           horizontal: "right",
         }}
-        onClose={this.props.onClose}
+        onClose={this.close}
       >
         <List component="nav" dense>
-          {this.generateMenuEntry(
-            <PlayArrowIcon />,
-            "Show Pilot on Map",
-            this.props.onShowOnMap
-          )}
+          {"onMap" in this.props
+            ? null
+            : this.generateMenuEntry(
+                <PlayArrowIcon />,
+                "Show Pilot on Map",
+                this.onShowOnMap
+              )}
           {/*this.generateMenuEntry(
             <DirectionsIcon />,
             "Live Navigation",
@@ -52,22 +101,22 @@ export default class ContextMenu extends React.PureComponent {
             ? this.generateMenuEntry(
                 <StarRateIcon />,
                 "Hide Pilot",
-                this.props.onHidePilot
+                this.onHidePilot
               )
             : this.generateMenuEntry(
                 <StarRateIcon />,
                 "Unhide Pilot",
-                this.props.onUnhidePilot
+                this.onUnhidePilot
               )}
           {this.generateMenuEntry(
             <RoomIcon />,
             "Open in Maps",
-            this.props.onNavigateTo
+            this.onNavigateTo
           )}
           {this.generateMenuEntry(
             <DeleteIcon />,
             "Remove Pilot",
-            this.props.onDelete
+            this.onDelete
           )}
         </List>
       </Popover>

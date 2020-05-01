@@ -7,7 +7,6 @@ import PilotSelector from "../PilotSelector/PilotSelector";
 import {
   getChosenPilots,
   addPilots,
-  removePilots,
   getChosenPilotsObject,
   updateShownPilots,
 } from "../../common/PersistentState/ChosenPilots";
@@ -61,10 +60,7 @@ class Pilots extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <AnimatedPilotList
-          pilots={this.state.chosenPilots}
-          removePilots={removePilots}
-        ></AnimatedPilotList>
+        <AnimatedPilotList pilots={this.state.chosenPilots}></AnimatedPilotList>
 
         <Box position="absolute" bottom="68px" right="16px">
           <Fab
