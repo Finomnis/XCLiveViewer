@@ -7,7 +7,14 @@ import {
 import { getMapViewportControllerService } from "../../services/MapViewportControllerService";
 
 export default class GoogleMapsTrack {
-  constructor(google, map, pilotInfo, initialData, pilotInfoWindow) {
+  constructor(
+    google,
+    map,
+    pilotInfo,
+    initialData,
+    pilotInfoWindow,
+    onMouseOver
+  ) {
     this.google = google;
     this.pilotInfoWindow = pilotInfoWindow;
     this.pilotColor = getPilotIconColor(pilotInfo.info.user.username);
@@ -41,6 +48,19 @@ export default class GoogleMapsTrack {
       getMapViewportControllerService().setSinglePilotMode(
         pilotInfo.info.user.username
       );
+    });
+
+    this.marker.addListener("mousedown", () => {
+      onMouseOver(true);
+    });
+    this.marker.addListener("mouseup", () => {
+      onMouseOver(false);
+    });
+    this.marker.addListener("mouseover", () => {
+      onMouseOver(true);
+    });
+    this.marker.addListener("mouseout", () => {
+      onMouseOver(false);
     });
 
     this.track = new this.google.maps.Polyline({

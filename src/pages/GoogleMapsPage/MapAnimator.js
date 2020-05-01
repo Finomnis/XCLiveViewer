@@ -8,6 +8,7 @@ export default class MapAnimator {
     this.google = google;
     this.tracks = {};
     this.infoWindow = new MapPilotInfoWindow(google);
+    this.currentMouseOvers = {};
   }
 
   cleanupOldTracks = (data) => {
@@ -20,6 +21,21 @@ export default class MapAnimator {
     for (const pilot of toRemove) {
       this.tracks[pilot].setMap(null);
       delete this.tracks[pilot];
+    }
+  };
+
+  onMouseOver = (pilotId, isOver) => {
+    if (isOver) {
+      if (!(pilotId in this.currentMouseOvers))
+        this.currentMouseOvers[pilotId] = 0;
+      this.currentMouseOvers[pilotId] += 1;
+    } else {
+      if (pilotId in this.currentMouseOvers) {
+        this.currentMouseOvers[pilotId] -= 1;
+        if (this.currentMouseOvers[pilotId] <= 0) {
+          delete this.currentMouseOvers[pilotId];
+        }
+      }
     }
   };
 
@@ -41,7 +57,8 @@ export default class MapAnimator {
           this.map,
           info,
           pilotData,
-          this.infoWindow
+          this.infoWindow,
+          (isOver) => this.onMouseOver(pilot, isOver)
         );
       }
 
