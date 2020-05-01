@@ -25,15 +25,18 @@ export default class MapAnimator {
     }
   };
 
-  onMouseOver = (pilotId, isOver) => {
+  onMouseOver = (pilotId, isOver, pagePos) => {
     if (isOver) {
       if (!(pilotId in this.currentMouseOvers))
-        this.currentMouseOvers[pilotId] = 0;
-      this.currentMouseOvers[pilotId] += 1;
+        this.currentMouseOvers[pilotId] = { num: 0, pos: { left: 0, top: 0 } };
+      this.currentMouseOvers[pilotId].num += 1;
+      if (pagePos != null) {
+        this.currentMouseOvers[pilotId].pos = pagePos;
+      }
     } else {
       if (pilotId in this.currentMouseOvers) {
-        this.currentMouseOvers[pilotId] -= 1;
-        if (this.currentMouseOvers[pilotId] <= 0) {
+        this.currentMouseOvers[pilotId].num -= 1;
+        if (this.currentMouseOvers[pilotId].num <= 0) {
           delete this.currentMouseOvers[pilotId];
         }
       }
@@ -59,7 +62,7 @@ export default class MapAnimator {
           info,
           pilotData,
           this.infoWindow,
-          (isOver) => this.onMouseOver(pilot, isOver),
+          (isOver, pagePos) => this.onMouseOver(pilot, isOver, pagePos),
           this.canReceiveMouseClicks
         );
       }

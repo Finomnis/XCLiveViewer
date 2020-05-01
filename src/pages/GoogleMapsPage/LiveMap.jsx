@@ -196,16 +196,11 @@ export default class LiveMap extends React.PureComponent {
   onContextMenu = (e) => {
     if (this.mapAnimator == null) return;
 
-    // Get mouse position
-    const mousePos = {
-      left: e.pageX,
-      top: e.pageY,
-    };
-
     // Get pilot, if any selected
     const mouseOvers = Object.keys(this.mapAnimator.currentMouseOvers);
     if (mouseOvers.length < 1) return;
     const pilotId = mouseOvers[0];
+    const pos = this.mapAnimator.currentMouseOvers[pilotId].pos;
 
     // Get pilot props
     const { pilotData } = getXContestInterface().animation.getData();
@@ -220,7 +215,7 @@ export default class LiveMap extends React.PureComponent {
     this.setState({
       contextMenu: {
         pilotId,
-        pos: mousePos,
+        pos,
         props: pilotProps,
         shown,
       },

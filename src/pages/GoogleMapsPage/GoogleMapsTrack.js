@@ -53,17 +53,17 @@ export default class GoogleMapsTrack {
       );
     });
 
-    this.marker.addListener("mousedown", () => {
-      onMouseOver(true);
+    this.marker.addListener("mousedown", ({ tb }) => {
+      onMouseOver(true, this.computeIconBottomLeftCornerPos(tb));
     });
     this.marker.addListener("mouseup", () => {
-      onMouseOver(false);
+      onMouseOver(false, null);
     });
-    this.marker.addListener("mouseover", () => {
-      onMouseOver(true);
+    this.marker.addListener("mouseover", ({ tb }) => {
+      onMouseOver(true, this.computeIconBottomLeftCornerPos(tb));
     });
     this.marker.addListener("mouseout", () => {
-      onMouseOver(false);
+      onMouseOver(false, null);
     });
 
     this.track = new this.google.maps.Polyline({
@@ -79,6 +79,18 @@ export default class GoogleMapsTrack {
     });
     this.newestTrackSegmentData = null;
   }
+
+  computeIconBottomLeftCornerPos = (mouseEvent) => {
+    // Hacky. Gets the bottom left corner of the pilot marker icon.
+    // Uses the event target absolute screen positions and width
+    // to compute the middle of the icon, then moves 13 to the bottom left,
+    // as all pilot icons are 24 in size.
+    const target = mouseEvent.target;
+    if (target == null) return null;
+    const left = target.x / window.devicePixelRatio + target.width / 2 - 13;
+    const top = target.y / window.devicePixelRatio + target.height / 2 + 13;
+    return { left, top };
+  };
 
   setMap = (map) => {
     this.marker.setMap(map);
