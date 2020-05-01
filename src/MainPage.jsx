@@ -34,11 +34,15 @@ const MainPage = () => {
   React.useLayoutEffect(() => {
     updateWindowHeight();
     window.addEventListener("resize", updateWindowHeight);
-    return () => window.removeEventListener("resize", updateWindowHeight);
+    return () => {
+      window.removeEventListener("resize", updateWindowHeight);
+    };
   }, []);
 
   // Callbacks for changing the current page
-  const handleNavigationButton = (_event, newValue) => setTabId(newValue);
+  const handleNavigationButton = (_event, newValue) => {
+    setTabId(newValue);
+  };
 
   const content = isSmartphone ? (
     <React.Fragment>

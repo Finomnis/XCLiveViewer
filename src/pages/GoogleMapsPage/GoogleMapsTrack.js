@@ -2,7 +2,7 @@ import {
   getPilotIcon,
   getPilotIconColor,
   getPilotTrackColor,
-  pilotIconChanged
+  pilotIconChanged,
 } from "../../common/PilotIcon";
 import { getMapViewportControllerService } from "../../services/MapViewportControllerService";
 
@@ -26,7 +26,7 @@ export default class GoogleMapsTrack {
       map: map,
       position: initialData.pos,
       title: pilotInfo.info.user.fullname,
-      icon: this.pilotIcon
+      icon: this.pilotIcon,
     });
 
     this.marker.addListener("click", () => {
@@ -46,24 +46,24 @@ export default class GoogleMapsTrack {
     this.track = new this.google.maps.Polyline({
       map: map,
       path: [],
-      strokeColor: this.trackColor
+      strokeColor: this.trackColor,
     });
     this.currentTrackVersion = { startTime: null, endTime: null, length: null };
     this.newestTrackSegment = new this.google.maps.Polyline({
       map: map,
       path: [],
-      strokeColor: this.trackColor
+      strokeColor: this.trackColor,
     });
     this.newestTrackSegmentData = null;
   }
 
-  setMap = map => {
+  setMap = (map) => {
     this.marker.setMap(map);
     this.track.setMap(map);
     this.newestTrackSegment.setMap(map);
   };
 
-  _updateTrack = track => {
+  _updateTrack = (track) => {
     if (!track || track.length < 1) return;
 
     // Compute identifiers to reduce the amount if maps updates
@@ -145,7 +145,7 @@ export default class GoogleMapsTrack {
     }
   };
 
-  updateData = data => {
+  updateData = (data) => {
     this.marker.setPosition(data.pos);
 
     // Update Pilot Icon if necessary
