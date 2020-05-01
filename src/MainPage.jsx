@@ -15,7 +15,7 @@ import "./MainPage.css";
 
 // TODO import LazyLoading from "./util/LazyLoading";
 
-import LiveMap from "./pages/GoogleMapsPage/LiveMap_new";
+import LiveMap from "./pages/GoogleMapsPage/LiveMap";
 import Pilots from "./pages/PilotList/Pilots";
 import TitleBar from "./pages/TitleBar";
 
