@@ -202,28 +202,23 @@ export default class LiveMap extends React.PureComponent {
     const pilotId = mouseOvers[0];
     const pos = this.mapAnimator.currentMouseOvers[pilotId].pos;
 
-    // Get pilot props
-    const { pilotData } = getXContestInterface().animation.getData();
-    if (!(pilotId in pilotData)) return;
-    const pilotProps = pilotData[pilotId];
-
     // Get whether or not the pilot is currently shown
     const chosenPilots = getChosenPilots();
     if (!(pilotId in chosenPilots)) return;
-    const shown = chosenPilots[pilotId].shown;
+    const pilotInfo = chosenPilots[pilotId];
 
     this.setState({
       contextMenu: {
         pilotId,
         pos,
-        props: pilotProps,
-        shown,
+        pilotInfo,
+        open: true,
       },
     });
   };
 
   hideContextMenu = () => {
-    this.setState({ contextMenu: null });
+    this.setState({ contextMenu: { ...this.state.contextMenu, open: false } });
   };
 
   render() {

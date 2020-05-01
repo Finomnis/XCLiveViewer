@@ -129,15 +129,10 @@ class AnimatedPilotListEntry extends React.PureComponent {
     this.flightDurationRef = React.createRef();
 
     this.contextMenuHandler = new ContextMenuHandler((e) => {
-      this.props.onContextMenuHandler(
-        this.props.pilotId,
-        {
-          left: e.pageX,
-          top: e.pageY,
-        },
-        this.pilotProps,
-        this.props.shown
-      );
+      this.props.onContextMenuHandler(this.props.pilotId, {
+        left: e.pageX,
+        top: e.pageY,
+      });
     });
   }
 

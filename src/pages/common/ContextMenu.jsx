@@ -19,13 +19,16 @@ import PageState from "../../common/PersistentState/PageState";
 import {
   setPilotShown,
   removePilots,
-  getChosenPilots,
 } from "../../common/PersistentState/ChosenPilots";
 import { getMapViewportControllerService } from "../../services/MapViewportControllerService";
 
 export default class ContextMenu extends React.PureComponent {
   generateMenuEntry = (icon, text, action, disabled = false) => (
-    <ListItem button onClick={action} disabled={disabled}>
+    <ListItem
+      button
+      onClick={disabled ? undefined : action}
+      disabled={disabled}
+    >
       <ListItemIcon>{icon}</ListItemIcon>
       <ListItemText>{text}</ListItemText>
     </ListItem>
@@ -43,8 +46,8 @@ export default class ContextMenu extends React.PureComponent {
   };
 
   onNavigateTo = () => {
-    const pilotProps = this.props.data.props;
-    navigateTo({ lat: pilotProps.lat, lng: pilotProps.lng });
+    const lastFix = this.props.data.pilotInfo.lastFix;
+    navigateTo({ lat: lastFix.lat, lng: lastFix.lon });
 
     this.close();
   };
@@ -75,18 +78,12 @@ export default class ContextMenu extends React.PureComponent {
     const { data } = this.props;
 
     const onMap = "onMap" in this.props;
-    let name = "";
-    if (data !== null) {
-      const pilotId = data.pilotId;
-      const chosenPilots = getChosenPilots();
-      if (pilotId in chosenPilots) {
-        name = chosenPilots[pilotId].name;
-      }
-    }
+    const offline = data !== null ? data.offline : null;
+    const lastFix = data !== null ? data.pilotInfo.lastFix : null;
 
     return (
       <Popover
-        open={data !== null}
+        open={data !== null && data.open}
         anchorReference="anchorPosition"
         anchorPosition={data === null ? null : data.pos}
         transformOrigin={{
@@ -99,24 +96,28 @@ export default class ContextMenu extends React.PureComponent {
           dense
           subheader={
             onMap && data !== null ? (
-              <ListSubheader>{name}</ListSubheader>
+              <ListSubheader>
+                {data === null ? null : data.pilotInfo.name}
+              </ListSubheader>
             ) : null
           }
         >
-          {onMap
-            ? null
-            : this.generateMenuEntry(
+          {!onMap && !offline
+            ? this.generateMenuEntry(
                 <PlayArrowIcon />,
                 "Show Pilot on Map",
                 this.onShowOnMap
-              )}
+              )
+            : null}
           {/*this.generateMenuEntry(
             <DirectionsIcon />,
             "Live Navigation",
             () => {},
             true
           )*/}
-          {data !== null && data.shown
+          {offline
+            ? null
+            : data !== null && data.pilotInfo.shown
             ? this.generateMenuEntry(
                 <StarRateIcon />,
                 "Hide Pilot",
@@ -129,8 +130,9 @@ export default class ContextMenu extends React.PureComponent {
               )}
           {this.generateMenuEntry(
             <RoomIcon />,
-            "Open in Maps",
-            this.onNavigateTo
+            offline ? "Last Observed Position" : "Open in Maps",
+            this.onNavigateTo,
+            lastFix === null
           )}
           {this.generateMenuEntry(
             <DeleteIcon />,

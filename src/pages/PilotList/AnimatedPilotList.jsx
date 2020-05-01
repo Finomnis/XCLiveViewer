@@ -1,12 +1,27 @@
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
+import {
+  Box,
+  Typography,
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  ExpansionPanelDetails,
+  withStyles,
+} from "@material-ui/core";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import AnimatedPilotListEntry from "./AnimatedPilotListEntry";
 import { getGPSProvider } from "../../services/GPSProvider";
 import { getDistance } from "geolib";
 
 import ContextMenu from "../common/ContextMenu";
-import { removePilots } from "../../common/PersistentState/ChosenPilots";
+import { getChosenPilots } from "../../common/PersistentState/ChosenPilots";
+import OfflinePilotEntry from "./OfflinePilotEntry";
+
+const OfflinePilotsExpansionPanel = withStyles({
+  root: {
+    backgroundColor: "#ddd",
+  },
+})(ExpansionPanel);
 
 class AnimatedPilotList extends React.PureComponent {
   constructor(props) {
@@ -88,23 +103,39 @@ class AnimatedPilotList extends React.PureComponent {
     getGPSProvider().unregisterCallback(this.onNewGPSDataReceived);
   }
 
-  removePilot = (pilotId) => {
-    removePilots([pilotId]);
-  };
+  showContextMenu = (pilotId, mousePos) => {
+    const chosenPilots = getChosenPilots();
+    if (!(pilotId in chosenPilots)) return;
+    const pilotInfo = chosenPilots[pilotId];
 
-  showContextMenu = (pilotId, mousePos, pilotProps, shown) => {
     this.setState({
       contextMenu: {
+        open: true,
         pilotId,
         pos: mousePos,
-        props: pilotProps,
-        shown,
+        pilotInfo,
+      },
+    });
+  };
+
+  showContextMenuOffline = (pilotId, mousePos) => {
+    const chosenPilots = getChosenPilots();
+    if (!(pilotId in chosenPilots)) return;
+    const pilotInfo = chosenPilots[pilotId];
+
+    this.setState({
+      contextMenu: {
+        open: true,
+        pilotId,
+        pos: mousePos,
+        pilotInfo,
+        offline: true,
       },
     });
   };
 
   hideContextMenu = () => {
-    this.setState({ contextMenu: null });
+    this.setState({ contextMenu: { ...this.state.contextMenu, open: false } });
   };
 
   render() {
@@ -131,7 +162,12 @@ class AnimatedPilotList extends React.PureComponent {
     };
 
     return (
-      <Box height="100%" bgcolor="#eeeef5" overflow="auto">
+      <Box
+        height="100%"
+        bgcolor="#eeeef5"
+        overflow="auto"
+        onContextMenu={(event) => event.preventDefault()}
+      >
         {onlinePilots.length > 0 ? (
           <Box margin={1} marginBottom={2}>
             {onlinePilots.map((pilotId) => (
@@ -140,7 +176,6 @@ class AnimatedPilotList extends React.PureComponent {
                 key={pilotId}
                 pilotId={pilotId}
                 pilotName={getPilotName(pilotId)}
-                removePilot={this.removePilot}
                 onContextMenuHandler={this.showContextMenu}
               />
             ))}
@@ -154,32 +189,30 @@ class AnimatedPilotList extends React.PureComponent {
                 key={pilotId}
                 pilotId={pilotId}
                 pilotName={getPilotName(pilotId)}
-                removePilot={this.removePilot}
                 onContextMenuHandler={this.showContextMenu}
               />
             ))}
           </Box>
         ) : null}
-        <Box margin={1}>
-          {offlinePilots.map((pilotId) => (
-            <Box
-              key={pilotId}
-              onClick={() => {
-                this.removePilot(pilotId);
-              }}
-              display="flex"
-            >
-              <Typography variant="body2">{getPilotName(pilotId)}</Typography>
-              <Typography
-                variant="caption"
-                color="textSecondary"
-                style={{ paddingLeft: ".5em" }}
-              >
-                [{pilotId}]
-              </Typography>
-            </Box>
-          ))}
-        </Box>
+        {offlinePilots.length > 0 ? (
+          <Box margin={1} onContextMenu={() => false}>
+            <OfflinePilotsExpansionPanel>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography>Offline Pilots</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails style={{ flexDirection: "column" }}>
+                {offlinePilots.map((pilotId) => (
+                  <OfflinePilotEntry
+                    key={pilotId}
+                    pilotId={pilotId}
+                    pilotName={getPilotName(pilotId)}
+                    onContextMenuHandler={this.showContextMenuOffline}
+                  />
+                ))}
+              </ExpansionPanelDetails>
+            </OfflinePilotsExpansionPanel>
+          </Box>
+        ) : null}
         <ContextMenu
           data={this.state.contextMenu}
           onClose={this.hideContextMenu}

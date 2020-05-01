@@ -1,8 +1,4 @@
 
-BUG: Reloating makes camera behave indeterministic,
-     depending on whether google maps or the pilot data load faster.
-     Camera should not deactivate when no pilots are online.
-
 - Make offline pilots list prettier
     - add right click menu for offline pilots
     - Start with "offline:". Otherwise GUI is confusing if
@@ -119,6 +115,15 @@ Animation:
     - Via share
     - Similar to Visibility Selector, maybe copy code
     
+BUG: Reloating makes camera behave indeterministic,
+     depending on whether google maps or the pilot data load faster.
+     Camera should not deactivate when no pilots are online.
+
+
+
+
+
+
 
 Old Notes:
 - The markers should be a some kind of arrow / google maps marker with a state symbol inside (double arrow for live, ? for no symbol, some symbol for landed)
