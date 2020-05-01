@@ -86,10 +86,55 @@ export default class GoogleMapsTrack {
     // to compute the middle of the icon, then moves 13 to the bottom left,
     // as all pilot icons are 24 in size.
     const target = mouseEvent.target;
-    if (target == null) return null;
-    const left = target.x / window.devicePixelRatio + target.width / 2 - 13;
-    const top = target.y / window.devicePixelRatio + target.height / 2 + 13;
-    return { left, top };
+
+    // Get mouse position
+    let mouseX = mouseEvent.pageX;
+    let mouseY = mouseEvent.pageY;
+    if (
+      "touches" in mouseEvent &&
+      (mouseX === undefined || mouseY === undefined)
+    ) {
+      mouseX = mouseEvent.touches[0].pageX;
+      mouseY = mouseEvent.touches[0].pageY;
+    }
+
+    // Initialization
+    let left = target.x;
+    let top = target.y;
+    let width = target.width;
+    let height = target.height;
+    let isValid = () => {
+      return (
+        mouseX >= left &&
+        mouseX <= left + width &&
+        mouseY >= top &&
+        mouseY <= top + height
+      );
+    };
+
+    // First attempt: Most devices.
+    left = target.x;
+    top = target.y;
+    width = target.width;
+    height = target.height;
+
+    // Second attempt: chrome on android
+    if (!isValid()) {
+      console.log("First result invalid! Trying android version...");
+      left = target.x / window.devicePixelRatio;
+      top = target.y / window.devicePixelRatio;
+      width = target.width;
+      height = target.height;
+    }
+
+    if (!isValid()) {
+      console.log("Second result invalid! Returning raw mouse coords.");
+      return { left: mouseX, top: mouseY };
+    }
+
+    const popupRight = left + width / 2 - 13;
+    const popupTop = top + height / 2 + 13;
+    return { left: popupRight, top: popupTop };
   };
 
   setMap = (map) => {
