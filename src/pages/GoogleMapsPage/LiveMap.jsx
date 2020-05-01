@@ -216,7 +216,6 @@ export default class LiveMap extends React.PureComponent {
     const chosenPilots = getChosenPilots();
     if (!(pilotId in chosenPilots)) return;
     const shown = chosenPilots[pilotId].shown;
-    console.log(shown);
 
     this.setState({
       contextMenu: {
