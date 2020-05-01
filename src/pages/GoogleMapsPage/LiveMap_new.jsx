@@ -1,0 +1,212 @@
+import React from "react";
+import Box from "@material-ui/core/Box";
+import { loadGoogleMapsApi } from "../../common/GoogleMapsApiLoader";
+import { LoadingPage, ErrorPage } from "../StatusPages";
+import mapStyle from "./MapStyle.json";
+import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
+import MapAnimator from "./MapAnimator";
+import "./gm-style-overrides.css";
+import { createGeolocationMarker } from "../../ext/geolocation-marker";
+import { getSetting, Settings } from "../../common/PersistentState/Settings";
+import { getMapViewportControllerService } from "../../services/MapViewportControllerService";
+import GoogleMapsController from "./GoogleMapsController";
+
+import "./CustomButtons/CustomButtons.css";
+import { createSatelliteMapButton } from "./CustomButtons/SatelliteMapButton";
+import { createFocusCameraMapButton } from "./CustomButtons/FocusCameraMapButton";
+import {
+  createDisplayGpsMapButton,
+  updateGpsMapButton,
+} from "./CustomButtons/DisplayGpsMapButton";
+import { getGPSProvider } from "../../services/GPSProvider";
+
+export default class LiveMap extends React.PureComponent {
+  constructor() {
+    super();
+
+    this.map = null;
+    this.google = null;
+
+    this.mapsRef = React.createRef();
+    this.cleanups = [];
+
+    this.state = {
+      mapReady: false,
+      mapError: false,
+    };
+
+    this.initializeGoogleMapsApi();
+  }
+
+  initializeGoogleMapsApi = () => {
+    const mapsApiLoadingState = { canceled: false };
+
+    this.cleanups.push(() => {
+      mapsApiLoadingState.canceled = true;
+    });
+
+    loadGoogleMapsApi()
+      .then(() => {
+        if (mapsApiLoadingState.canceled) return;
+        this.google = window.google;
+        this.setState({ mapReady: true });
+      })
+      .catch((e) => {
+        if (mapsApiLoadingState.canceled) return;
+        console.log("Map error:", e);
+        this.setState({ mapError: true });
+      });
+  };
+
+  initializeMapIfNecessary = () => {
+    if (!this.state.mapReady || this.state.mapError) return;
+    if (this.map === null) {
+      this.map = new this.google.maps.Map(this.mapsRef.current, {
+        center: { lat: 46.509012, lng: 11.827984 },
+        mapTypeId: "terrain",
+        zoom: 5,
+        maxZoom: 15,
+        disableDefaultUI: true,
+        zoomControl: true,
+        scaleControl: true,
+        fullscreenControl: true,
+        styles: mapStyle,
+      });
+    }
+
+    const map = this.map;
+    const google = this.google;
+
+    // Register map type callback
+    map.addListener("maptypeid_changed", () => {
+      if (map.getMapTypeId() === google.maps.MapTypeId.TERRAIN) {
+        map.setOptions({ maxZoom: 15 });
+      } else {
+        map.setOptions({ maxZoom: 50 });
+      }
+    });
+
+    // Add custom map controls
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(
+      createSatelliteMapButton(google, map)
+    );
+    const gpsMapButton = createDisplayGpsMapButton(google, map);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(gpsMapButton);
+    map.controls[google.maps.ControlPosition.RIGHT_TOP].push(
+      createFocusCameraMapButton(google, map)
+    );
+
+    // Update gps button on change
+    let mapButtonUpdater = (value) => {
+      updateGpsMapButton(gpsMapButton, value);
+    };
+    getSetting(Settings.GPS_SHOWN).registerCallback(mapButtonUpdater);
+    this.cleanups.push(() => {
+      getSetting(Settings.GPS_SHOWN).unregisterCallback(mapButtonUpdater);
+    });
+
+    // Map animator
+    const mapAnimator = new MapAnimator(map, google);
+    const mapAnimatorUpdateCallback = mapAnimator.update;
+    getXContestInterface().animation.registerCallback(
+      mapAnimatorUpdateCallback
+    );
+
+    const geolocationMarker = createGeolocationMarker(google, null);
+    geolocationMarker.setPositionOptions({ enableHighAccuracy: true });
+
+    // enable/disable geolocation marker on change
+    const geolocationMarkerUpdateState = () => {
+      let enabled = getSetting(Settings.GPS_ENABLED).getValue();
+      let shown = getSetting(Settings.GPS_SHOWN).getValue();
+      if (enabled && shown) {
+        geolocationMarker.setMap(map);
+        // Manually update the position to trigger a redrawing.
+        // Kinda hacky, workaround to bug in geolocationMarker
+        const currentGPSData = getGPSProvider().getData();
+        if (currentGPSData !== null)
+          geolocationMarker.updatePosition_(currentGPSData);
+      } else {
+        geolocationMarker.setMap(null);
+      }
+    };
+    geolocationMarkerUpdateState();
+    getSetting(Settings.GPS_ENABLED).registerCallback(
+      geolocationMarkerUpdateState
+    );
+    getSetting(Settings.GPS_SHOWN).registerCallback(
+      geolocationMarkerUpdateState
+    );
+
+    // Register Map Controller
+    let mapController = new GoogleMapsController(google, map);
+    getMapViewportControllerService().registerMapController(mapController);
+
+    this.cleanups.push(() => {
+      // Unregister Map Controller
+      getMapViewportControllerService().unregisterMapController(mapController);
+
+      // Shutdown mapController
+      mapController.shutdown();
+
+      // Stop animation
+      getXContestInterface().animation.unregisterCallback(
+        mapAnimatorUpdateCallback
+      );
+
+      // Unregister connection between GPS_ENABLED setting and geolocationMarker
+      getSetting(Settings.GPS_ENABLED).unregisterCallback(
+        geolocationMarkerUpdateState
+      );
+      getSetting(Settings.GPS_SHOWN).unregisterCallback(
+        geolocationMarkerUpdateState
+      );
+
+      // Disable geolocationMarker
+      geolocationMarker.setMap(null);
+    });
+
+    this.mapInitialized = true;
+  };
+
+  componentDidMount() {
+    this.initializeMapIfNecessary();
+  }
+
+  componentDidUpdate() {
+    this.initializeMapIfNecessary();
+  }
+
+  componentWillUnmount() {
+    for (let cleanup of this.cleanups) {
+      cleanup();
+    }
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        <Box // Shown if ready,!error
+          width="100%"
+          height="100%"
+          display={
+            this.state.mapReady && !this.state.mapError ? "block" : "none"
+          }
+          ref={this.mapsRef}
+          onWheel={() => {
+            // Free camera on mouse wheel
+            getMapViewportControllerService().setFreeMode();
+          }}
+        ></Box>
+        <LoadingPage // Shown if !ready,!error
+          message="Loading Maps ..."
+          hideIf={this.state.mapReady || this.state.mapError}
+        ></LoadingPage>
+        <ErrorPage // Shown if !ready,error and ready,error
+          message="Unable to load map!"
+          hideIf={!this.state.mapError}
+        ></ErrorPage>
+      </React.Fragment>
+    );
+  }
+}
