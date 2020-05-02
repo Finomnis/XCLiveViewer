@@ -107,7 +107,7 @@ export class ElevationHistogram extends React.PureComponent {
     ctx.stroke();
   };
 
-  shallowRerender = (data) => {
+  shallowRerender = (data, force = false) => {
     if (!(this.props.pilot in data)) return;
     if (this.canvasRef.current === null) return;
     const canvas = this.canvasRef.current;
@@ -119,7 +119,7 @@ export class ElevationHistogram extends React.PureComponent {
     const currentTime = pilotData.lastPotentialAirTime;
 
     // Only update once per second
-    if (this.lastRenderedTimestamp === currentTime) return;
+    if (!force && this.lastRenderedTimestamp === currentTime) return;
     this.lastRenderedTimestamp = currentTime;
 
     // Get current height, as a starting point
@@ -169,18 +169,31 @@ export class ElevationHistogram extends React.PureComponent {
     this.shallowRerender(pilotData);
   };
 
+  shallowFetchDataAndRerender = (force = false) => {
+    this.shallowRerender(
+      getXContestInterface().animation.getData().pilotData,
+      force
+    );
+  };
+
   componentDidMount = () => {
-    this.shallowRerender(getXContestInterface().animation.getData().pilotData);
+    this.shallowFetchDataAndRerender();
     getXContestInterface().animation.registerCallback(this.onNewAnimationData);
+    window.addEventListener("resize", this.onSizeChanged);
   };
   componentDidUpdate = () => {
-    this.shallowRerender(getXContestInterface().animation.getData());
+    this.shallowFetchDataAndRerender();
   };
   componentWillUnmount() {
+    window.removeEventListener("resize", this.onSizeChanged);
     getXContestInterface().animation.unregisterCallback(
       this.onNewAnimationData
     );
   }
+
+  onSizeChanged = () => {
+    this.shallowFetchDataAndRerender(true);
+  };
 
   render() {
     return (
