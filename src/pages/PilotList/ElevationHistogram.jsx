@@ -16,6 +16,7 @@ export class ElevationHistogram extends React.PureComponent {
     this.COLOR_PILOT = "#e11";
 
     this.lastRenderedTimestamp = 0;
+    this.lastRenderedTrackStart = null;
   }
 
   prepareCanvasAndComputeLimits = (canvas, pilotData) => {
@@ -89,7 +90,7 @@ export class ElevationHistogram extends React.PureComponent {
     ctx.fill();
 
     // paint path
-    ctx.lineWidth = 2 * dpr;
+    ctx.lineWidth = 1.5 * dpr;
     ctx.lineJoin = "round";
     ctx.lineCap = "round";
     ctx.beginPath();
@@ -117,10 +118,17 @@ export class ElevationHistogram extends React.PureComponent {
     const track = pilotData.track;
     const currentElevation = pilotData.elevation;
     const currentTime = pilotData.lastPotentialAirTime;
+    const trackStartTime = track.length > 0 ? track[0].timestamp : null;
 
     // Only update once per second
-    if (!force && this.lastRenderedTimestamp === currentTime) return;
+    if (
+      !force &&
+      this.lastRenderedTimestamp === currentTime &&
+      this.lastRenderedTrackStart === trackStartTime
+    )
+      return;
     this.lastRenderedTimestamp = currentTime;
+    this.lastRenderedTrackStart = trackStartTime;
 
     // Get current height, as a starting point
     const currentHeight =
