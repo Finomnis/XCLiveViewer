@@ -4,7 +4,7 @@ export default class MapPilotInfoWindow {
     this.infoWindow = new google.maps.InfoWindow({
       content: "- ERROR -",
       pixelOffset: new google.maps.Size(0, -5),
-      disableAutoPan: true
+      disableAutoPan: true,
     });
     this.data = {};
     this.currentPilot = null;
@@ -22,7 +22,7 @@ export default class MapPilotInfoWindow {
     this.updateContent();
   };
 
-  update = data => {
+  update = (data) => {
     this.data = data;
     this.updateContent();
   };
@@ -54,7 +54,10 @@ export default class MapPilotInfoWindow {
     newContent += Math.round(height) + "m (";
     newContent += Math.round(heightGnd) + "m)<br>";
 
-    if (pilotInfo.baroVario !== null && !pilotInfo.landed) {
+    if (
+      pilotInfo.baroVario !== null &&
+      !(pilotInfo.endOfTrack && pilotInfo.landed)
+    ) {
       const vario = Math.round(pilotInfo.baroVario * 10);
       let varioAbs = Math.abs(vario);
       if (varioAbs > 99) varioAbs = 99;
@@ -67,7 +70,10 @@ export default class MapPilotInfoWindow {
       newContent += "<span>" + varioStr + "</span>&nbsp;&nbsp;";
     }
 
-    if (pilotInfo.velocity !== null && !pilotInfo.landed) {
+    if (
+      pilotInfo.velocity !== null &&
+      !(pilotInfo.endOfTrack && pilotInfo.landed)
+    ) {
       newContent += Math.round(pilotInfo.velocity * 3.6) + "km/h";
     }
 
