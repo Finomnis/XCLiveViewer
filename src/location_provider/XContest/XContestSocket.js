@@ -107,7 +107,7 @@ export default class XContestSocket {
   };
 
   onMessage = (evt) => {
-    console.debug("WebSocket: Message!");
+    //console.debug("WebSocket: Message!");
     this.setConnectionState(ConnectionState.ACTIVE);
 
     let msg = JSON.parse(evt.data);

@@ -435,7 +435,7 @@ class FlightAnimation {
     // Compute last potential air time.
     // Used for computation of flight duration.
     let lastPotentialAirtime = animationTimeSeconds;
-    if (this.endOfTrack && this.landed) {
+    if (endOfTrack && this.landed) {
       lastPotentialAirtime = newestDataTimestamp;
     }
 
