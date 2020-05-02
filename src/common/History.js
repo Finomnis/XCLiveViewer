@@ -7,7 +7,7 @@ window.addEventListener(
       console.warn("History was already 0!");
     }
     const callback = ourHistory.pop();
-    console.debug("- History size:", ourHistory.length);
+    //console.debug("- History size:", ourHistory.length);
     if (ourHistory.length > 0) window.history.pushState({}, "");
     if (callback) callback();
   },
@@ -15,10 +15,10 @@ window.addEventListener(
 );
 
 export const useHistory = () => {
-  const pushFunction = cb => {
+  const pushFunction = (cb) => {
     const histSize = ourHistory.length;
     ourHistory.push(cb);
-    console.debug("+ History size:", ourHistory.length);
+    //console.debug("+ History size:", ourHistory.length);
     if (histSize === 0) {
       window.history.pushState({}, "");
     }

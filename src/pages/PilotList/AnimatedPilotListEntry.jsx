@@ -351,13 +351,13 @@ class AnimatedPilotListEntry extends React.PureComponent {
       this.pilotProps = this.extractImportantProps(pilotInfo);
     }
 
-    console.log(
+    /*console.debug(
       "RENDER ",
       this.props.pilotId,
       this.state,
       this.props,
       this.pilotProps
-    );
+    );*/
 
     const pilotIcon = getPilotIcon(
       this.pilotProps.startOfTrack,
