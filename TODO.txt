@@ -1,6 +1,4 @@
 
-- Add optional nosleep.js (and add setting)
-
 - Implement Pilots List
     + Sort: online/offline, distance
     + Multiline or extendable, run some tests
@@ -22,6 +20,7 @@
 
 - Implement Navigation (for drivers)
 
+- 3D Map
 
 
 
@@ -116,6 +115,7 @@ BUG: Reloating makes camera behave indeterministic,
 
 - Add 'Go to last known position' button to offline pilots
 
+- Add optional nosleep.js (and add setting)
 
 
 
