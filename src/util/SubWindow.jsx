@@ -9,7 +9,7 @@ import { useHistory } from "../common/History";
 // - "Dialog.onClose()" => same as previous, as can be forwarded
 // - History gets reverted
 
-const SubWindow = props => {
+const SubWindow = (props) => {
   const [open, _setOpen] = useState(false);
   const [historyOpen, _setHistoryOpen] = useState(false);
   const history = useHistory();
@@ -27,22 +27,24 @@ const SubWindow = props => {
   // If we should be open, initiate a window opening.
   // Special case: if we just closed the window, don't immediately re-open it,
   // but signal the parent class to close instead.
-  if (props.open && !open) {
-    if (historyOpen) {
-      // This creates an endless feedback loop if props.onClose doesn't set
-      // props.open to false. Therefore we require props.onClose to do so.
-      props.onClose();
+  React.useEffect(() => {
+    if (props.open && !open) {
+      if (historyOpen) {
+        // This creates an endless feedback loop if props.onClose doesn't set
+        // props.open to false. Therefore we require props.onClose to do so.
+        props.onClose();
 
-      // To further prevent the feedback loop, we now set the history open state.
-      // Now, if props.onClose failed to set props.open to false, the window
-      // will immediately re-open.
-      // Currently commented out, because it proved unstable and caused state
-      // fluctuations.
-      //_setHistoryOpen(false);
-    } else {
-      openWindow();
+        // To further prevent the feedback loop, we now set the history open state.
+        // Now, if props.onClose failed to set props.open to false, the window
+        // will immediately re-open.
+        // Currently commented out, because it proved unstable and caused state
+        // fluctuations.
+        //_setHistoryOpen(false);
+      } else {
+        openWindow();
+      }
     }
-  }
+  });
 
   // If both the external and internal state agree that the window is now close,
   // reset the history state. The history state prevents the window

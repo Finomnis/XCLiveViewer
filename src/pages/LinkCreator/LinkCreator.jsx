@@ -103,8 +103,8 @@ class LinkCreator extends React.PureComponent {
             <Button
               disabled={false}
               onClick={() => {
-                this.createLink(Object.keys(this.state.selected));
                 this.closeWindow();
+                this.createLink(Object.keys(this.state.selected));
               }}
               color="primary"
             >
