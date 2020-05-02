@@ -73,6 +73,21 @@ const MainMenu = (props) => {
             <ListItemText primary="Create Pilot Link" />
           </ListItem>
         </List>
+        <Typography
+          variant="caption"
+          style={{
+            fontSize: "0.6rem",
+            textAlign: "center",
+            position: "absolute",
+            bottom: "0px",
+            width: "100%",
+          }}
+        >
+          {"Icon made by "}
+          <a href="https://www.flaticon.com/authors/freepik">{"Freepik"}</a>
+          {" from "}
+          <a href="https://www.flaticon.com/">{"www.flaticon.com"}</a>
+        </Typography>
       </SwipeableDrawer>
       <SettingsPage
         open={settingsOpen}

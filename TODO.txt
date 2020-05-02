@@ -25,8 +25,6 @@
 
 
 
-
-
 ABANDONED:
 
 // - Right click on pilot icon to open context menu (in map)
@@ -116,6 +114,8 @@ BUG: Reloating makes camera behave indeterministic,
 - Add 'Go to last known position' button to offline pilots
 
 - Add optional nosleep.js (and add setting)
+
+- Logo
 
 
 
