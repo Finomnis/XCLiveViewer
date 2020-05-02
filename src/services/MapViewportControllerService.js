@@ -1,5 +1,4 @@
 import { getXContestInterface } from "../location_provider/XContest/XContestInterface";
-import { registerPersistentState } from "../common/PersistentState/PersistentState";
 import { getSetting, Settings } from "../common/PersistentState/Settings";
 
 class MapViewportControllerService {
