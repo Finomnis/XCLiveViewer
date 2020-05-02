@@ -7,17 +7,12 @@ class MapViewportControllerService {
     this.mapControllers = [];
 
     // The state of the viewport controller service
-    this.state = registerPersistentState("viewport-state", {
+    this.state = {
       includeSelf: getSetting(Settings.GPS_SHOWN).getValue(),
       enabled: true,
       followSinglePilot: null,
       pilots: {},
-    });
-
-    // Reset state at every new page load.
-    // TODO If this turns out to be intended behaviour, convert the persistent state to
-    // a local class state.
-    this.state.setValue(null);
+    };
 
     // Register for animation frame updates
     getXContestInterface().animation.registerCallback(this.onAnimationFrame);
@@ -26,30 +21,29 @@ class MapViewportControllerService {
     getSetting(Settings.GPS_SHOWN).registerCallback(this.onSelfShownChanged);
   }
 
+  setState = (val) => {
+    this.state = { ...this.state, ...val };
+  };
+
   // Disables the controllers, enables manual mode
   setFreeMode = () => {
-    this.state.updateValue((oldValue) => ({
-      ...oldValue,
-      enabled: false,
-    }));
+    this.setState({ enabled: false });
   };
 
   // Follows a single pilot
   setSinglePilotMode = (pilotId) => {
-    this.state.updateValue((oldValue) => ({
-      ...oldValue,
+    this.setState({
       enabled: true,
       followSinglePilot: pilotId,
-    }));
+    });
     this._emitZoomToSinglePilot();
   };
 
   setFollowMode = () => {
-    this.state.updateValue((oldValue) => ({
-      ...oldValue,
+    this.setState({
       enabled: true,
       followSinglePilot: null,
-    }));
+    });
   };
 
   // Sends single pilot mode signal to controllers
@@ -61,38 +55,36 @@ class MapViewportControllerService {
 
   // When GPS_SHOWN setting changed
   onSelfShownChanged = (value) => {
-    this.state.updateValue((oldState) => ({
-      ...oldState,
+    this.setState({
       includeSelf: value,
-    }));
+    });
   };
 
   // Update this and every registered map controller.
   onAnimationFrame = ({ pilotData_filtered }) => {
     // Add new pilots, remove old pilots
-    this.state.updateValue((oldState) => {
-      const newState = { ...oldState };
-      newState.pilots = { ...newState.pilots };
+    const oldState = this.state;
+    const newState = { ...oldState };
+    newState.pilots = { ...newState.pilots };
 
-      // Remove old pilots
-      for (const pilotName in oldState.pilots) {
-        if (!(pilotName in pilotData_filtered)) {
-          delete newState.pilots[pilotName];
-        }
+    // Remove old pilots
+    for (const pilotName in oldState.pilots) {
+      if (!(pilotName in pilotData_filtered)) {
+        delete newState.pilots[pilotName];
       }
+    }
 
-      // Add new pilots
-      for (const pilotName in pilotData_filtered) {
-        if (!(pilotName in newState.pilots)) {
-          newState.pilots[pilotName] = true;
-        }
+    // Add new pilots
+    for (const pilotName in pilotData_filtered) {
+      if (!(pilotName in newState.pilots)) {
+        newState.pilots[pilotName] = true;
       }
+    }
 
-      return newState;
-    });
+    this.state = newState;
 
     for (const mapController of this.mapControllers) {
-      mapController.onAnimationFrame(pilotData_filtered, this.state.getValue());
+      mapController.onAnimationFrame(pilotData_filtered, this.state);
     }
   };
 
