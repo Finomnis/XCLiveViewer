@@ -25,7 +25,11 @@ export class ElevationHistogram extends React.PureComponent {
     canvas.height = rect.height * dpr;
 
     // If landed, display the elevation histogram of the entire flight
-    if (pilotData.landed && pilotData.track.length > 0) {
+    if (
+      pilotData.endOfTrack &&
+      pilotData.landed &&
+      pilotData.track.length > 0
+    ) {
       const finalTimestamp = pilotData.lastPotentialAirTime;
       const beginningTimestamp = pilotData.track[0].timestamp;
       return Math.max(1, finalTimestamp - beginningTimestamp);

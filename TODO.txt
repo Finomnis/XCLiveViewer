@@ -1,16 +1,4 @@
 
-- Make offline pilots list prettier
-    - add right click menu for offline pilots
-    - Start with "offline:". Otherwise GUI is confusing if
-      only one pilot is displayed.
-      
-- Add 'Go to last known position' button to offline pilots
-
-- Grey out non-highlighted pilots instead of hiding them in map
-    - Move highlighted pilots to the front on map
-
-
-
 - Add optional nosleep.js (and add setting)
 
 - Implement Pilots List
@@ -22,7 +10,7 @@
         + status
         + altitude/altitude gnd
         + distance, direction
-        - (vario)
+        - vario
         - (velocity)
         - (glider)
         + airtime
@@ -31,7 +19,6 @@
         + altitude histogram
     + Make animated
     - Make configurable
-
 
 - Implement Navigation (for drivers)
 
@@ -62,6 +49,9 @@ ABANDONED:
     - Highlighting Menu: Reset removes all highlights
     - Right-Click menu:
         - Highlight/Don't highlight
+
+- Grey out non-highlighted pilots instead of hiding them in map
+    - Move highlighted pilots to the front on map
 
 
 
@@ -119,7 +109,12 @@ BUG: Reloating makes camera behave indeterministic,
      depending on whether google maps or the pilot data load faster.
      Camera should not deactivate when no pilots are online.
 
+- Make offline pilots list prettier
+    - add right click menu for offline pilots
+    - Start with "offline:". Otherwise GUI is confusing if
+      only one pilot is displayed.
 
+- Add 'Go to last known position' button to offline pilots
 
 
 
