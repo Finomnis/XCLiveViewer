@@ -10,6 +10,7 @@ export const Settings = {
   FPS_RATE: "FPS_RATE",
   GPS_ENABLED: "GPS_ENABLED",
   GPS_SHOWN: "GPS_SHOWN",
+  PREVENT_SLEEP: "PREVENT_SLEEP",
 };
 
 // Wrapper for simplification
@@ -26,6 +27,7 @@ const settingsObjects = {
   FPS_RATE: createSetting(Settings.FPS_RATE, 10),
   GPS_ENABLED: createSetting(Settings.GPS_ENABLED, true),
   GPS_SHOWN: createSetting(Settings.GPS_SHOWN, true),
+  PREVENT_SLEEP: createSetting(Settings.PREVENT_SLEEP, false),
 };
 
 export const getSetting = (key) => settingsObjects[key];

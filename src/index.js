@@ -8,6 +8,7 @@ import "flag-icon-css/css/flag-icon.min.css";
 
 import * as serviceWorker from "./serviceWorker";
 import { processUrlParameters } from "./UrlParameters";
+import { startNoSleepService } from "./services/NoSleep";
 
 // Read the .env file
 require("dotenv").config();
@@ -17,6 +18,9 @@ resolveBreakingChanges();
 
 // Process url parameters
 processUrlParameters();
+
+// Nosleep
+startNoSleepService();
 
 // Render the page
 ReactDOM.render(<App />, document.getElementById("root"));

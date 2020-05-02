@@ -6,7 +6,7 @@ import SubWindow from "../../util/SubWindow";
 import { BooleanSetting, NumberSetting } from "./SettingsPageEntries";
 import SettingsPageTitleBar from "./SettingsPageTitleBar";
 
-const SettingsPage = props => {
+const SettingsPage = (props) => {
   // Retreive the settings that enable/disable other settings
   const [settingLimitPaths] = getSetting(Settings.LIMIT_PATHS).use();
   const [settingFpsLimit] = getSetting(Settings.FPS_LIMIT).use();
@@ -73,6 +73,14 @@ const SettingsPage = props => {
           setting={Settings.GPS_ENABLED}
           primaryText="Enable GPS"
           secondaryText="required for advanced features"
+        />
+
+        {/* Prevent sleep */}
+        <Divider />
+        <BooleanSetting
+          setting={Settings.PREVENT_SLEEP}
+          primaryText="Prevent Sleep"
+          secondaryText="Keeps display on. Useful for driving."
         />
       </List>
     </SubWindow>
