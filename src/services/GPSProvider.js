@@ -36,28 +36,28 @@ class GPSProvider {
     //console.log("UPDATE_GPS_STATE", enableGps, this._callbacks.length);
   };
 
-  _setGPSData = data => {
-    console.log("GPS DATA:", data);
+  _setGPSData = (data) => {
+    //console.debug("GPS DATA:", data);
     this._gpsData = data;
     for (const cb of this._callbacks) {
       cb(data);
     }
   };
 
-  _onNewGPSData = data => {
+  _onNewGPSData = (data) => {
     this._setGPSData(data);
   };
   _onGPSError = () => {
     this._setGPSData(null);
   };
 
-  registerCallback = cb => {
+  registerCallback = (cb) => {
     if (!this._callbacks.includes(cb)) this._callbacks.push(cb);
     this._updateGPSState();
     cb(this._gpsData);
   };
 
-  unregisterCallback = cb => {
+  unregisterCallback = (cb) => {
     const index = this._callbacks.indexOf(cb);
     if (index >= 0) {
       this._callbacks.splice(index, 1);
