@@ -1,5 +1,6 @@
 import { registerPersistentState } from "./PersistentState";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
+import { parseTime } from "../../location_provider/XContest/FlightAnimationData";
 
 const persistentChosenPilots = registerPersistentState("chosen-pilots", {});
 
@@ -44,9 +45,10 @@ export function setChosenPilotsAndUpdateInfos(chosenPilots = null) {
       const previousLastFix = chosenPilots[pilotId].lastFix;
       if (!previousLastFix || previousLastFix.t !== lastFix.timestamp) {
         chosenPilots[pilotId].lastFix = {
-          t: lastFix.timestamp,
+          t: parseTime(lastFix.timestamp),
           lat: lastFix.lat,
           lon: lastFix.lon,
+          landed: pilotList[pilotId].landed,
         };
         chosenPilotsUpdated = true;
       }
