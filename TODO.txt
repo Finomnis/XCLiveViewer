@@ -117,6 +117,8 @@ BUG: Reloating makes camera behave indeterministic,
 
 - Logo
 
+- Option to display offline pilots on map
+
 
 
 
