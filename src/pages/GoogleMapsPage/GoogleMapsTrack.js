@@ -10,7 +10,7 @@ export default class GoogleMapsTrack {
   constructor(
     google,
     map,
-    pilotInfo,
+    pilotId,
     initialData,
     pilotInfoWindow,
     onMouseOver,
@@ -18,8 +18,8 @@ export default class GoogleMapsTrack {
   ) {
     this.google = google;
     this.pilotInfoWindow = pilotInfoWindow;
-    this.pilotColor = getPilotIconColor(pilotInfo.info.user.username);
-    this.trackColor = getPilotTrackColor(pilotInfo.info.user.username);
+    this.pilotColor = getPilotIconColor(pilotId);
+    this.trackColor = getPilotTrackColor(pilotId);
 
     this.pilotIcon = getPilotIcon(
       initialData.startOfTrack,
@@ -33,24 +33,18 @@ export default class GoogleMapsTrack {
     this.marker = new this.google.maps.Marker({
       map: map,
       position: initialData.pos,
-      title: pilotInfo.info.user.fullname,
+      title: initialData.name,
       icon: this.pilotIcon,
     });
 
     this.marker.addListener("click", () => {
       if (canOpenInfoWindow()) {
-        this.pilotInfoWindow.open(
-          this.map,
-          this.marker,
-          pilotInfo.info.user.username
-        );
+        this.pilotInfoWindow.open(this.map, this.marker, pilotId);
       }
     });
 
     this.marker.addListener("dblclick", () => {
-      getMapViewportControllerService().setSinglePilotMode(
-        pilotInfo.info.user.username
-      );
+      getMapViewportControllerService().setSinglePilotMode(pilotId);
     });
 
     this.marker.addListener("mousedown", ({ tb }) => {

@@ -1,4 +1,3 @@
-import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
 import GoogleMapsTrack from "./GoogleMapsTrack";
 import MapPilotInfoWindow from "./MapPilotInfoWindow";
 
@@ -44,22 +43,17 @@ export default class MapAnimator {
   };
 
   update = ({ pilotData_filtered }) => {
-    const pilotInfos = getXContestInterface().getPilotInfos();
-
     // Remove tracks that we unsubscribed from
     this.cleanupOldTracks(pilotData_filtered);
 
     // Update all pilots
     Object.entries(pilotData_filtered).forEach(([pilot, pilotData]) => {
-      if (!(pilot in pilotInfos)) return;
-      const info = pilotInfos[pilot];
-
       // Add track if it doesn't exist
       if (!(pilot in this.tracks)) {
         this.tracks[pilot] = new GoogleMapsTrack(
           this.google,
           this.map,
-          info,
+          pilot,
           pilotData,
           this.infoWindow,
           (isOver, pagePos) => this.onMouseOver(pilot, isOver, pagePos),
