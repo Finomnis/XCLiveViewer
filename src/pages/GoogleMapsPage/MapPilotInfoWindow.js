@@ -50,9 +50,12 @@ export default class MapPilotInfoWindow {
 
     // Update content
     let newContent = "";
-    newContent += "<b>" + pilotInfo.name + "</b><br>";
-    newContent += Math.round(height) + "m (";
-    newContent += Math.round(heightGnd) + "m)<br>";
+    newContent += "<b>" + pilotInfo.name + "</b>";
+    if (height !== null && heightGnd !== null) {
+      newContent += "<br>";
+      newContent += Math.round(height) + "m (";
+      newContent += Math.round(heightGnd) + "m)<br>";
+    }
 
     if (
       pilotInfo.baroVario !== null &&

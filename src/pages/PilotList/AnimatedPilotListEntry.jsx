@@ -312,6 +312,10 @@ class AnimatedPilotListEntry extends React.PureComponent {
   static renderHeight(pilotProps) {
     const height = pilotProps.height;
 
+    if (height == null) {
+      return "--m (--m)";
+    }
+
     return (
       Math.round(height) +
       "m (" +
