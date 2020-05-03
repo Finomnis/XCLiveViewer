@@ -2,7 +2,7 @@ import {
   getChosenPilots,
   getChosenPilotsObject,
 } from "../../common/PersistentState/ChosenPilots";
-import FlightAnimation from "./FlightAnimation";
+import FlightAnimation, { createOfflineEntry } from "./FlightAnimation";
 import HighPrecisionTimeSync from "../../util/HighPrecisionTimeSync";
 import { Settings, getSetting } from "../../common/PersistentState/Settings";
 
@@ -23,15 +23,20 @@ export default class XContestAnimation {
     this._highPrecisionTimeSync = new HighPrecisionTimeSync();
     const settings_limitFps = getSetting(Settings.FPS_LIMIT);
     const settings_fps = getSetting(Settings.FPS_RATE);
+    const settings_showOfflinePilots = getSetting(Settings.SHOW_OFFLINE_PILOTS);
 
     // Cached settings values for performance improvements. Not sure if actually worth
     this._setting_limitFps = settings_limitFps.getValue();
     this._setting_fps = settings_fps.getValue();
+    this._setting_showOfflinePilots = settings_showOfflinePilots.getValue();
     settings_limitFps.registerCallback((value) => {
       this._setting_limitFps = value;
     });
     settings_fps.registerCallback((value) => {
       this._setting_fps = value;
+    });
+    settings_showOfflinePilots.registerCallback((value) => {
+      this._setting_showOfflinePilots = value;
     });
 
     this._setSubscribedFlightsCallback = (flights) => {
@@ -71,8 +76,21 @@ export default class XContestAnimation {
               newFilteredAnimationData[pilot] = pilotAnimationFrame;
             }
           }
+        } else {
+          // Add offline pilots
+          if (this._setting_showOfflinePilots) {
+            if (pilotData.lastFix != null && pilotData.lastFix.landed) {
+              const offlinePilotEntry = createOfflineEntry(pilot, pilotData);
+
+              newAnimationData[pilot] = offlinePilotEntry;
+              if (pilotData.shown) {
+                newFilteredAnimationData[pilot] = offlinePilotEntry;
+              }
+            }
+          }
         }
       });
+
       this._submitAnimationFrame({
         pilotData: newAnimationData,
         pilotData_filtered: newFilteredAnimationData,

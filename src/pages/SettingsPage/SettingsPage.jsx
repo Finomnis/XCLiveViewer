@@ -82,6 +82,14 @@ const SettingsPage = (props) => {
           primaryText="Prevent Sleep"
           secondaryText="Keeps display on. Useful for driving."
         />
+
+        {/* Show offline pilots */}
+        <Divider />
+        <BooleanSetting
+          setting={Settings.SHOW_OFFLINE_PILOTS}
+          primaryText="Show Offline Pilots"
+          secondaryText="Displays last observed landing spot."
+        />
       </List>
     </SubWindow>
   );

@@ -11,6 +11,7 @@ export const Settings = {
   GPS_ENABLED: "GPS_ENABLED",
   GPS_SHOWN: "GPS_SHOWN",
   PREVENT_SLEEP: "PREVENT_SLEEP",
+  SHOW_OFFLINE_PILOTS: "SHOW_OFFLINE_PILOTS",
 };
 
 // Wrapper for simplification
@@ -28,6 +29,7 @@ const settingsObjects = {
   GPS_ENABLED: createSetting(Settings.GPS_ENABLED, true),
   GPS_SHOWN: createSetting(Settings.GPS_SHOWN, true),
   PREVENT_SLEEP: createSetting(Settings.PREVENT_SLEEP, false),
+  SHOW_OFFLINE_PILOTS: createSetting(Settings.SHOW_OFFLINE_PILOTS, false),
 };
 
 export const getSetting = (key) => settingsObjects[key];

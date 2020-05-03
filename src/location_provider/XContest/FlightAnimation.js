@@ -40,6 +40,21 @@ class DataGens {
     };
   };
 
+  static offlineData = (offlinePilotInfos) => {
+    return {
+      baroAlt: null,
+      gpsAlt: null,
+      elevation: null,
+      pos: {
+        lat: offlinePilotInfos.lastFix.lat,
+        lng: offlinePilotInfos.lastFix.lon,
+      },
+      gpsVario: null,
+      baroVario: null,
+      velocity: null,
+    };
+  };
+
   static takeData(data) {
     return {
       baroAlt: data.baroAlt,
@@ -449,6 +464,7 @@ class FlightAnimation {
       track: track,
       velocityVec: velocityVec,
       lastPotentialAirTime: Math.round(lastPotentialAirtime),
+      offline: false,
     };
 
     return result;
@@ -456,5 +472,24 @@ class FlightAnimation {
 
   getNewestTimestamp = () => this.liveData.getNewestTimestamp();
 }
+
+export const createOfflineEntry = (pilotId, offlinePilotInfos) => {
+  const landed = offlinePilotInfos.lastFix.landed;
+
+  const result = {
+    ...DataGens.offlineData(offlinePilotInfos),
+    startOfTrack: !landed,
+    endOfTrack: landed,
+    landed: landed,
+    name: offlinePilotInfos.name == null ? pilotId : offlinePilotInfos.name,
+    newestDataTimestamp: offlinePilotInfos.lastFix.t,
+    track: [],
+    velocityVec: null,
+    lastPotentialAirTime: offlinePilotInfos.lastFix.t,
+    offline: true,
+  };
+
+  return result;
+};
 
 export default FlightAnimation;

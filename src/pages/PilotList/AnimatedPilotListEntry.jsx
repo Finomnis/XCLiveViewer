@@ -112,6 +112,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
       launchTime: null,
       scoreDistance: null,
       scoreType: null,
+      offline: true,
     };
     Object.assign(
       this.state,
@@ -156,6 +157,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
         pilotInfo.velocityVec === null ? null : pilotInfo.velocityVec.lng,
       velocity: pilotInfo.velocity,
       lastPotentialAirTime: pilotInfo.lastPotentialAirTime,
+      offline: pilotInfo.offline,
     };
   };
 
@@ -180,6 +182,12 @@ class AnimatedPilotListEntry extends React.PureComponent {
 
     const pilotInfo = pilotData[this.props.pilotId];
     const newPilotProps = this.extractImportantProps(pilotInfo);
+
+    // If offline state changed, rerender
+    if (this.state.offline !== newPilotProps.offline) {
+      this.setState({ offline: newPilotProps.offline });
+      return;
+    }
 
     // Run shallow update without touching React
     if (this.propsChanged(newPilotProps)) {
@@ -441,32 +449,34 @@ class AnimatedPilotListEntry extends React.PureComponent {
             </SecondRow>
           </div>
         </PilotExpansionPanelSummary>
-        <PilotExpansionPanelDetails>
-          <DetailsStats>
-            <DetailsRow variant="caption">
-              <DetailTimerIcon />
-              <span ref={this.flightDurationRef}>
-                {AnimatedPilotListEntry.renderFlightDuration(
-                  this.state.launchTime,
-                  this.pilotProps.lastPotentialAirTime
+        {this.state.offline ? null : (
+          <PilotExpansionPanelDetails>
+            <DetailsStats>
+              <DetailsRow variant="caption">
+                <DetailTimerIcon />
+                <span ref={this.flightDurationRef}>
+                  {AnimatedPilotListEntry.renderFlightDuration(
+                    this.state.launchTime,
+                    this.pilotProps.lastPotentialAirTime
+                  )}
+                </span>
+              </DetailsRow>
+              <DetailsRow variant="caption">
+                <DetailDistanceIcon />
+                {AnimatedPilotListEntry.renderScore(
+                  this.state.scoreDistance,
+                  this.state.scoreType
                 )}
-              </span>
-            </DetailsRow>
-            <DetailsRow variant="caption">
-              <DetailDistanceIcon />
-              {AnimatedPilotListEntry.renderScore(
-                this.state.scoreDistance,
-                this.state.scoreType
-              )}
-            </DetailsRow>
-            <DetailsRow variant="caption">
-              <DetailLaunchIcon /> {this.state.launchSite}
-            </DetailsRow>
-          </DetailsStats>
-          <DetailsGraph variant="caption">
-            <ElevationHistogram pilot={this.props.pilotId} />
-          </DetailsGraph>
-        </PilotExpansionPanelDetails>
+              </DetailsRow>
+              <DetailsRow variant="caption">
+                <DetailLaunchIcon /> {this.state.launchSite}
+              </DetailsRow>
+            </DetailsStats>
+            <DetailsGraph variant="caption">
+              <ElevationHistogram pilot={this.props.pilotId} />
+            </DetailsGraph>
+          </PilotExpansionPanelDetails>
+        )}
       </ExpansionPanel>
     );
   }
