@@ -2,16 +2,6 @@ import { deflate, inflate } from "pako";
 
 import * as cbor from "cbor";
 
-function encodeUtf8(data) {
-  // Needs to be imported explicitely for tests
-  if (typeof TextEncoder === "undefined") {
-    const { TextEncoder } = require("util");
-    return new TextEncoder("utf-8").encode(data);
-  } else {
-    return new TextEncoder("utf-8").encode(data);
-  }
-}
-
 function decodeUtf8(data) {
   // Needs to be imported explicitely for tests
   if (typeof TextDecoder === "undefined") {
