@@ -68,7 +68,7 @@ class LinkCreator extends React.PureComponent {
 
     const encodedData = encodeBase64(payload);
 
-    const url = window.location.href + "?group=" + encodedData;
+    const url = window.location.href + "?g=" + encodedData;
 
     this.setState({ createdLink: url });
   };

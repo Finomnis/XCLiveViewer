@@ -1,4 +1,5 @@
-import { decodeBase64, encodeBase64 } from "../Base64Data";
+import { decodeBase64, encodeBase64, decodeBase64Json } from "../Base64Data";
+import { deflate } from "pako";
 
 function test_enc_dec(data) {
   const encodedData = encodeBase64(data);
@@ -14,6 +15,11 @@ function test_enc_dec(data) {
 
   const decodedData = decodeBase64(encodedData);
   expect(decodedData).toEqual(data);
+
+  // Test previous version
+  expect(
+    decodeBase64Json(Buffer.from(deflate(uncompressed_utf8)).toString("base64"))
+  ).toEqual(data);
 }
 
 it("Base64Data", () => {
@@ -50,4 +56,7 @@ it("Base64Data", () => {
     c: [1, 2],
   });
   test_enc_dec(["a", "b", "c"]);
+  test_enc_dec({
+    miromatejka: "Miroslav Matejka",
+  });
 });

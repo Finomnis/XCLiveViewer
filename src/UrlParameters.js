@@ -1,4 +1,4 @@
-import { decodeBase64 } from "./util/Base64Data";
+import { decodeBase64, decodeBase64Json } from "./util/Base64Data";
 import {
   getChosenPilots,
   defaultPilotEntry,
@@ -9,7 +9,11 @@ export function processUrlParameters() {
   const urlParams = new URLSearchParams(window.location.search);
 
   if (urlParams.has("group")) {
-    processGroup(urlParams.get("group"));
+    groupParameterJson(urlParams.get("group"));
+  }
+
+  if (urlParams.has("g")) {
+    groupParameter(urlParams.get("g"));
   }
 
   // If there were params,
@@ -18,9 +22,17 @@ export function processUrlParameters() {
   }
 }
 
-function processGroup(groupData) {
-  let groupPilots = decodeBase64(groupData);
+function groupParameterJson(groupData) {
+  let groupPilots = decodeBase64Json(groupData);
+  processGroupData(groupPilots);
+}
 
+function groupParameter(groupData) {
+  let groupPilots = decodeBase64(groupData);
+  processGroupData(groupPilots);
+}
+
+function processGroupData(groupPilots) {
   let chosenPilots = { ...getChosenPilots() };
 
   // Create pilots and update names
