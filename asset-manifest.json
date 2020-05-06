@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/XCLiveViewer/static/css/main.7850548b.chunk.css",
-    "main.js": "/XCLiveViewer/static/js/main.b5d1b229.chunk.js",
-    "main.js.map": "/XCLiveViewer/static/js/main.b5d1b229.chunk.js.map",
+    "main.js": "/XCLiveViewer/static/js/main.17911d21.chunk.js",
+    "main.js.map": "/XCLiveViewer/static/js/main.17911d21.chunk.js.map",
     "runtime-main.js": "/XCLiveViewer/static/js/runtime-main.cdd4df36.js",
     "runtime-main.js.map": "/XCLiveViewer/static/js/runtime-main.cdd4df36.js.map",
     "static/css/2.69712b45.chunk.css": "/XCLiveViewer/static/css/2.69712b45.chunk.css",
-    "static/js/2.213fcb98.chunk.js": "/XCLiveViewer/static/js/2.213fcb98.chunk.js",
-    "static/js/2.213fcb98.chunk.js.map": "/XCLiveViewer/static/js/2.213fcb98.chunk.js.map",
+    "static/js/2.d88610c9.chunk.js": "/XCLiveViewer/static/js/2.d88610c9.chunk.js",
+    "static/js/2.d88610c9.chunk.js.map": "/XCLiveViewer/static/js/2.d88610c9.chunk.js.map",
     "cesium/Assets/IAU2006_XYS/IAU2006_XYS_0.json": "/XCLiveViewer/cesium/Assets/IAU2006_XYS/IAU2006_XYS_0.json",
     "cesium/Assets/IAU2006_XYS/IAU2006_XYS_1.json": "/XCLiveViewer/cesium/Assets/IAU2006_XYS/IAU2006_XYS_1.json",
     "cesium/Assets/IAU2006_XYS/IAU2006_XYS_10.json": "/XCLiveViewer/cesium/Assets/IAU2006_XYS/IAU2006_XYS_10.json",
@@ -372,19 +372,19 @@
     "cesium/Workers/upsampleQuantizedTerrainMesh.js": "/XCLiveViewer/cesium/Workers/upsampleQuantizedTerrainMesh.js",
     "cesium/Workers/when-c2e8ef35.js": "/XCLiveViewer/cesium/Workers/when-c2e8ef35.js",
     "index.html": "/XCLiveViewer/index.html",
-    "precache-manifest.951a03ec1cbfa3a285ba34ae25327f5b.js": "/XCLiveViewer/precache-manifest.951a03ec1cbfa3a285ba34ae25327f5b.js",
+    "precache-manifest.126eb303b9ff2694d9bfff79c9ee9d44.js": "/XCLiveViewer/precache-manifest.126eb303b9ff2694d9bfff79c9ee9d44.js",
     "service-worker.js": "/XCLiveViewer/service-worker.js",
     "static/css/2.69712b45.chunk.css.map": "/XCLiveViewer/static/css/2.69712b45.chunk.css.map",
     "static/css/main.7850548b.chunk.css.map": "/XCLiveViewer/static/css/main.7850548b.chunk.css.map",
-    "static/js/2.213fcb98.chunk.js.LICENSE.txt": "/XCLiveViewer/static/js/2.213fcb98.chunk.js.LICENSE.txt",
-    "static/js/main.b5d1b229.chunk.js.LICENSE.txt": "/XCLiveViewer/static/js/main.b5d1b229.chunk.js.LICENSE.txt",
+    "static/js/2.d88610c9.chunk.js.LICENSE.txt": "/XCLiveViewer/static/js/2.d88610c9.chunk.js.LICENSE.txt",
+    "static/js/main.17911d21.chunk.js.LICENSE.txt": "/XCLiveViewer/static/js/main.17911d21.chunk.js.LICENSE.txt",
     "static/media/flag-icon.min.css": "/XCLiveViewer/static/media/zw.8b885465.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.cdd4df36.js",
     "static/css/2.69712b45.chunk.css",
-    "static/js/2.213fcb98.chunk.js",
+    "static/js/2.d88610c9.chunk.js",
     "static/css/main.7850548b.chunk.css",
-    "static/js/main.b5d1b229.chunk.js"
+    "static/js/main.17911d21.chunk.js"
   ]
 }
