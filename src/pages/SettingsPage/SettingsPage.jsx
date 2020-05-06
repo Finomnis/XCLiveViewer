@@ -16,7 +16,7 @@ const SettingsPage = (props) => {
     <SubWindow fullScreen open={props.open} onClose={props.onClose}>
       <SettingsPageTitleBar onClose={props.onClose} />
 
-      <List>
+      <List style={{ overflow: "auto" }}>
         {/* ANIMATION DELAY */}
         <BooleanSetting
           setting={Settings.LOW_LATENCY}
