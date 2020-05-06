@@ -8,7 +8,7 @@ import SubWindow from "../../util/SubWindow";
 
 import { getChosenPilots } from "../../common/PersistentState/ChosenPilots";
 import LinkPopup from "./LinkPopup";
-import { encodeBase64Json } from "../../util/Base64Data";
+import { encodeBase64 } from "../../util/Base64Data";
 import PilotMultipleChoiceList from "../common/PilotMultipleChoiceList";
 
 // Base window, without the table
@@ -58,6 +58,10 @@ class LinkCreator extends React.PureComponent {
 
     const chosenPilots = getChosenPilots();
 
+    // Sort pilots
+    pilots = [...pilots];
+    pilots.sort();
+
     pilots.forEach((pilotId) => {
       if (pilotId in chosenPilots && chosenPilots[pilotId].name != null) {
         payload[pilotId] = chosenPilots[pilotId].name;
@@ -66,9 +70,9 @@ class LinkCreator extends React.PureComponent {
       }
     });
 
-    const encodedData = encodeBase64Json(payload);
+    const encodedData = encodeBase64(payload);
 
-    const url = window.location.href + "?group=" + encodedData;
+    const url = window.location.href + "?g=" + encodeURIComponent(encodedData);
 
     this.setState({ createdLink: url });
   };

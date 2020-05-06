@@ -2,6 +2,15 @@ import { deflate, inflate } from "pako";
 
 import * as cbor from "cbor";
 
+function bufferToBase64Url(data) {
+  const base64Encoded = data.toString("base64");
+  const urlEscaped = base64Encoded
+    .replace(/\+/g, "-") // Replace + with -
+    .replace(/\//g, "_") // Replace / with _
+    .replace(/=+$/, ""); // Remove padding =
+  return urlEscaped;
+}
+
 function encodeUtf8(data) {
   // Needs to be imported explicitely for tests
   if (typeof TextEncoder === "undefined") {
@@ -36,9 +45,9 @@ export const encodeBase64 = (value) => {
   ]);
 
   if (cbor_data_compressed.length < cbor_data_uncompressed.length) {
-    return cbor_data_compressed.toString("base64");
+    return bufferToBase64Url(cbor_data_compressed);
   } else {
-    return cbor_data_uncompressed.toString("base64");
+    return bufferToBase64Url(cbor_data_uncompressed);
   }
 };
 
@@ -69,5 +78,5 @@ export const encodeBase64Json = (value) => {
   const json = JSON.stringify(value);
   const encoded = encodeUtf8(json);
   const compressed_brotli = deflate(encoded);
-  return Buffer.from(compressed_brotli).toString("base64");
+  return bufferToBase64Url(Buffer.from(compressed_brotli));
 };

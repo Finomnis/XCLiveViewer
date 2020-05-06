@@ -1,4 +1,9 @@
-import { decodeBase64, encodeBase64, decodeBase64Json } from "../Base64Data";
+import {
+  decodeBase64,
+  encodeBase64,
+  decodeBase64Json,
+  encodeBase64Json,
+} from "../Base64Data";
 import { deflate } from "pako";
 
 function test_enc_dec(data) {
@@ -20,6 +25,7 @@ function test_enc_dec(data) {
   expect(
     decodeBase64Json(Buffer.from(deflate(uncompressed_utf8)).toString("base64"))
   ).toEqual(data);
+  expect(decodeBase64Json(encodeBase64Json(data))).toEqual(data);
 }
 
 it("Base64Data", () => {

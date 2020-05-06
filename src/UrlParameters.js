@@ -18,7 +18,8 @@ export function processUrlParameters() {
 
   // If there were params,
   if (window.location.href !== window.location.href.split("?")[0]) {
-    window.location.href = window.location.href.split("?")[0];
+    const newHref = window.location.href.split("?")[0];
+    window.history.replaceState({}, "", newHref);
   }
 }
 
