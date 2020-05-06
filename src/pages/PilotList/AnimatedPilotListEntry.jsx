@@ -20,7 +20,11 @@ import ContextMenuHandler from "../../util/ContextMenuHandler";
 import { parseTime } from "../../location_provider/XContest/FlightAnimationData";
 import { ElevationHistogram } from "./ElevationHistogram";
 
-const FirstRowLeft = styled(Typography)({ overflow: "hidden", flex: "1" });
+const FirstRowLeft = styled(Typography)({
+  overflow: "hidden",
+  flex: "1",
+  width: 0,
+});
 
 const FirstRowRight = styled(Typography)({
   marginRight: ".2em",

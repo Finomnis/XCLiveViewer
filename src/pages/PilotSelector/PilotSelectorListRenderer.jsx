@@ -1,9 +1,16 @@
 import React from "react";
-import { TableCell, Typography, Box } from "@material-ui/core";
+import { TableCell, Typography, Box, withStyles } from "@material-ui/core";
 import { LastFixState, LastFixArrow } from "../../util/LastFixState";
 
 export const headerHeight = 37;
 export const rowHeight = 57;
+
+const NoWrapTypography = withStyles({
+  root: {
+    whiteSpace: "nowrap",
+    width: 0,
+  },
+})(Typography);
 
 export const TableHeader = () => {
   return (
@@ -48,15 +55,21 @@ class PilotSelectorListRow extends React.PureComponent {
           filter: disabled ? "grayscale(100%) opacity(30%)" : undefined,
         }}
       >
-        <Box flex="1" paddingLeft={1} paddingTop={1} paddingBottom={1}>
-          <Typography variant="body2">{fullname}</Typography>
-          <Typography
+        <Box
+          flex="1"
+          overflow="hidden"
+          paddingLeft={1}
+          paddingTop={1}
+          paddingBottom={1}
+        >
+          <NoWrapTypography variant="body2">{fullname}</NoWrapTypography>
+          <NoWrapTypography
             variant="caption"
             color="textSecondary"
             style={{ paddingLeft: ".5em" }}
           >
             [{username}]
-          </Typography>
+          </NoWrapTypography>
         </Box>
         <div style={{ width: "25%", textAlign: "right" }}>
           <div>
