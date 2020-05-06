@@ -15,7 +15,7 @@ export const TableHeader = () => {
         height: headerHeight,
         display: "flex",
         alignItems: "center",
-        boxSizing: "border-box"
+        boxSizing: "border-box",
       }}
     >
       <div style={{ flex: "1" }}>Name</div>
@@ -34,7 +34,7 @@ class PilotSelectorListRow extends React.PureComponent {
       timestamp,
       landed,
       iso,
-      disabled
+      disabled,
     } = this.props;
 
     return (
@@ -45,7 +45,7 @@ class PilotSelectorListRow extends React.PureComponent {
           display: "flex",
           alignItems: "center",
           boxSizing: "border-box",
-          filter: disabled ? "grayscale(100%) opacity(30%)" : undefined
+          filter: disabled ? "grayscale(100%) opacity(30%)" : undefined,
         }}
       >
         <Box flex="1" paddingLeft={1} paddingTop={1} paddingBottom={1}>
@@ -113,7 +113,7 @@ export const renderRow = ({ data, index, style }) => {
       style={{
         ...style,
         backgroundColor:
-          selected && !disabled ? "rgba(0, 0, 0, 0.04)" : undefined
+          selected && !disabled ? "rgba(0, 0, 0, 0.04)" : undefined,
       }}
       onClick={() => {
         if (!disabled) data.onPilotClicked(pilotId);
