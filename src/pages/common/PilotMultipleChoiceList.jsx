@@ -70,8 +70,8 @@ export default class PilotMultipleChoiceList extends React.PureComponent {
     const pilots = this.getSortedPilotIds();
 
     return (
-      <Box overflow="scroll">
-        <Table /*size="small"*/ style={{ overflow: "scroll" }}>
+      <Box overflow="auto">
+        <Table /*size="small"*/ style={{ width: "100%" }}>
           <TableBody>
             {pilots.map((pilotId) => (
               <TableRow
