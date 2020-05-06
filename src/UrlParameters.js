@@ -34,6 +34,7 @@ function groupParameter(groupData) {
 }
 
 function processGroupData(groupPilots) {
+  console.log("Applying group information from url data:", groupPilots);
   let chosenPilots = { ...getChosenPilots() };
 
   // Create pilots and update names
