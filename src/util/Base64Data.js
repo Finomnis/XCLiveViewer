@@ -65,3 +65,9 @@ export const decodeBase64Json = (data) => {
   const decoded = decodeUtf8(decompressed);
   return JSON.parse(decoded);
 };
+export const encodeBase64Json = (value) => {
+  const json = JSON.stringify(value);
+  const encoded = encodeUtf8(json);
+  const compressed_brotli = deflate(encoded);
+  return Buffer.from(compressed_brotli).toString("base64");
+};
