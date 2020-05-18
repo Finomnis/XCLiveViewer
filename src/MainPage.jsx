@@ -20,9 +20,12 @@ import Pilots from "./pages/PilotList/Pilots";
 import TitleBar from "./pages/TitleBar";
 
 import PageState from "./common/PersistentState/PageState";
+import { getSetting, Settings } from "./common/PersistentState/Settings";
+import { PageLayout } from "./common/PersistentState/PageLayout";
 
 const MainPage = () => {
   const [tabId, setTabId] = PageState.TabID.use();
+  const [pageLayout] = getSetting(Settings.PAGE_LAYOUT).use();
   const [windowHeight, setWindowHeight] = React.useState(0);
   const theme = useTheme();
   const isSmartphone = useMediaQuery(theme.breakpoints.down("sm"));
@@ -44,7 +47,20 @@ const MainPage = () => {
     setTabId(newValue);
   };
 
-  const content = isSmartphone ? (
+  // Apply layout overrides from PAGE_LAYOUT setting
+  let showSmartphoneLayout = isSmartphone;
+  switch (pageLayout) {
+    case PageLayout.DESKTOP:
+      showSmartphoneLayout = false;
+      break;
+    case PageLayout.PHONE:
+      showSmartphoneLayout = true;
+      break;
+    default:
+      break;
+  }
+
+  const content = showSmartphoneLayout ? (
     <React.Fragment>
       <Box flexGrow={1} clone display="flex">
         <SwipeableViews disabled index={tabId}>

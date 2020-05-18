@@ -2,8 +2,13 @@ import React from "react";
 
 import { List, Divider } from "@material-ui/core";
 import { getSetting, Settings } from "../../common/PersistentState/Settings";
+import { PageLayout } from "../../common/PersistentState/PageLayout";
 import SubWindow from "../../util/SubWindow";
-import { BooleanSetting, NumberSetting } from "./SettingsPageEntries";
+import {
+  BooleanSetting,
+  NumberSetting,
+  MultipleChoiceSetting,
+} from "./SettingsPageEntries";
 import SettingsPageTitleBar from "./SettingsPageTitleBar";
 
 const SettingsPage = (props) => {
@@ -80,7 +85,7 @@ const SettingsPage = (props) => {
         <BooleanSetting
           setting={Settings.PREVENT_SLEEP}
           primaryText="Prevent Sleep"
-          secondaryText="Keeps display on. Useful for driving."
+          secondaryText="keeps display on, useful for driving"
         />
 
         {/* Show offline pilots */}
@@ -88,7 +93,21 @@ const SettingsPage = (props) => {
         <BooleanSetting
           setting={Settings.SHOW_OFFLINE_PILOTS}
           primaryText="Show Offline Pilots"
-          secondaryText="Displays last observed landing spot."
+          secondaryText="displays last observed landing spot"
+        />
+
+        {/* Page Layout */}
+        <Divider />
+        <MultipleChoiceSetting
+          setting={Settings.PAGE_LAYOUT}
+          primaryText="Page Layout"
+          secondaryText="explicitely sets the layout mode"
+          choices={[
+            { name: "Auto", value: PageLayout.AUTO },
+            { name: "Phone", value: PageLayout.PHONE },
+            { name: "Desktop", value: PageLayout.DESKTOP },
+            { name: "Widget", value: PageLayout.WIDGET, disabled: true },
+          ]}
         />
       </List>
     </SubWindow>
