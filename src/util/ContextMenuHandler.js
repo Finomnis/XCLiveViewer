@@ -13,8 +13,21 @@ export default class ContextMenuHandler {
     this.currentTouch = null;
   }
 
+  cancelCurrentTouch = () => {
+    this.currentTouch = null;
+    this.contextMenuPossible = false;
+    clearTimeout(this.longPressCountdown);
+  };
+
   onTouchStart = (e) => {
-    //console.log(this.toString(), "onTouchStart");
+    //console.log(this.toString(), "onTouchStart", e.touches.length);
+
+    // Cancel context menu when multi-touch detected
+    if (e.touches.length !== 1) {
+      this.cancelCurrentTouch();
+      return;
+    }
+
     this.contextMenuPossible = true;
 
     const touch = e.touches[0];
@@ -28,7 +41,14 @@ export default class ContextMenuHandler {
   };
 
   onTouchMove = (e) => {
-    //console.log(this.toString(), "onTouchMove");
+    //console.log(this.toString(), "onTouchMove", e.touches.length);
+
+    // Cancel context menu when multi-touch detected
+    if (e.touches.length !== 1) {
+      this.cancelCurrentTouch();
+      return;
+    }
+
     const touch = e.touches[0];
     if (this.currentTouch !== null) {
       const dX = this.currentTouch.pageX - touch.pageX;
@@ -42,28 +62,22 @@ export default class ContextMenuHandler {
       }
     }
 
-    clearTimeout(this.longPressCountdown);
+    this.cancelCurrentTouch();
   };
 
   onTouchCancel = (e) => {
     //console.log(this.toString(), "onTouchCancel");
-    this.currentTouch = null;
-    this.contextMenuPossible = false;
-    clearTimeout(this.longPressCountdown);
+    this.cancelCurrentTouch();
   };
 
   onTouchEnd = (e) => {
     //console.log(this.toString(), "onTouchEnd");
-    this.currentTouch = null;
-    this.contextMenuPossible = false;
-    clearTimeout(this.longPressCountdown);
+    this.cancelCurrentTouch();
   };
 
   onContextMenu = (e) => {
     //console.log(this.toString(), "onContextMenu");
-    this.contextMenuPossible = false;
-
-    clearTimeout(this.longPressCountdown);
+    this.cancelCurrentTouch();
 
     this.callback(e);
     e.preventDefault();
