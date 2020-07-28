@@ -47,14 +47,14 @@ export default class GoogleMapsTrack {
       getMapViewportControllerService().setSinglePilotMode(pilotId);
     });
 
-    this.marker.addListener("mousedown", ({ tb }) => {
-      onMouseOver(true, this.computeIconBottomLeftCornerPos(tb));
+    this.marker.addListener("mousedown", (ev) => {
+      onMouseOver(true, this.computeIconBottomLeftCornerPos(ev.ub));
     });
     this.marker.addListener("mouseup", () => {
       onMouseOver(false, null);
     });
-    this.marker.addListener("mouseover", ({ tb }) => {
-      onMouseOver(true, this.computeIconBottomLeftCornerPos(tb));
+    this.marker.addListener("mouseover", (ev) => {
+      onMouseOver(true, this.computeIconBottomLeftCornerPos(ev.ub));
     });
     this.marker.addListener("mouseout", () => {
       onMouseOver(false, null);
@@ -65,7 +65,11 @@ export default class GoogleMapsTrack {
       path: [],
       strokeColor: this.trackColor,
     });
-    this.currentTrackVersion = { startTime: null, endTime: null, length: null };
+    this.currentTrackVersion = {
+      startTime: null,
+      endTime: null,
+      length: null,
+    };
     this.newestTrackSegment = new this.google.maps.Polyline({
       map: map,
       path: [],
