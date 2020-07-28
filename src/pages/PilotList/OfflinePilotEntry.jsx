@@ -25,7 +25,7 @@ export default class OfflinePilotEntry extends React.PureComponent {
   render() {
     return (
       <OfflinePilotPaper
-        className="MuiExpansionPanel-rounded MuiExpansionPanel-root"
+        className="MuiAccordion-rounded MuiAccordion-root"
         onContextMenu={this.contextMenuHandler.onContextMenu}
         onTouchStart={this.contextMenuHandler.onTouchStart}
         onTouchCancel={this.contextMenuHandler.onTouchCancel}

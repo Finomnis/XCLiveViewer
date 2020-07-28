@@ -2,9 +2,9 @@ import React from "react";
 import {
   Box,
   Typography,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
   withStyles,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -17,11 +17,11 @@ import ContextMenu from "../common/ContextMenu";
 import { getChosenPilots } from "../../common/PersistentState/ChosenPilots";
 import OfflinePilotEntry from "./OfflinePilotEntry";
 
-const OfflinePilotsExpansionPanel = withStyles({
+const OfflinePilotsAccordion = withStyles({
   root: {
     backgroundColor: "#ddd",
   },
-})(ExpansionPanel);
+})(Accordion);
 
 class AnimatedPilotList extends React.PureComponent {
   constructor(props) {
@@ -196,11 +196,11 @@ class AnimatedPilotList extends React.PureComponent {
         ) : null}
         {offlinePilots.length > 0 ? (
           <Box margin={1} onContextMenu={() => false}>
-            <OfflinePilotsExpansionPanel>
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <OfflinePilotsAccordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography>Offline Pilots</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails style={{ flexDirection: "column" }}>
+              </AccordionSummary>
+              <AccordionDetails style={{ flexDirection: "column" }}>
                 {offlinePilots.map((pilotId) => (
                   <OfflinePilotEntry
                     key={pilotId}
@@ -209,8 +209,8 @@ class AnimatedPilotList extends React.PureComponent {
                     onContextMenuHandler={this.showContextMenuOffline}
                   />
                 ))}
-              </ExpansionPanelDetails>
-            </OfflinePilotsExpansionPanel>
+              </AccordionDetails>
+            </OfflinePilotsAccordion>
           </Box>
         ) : null}
         <ContextMenu

@@ -1,9 +1,9 @@
 import React from "react";
 import {
-  ExpansionPanel,
-  ExpansionPanelSummary,
+  Accordion,
+  AccordionSummary,
   Typography,
-  ExpansionPanelDetails,
+  AccordionDetails,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { getXContestInterface } from "../../location_provider/XContest/XContestInterface";
@@ -37,7 +37,7 @@ const SecondRow = styled(Typography)({
   paddingLeft: ".5em",
 });
 
-const PilotExpansionPanelSummary = withStyles({
+const PilotAccordionSummary = withStyles({
   root: {
     paddingLeft: "12px",
   },
@@ -46,9 +46,9 @@ const PilotExpansionPanelSummary = withStyles({
     alignItems: "center",
     whiteSpace: "nowrap",
   },
-})(ExpansionPanelSummary);
+})(AccordionSummary);
 
-const PilotExpansionPanelDetails = withStyles({
+const PilotAccordionDetails = withStyles({
   root: {
     display: "flex",
     alignItems: "stretch",
@@ -57,7 +57,7 @@ const PilotExpansionPanelDetails = withStyles({
     WebkitUserSelect: "none",
     msUserSelect: "none",
   },
-})(ExpansionPanelDetails);
+})(AccordionDetails);
 
 const DetailsStats = styled(Typography)({
   flex: "1 0 0",
@@ -263,7 +263,10 @@ class AnimatedPilotListEntry extends React.PureComponent {
         this.pilotProps.endOfTrack,
         this.pilotProps.landed,
         { lat: this.pilotProps.lat, lng: this.pilotProps.lng },
-        { lat: this.pilotProps.velocityLat, lng: this.pilotProps.velocityLng }
+        {
+          lat: this.pilotProps.velocityLat,
+          lng: this.pilotProps.velocityLng,
+        }
       );
 
       // Update svg path if necessary
@@ -380,13 +383,16 @@ class AnimatedPilotListEntry extends React.PureComponent {
       this.pilotProps.endOfTrack,
       this.pilotProps.landed,
       { lat: this.pilotProps.lat, lng: this.pilotProps.lng },
-      { lat: this.pilotProps.velocityLat, lng: this.pilotProps.velocityLng }
+      {
+        lat: this.pilotProps.velocityLat,
+        lng: this.pilotProps.velocityLng,
+      }
     );
     const pilotIconRotation =
       pilotIcon.rotation === undefined ? 0 : pilotIcon.rotation;
 
     return (
-      <ExpansionPanel
+      <Accordion
         TransitionProps={{ unmountOnExit: true }}
         onContextMenu={this.contextMenuHandler.onContextMenu}
         onTouchStart={this.contextMenuHandler.onTouchStart}
@@ -397,7 +403,7 @@ class AnimatedPilotListEntry extends React.PureComponent {
           filter: this.props.shown ? undefined : "grayscale(100%) opacity(70%)",
         }}
       >
-        <PilotExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <PilotAccordionSummary expandIcon={<ExpandMoreIcon />}>
           <svg
             width="30px"
             height="30px"
@@ -452,9 +458,9 @@ class AnimatedPilotListEntry extends React.PureComponent {
               </span>
             </SecondRow>
           </div>
-        </PilotExpansionPanelSummary>
+        </PilotAccordionSummary>
         {this.state.offline ? null : (
-          <PilotExpansionPanelDetails>
+          <PilotAccordionDetails>
             <DetailsStats>
               <DetailsRow variant="caption">
                 <DetailTimerIcon />
@@ -479,9 +485,9 @@ class AnimatedPilotListEntry extends React.PureComponent {
             <DetailsGraph variant="caption">
               <ElevationHistogram pilot={this.props.pilotId} />
             </DetailsGraph>
-          </PilotExpansionPanelDetails>
+          </PilotAccordionDetails>
         )}
-      </ExpansionPanel>
+      </Accordion>
     );
   }
 }
